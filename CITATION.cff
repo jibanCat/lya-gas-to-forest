@@ -8,6 +8,7 @@ version: "0.1.0"
 repository-code: "https://github.com/Jibancat/lya-gas-to-forest"
 url: "https://jibancat.github.io/lya-gas-to-forest/"
 license: ["MIT", "CC-BY-4.0", "CC0-1.0"]
+date-released: "2026-10-05"
 authors:
   - family-names: "Ho"
     given-names: "Ming-Feng"

@@ -4,7 +4,7 @@ An interactive, browser-based teaching resource on how neutral hydrogen between 
 **Lyman-α forest**: the dense pattern of absorption lines in quasar spectra that cosmologists use to map the
 intergalactic gas.
 
-**Version 0.1.0** · <!-- release:site -->**Live site:** available after the v0.1 deployment, at `https://jibancat.github.io/lya-gas-to-forest/`<!-- /release:site -->
+**Version 0.1.0** · <!-- release:site -->**Live site:** https://jibancat.github.io/lya-gas-to-forest/ · **Science notes:** https://jibancat.github.io/lya-gas-to-forest/science/<!-- /release:site -->
 
 ## Who it is for
 

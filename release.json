@@ -2,12 +2,12 @@
   "_about": "Release-time facts, filled by tools/finalize_release.py once approved; null until then. The version lives in package.json.",
   "repository": "https://github.com/Jibancat/lya-gas-to-forest",
   "site": "https://jibancat.github.io/lya-gas-to-forest/",
-  "date_released": null,
+  "date_released": "2026-10-05",
   "copyright_holder": "Ming-Feng Ho",
   "licences": {
     "code": "MIT",
     "content": "CC-BY-4.0",
     "data": "CC0-1.0"
   },
-  "site_live": false
+  "site_live": true
 }

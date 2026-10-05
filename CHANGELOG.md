@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.1.0 — first public release (date set at release)
+## v0.1.0 — first public release, 2026-10-05
 
 **What it is.** Fourteen interactive scenes, from a beam of quasar light crossing continuous intergalactic gas to the
 Lyman-α forest and the limits of reading it back:
