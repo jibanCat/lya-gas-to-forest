@@ -14,7 +14,7 @@ if (!base || !base.endsWith('/')) { console.log('usage: node app/safari_check.mj
 if (outDir) fs.mkdirSync(outDir, { recursive: true });
 const PORT = 4445, D = `http://127.0.0.1:${PORT}`, drv = spawn('/usr/bin/safaridriver', ['-p', String(PORT)], { stdio: 'ignore' });
 const wait = ms => new Promise(r => setTimeout(r, ms));
-const call = async (method, p, body) => { const r = await fetch(D + p, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined }); const j = await r.json(); if (j.value && j.value.error) throw new Error(`${j.value.error}: ${j.value.message}`); return j.value; };
+const call = async (method, p, body) => { const ac = new AbortController(), timer = setTimeout(() => ac.abort(), 30000); try { const r = await fetch(D + p, { method, signal: ac.signal, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined }); const j = await r.json(); if (j.value && j.value.error) throw new Error(`${j.value.error}: ${j.value.message}`); return j.value; } finally { clearTimeout(timer); } };   // a stalled session fails within 30 s
 const R = [], ok = (name, pass, detail = {}) => { R.push({ name, pass: !!pass, ...detail }); console.log(`${pass ? 'ok  ' : 'FAIL'} ${name}${pass ? '' : ' ' + JSON.stringify(detail).slice(0, 200)}`); };
 let sid = null, version = null;
 try {
@@ -36,6 +36,8 @@ try {
 
   // loading: the root, every scene by deep link, refresh, the science notes
   await go(base); ok('the site root opens the app', /\/lya\.html(#|$)/.test(await url()) && /beat 0/.test(await tag()), { url: await url() });
+  const focused = await js('return document.hasFocus()');   // real keyboard and pointer input reach only the window in front
+  ok('the automation window has focus (keep the Mac idle while the check runs)', focused);
   for (let n = 0; n < 14; n++) {
     const drawn = await go(`${base}lya.html?n=${n}#beat=${n}`, 'return !!document.getElementById("live") && document.getElementById("live").textContent.length > 40');
     const ink = await js('const c = document.getElementById("cv"), d = c.getContext("2d").getImageData(0, 0, c.width, c.height).data; let n = 0; for (let i = 0; i < d.length; i += 64) if (Math.abs(d[i] - 252) + Math.abs(d[i + 1] - 251) + Math.abs(d[i + 2] - 248) > 30 && d[i + 3] > 0) n++; return n;');
@@ -58,14 +60,15 @@ try {
   const prevEl = await call('POST', S('/element'), { using: 'css selector', value: '#prev' }); await call('POST', S(`/element/${Object.values(prevEl)[0]}/click`), {}); await wait(250);
   ok('"previous" navigates', /beat 9/.test(await tag()));
   await js('document.activeElement && document.activeElement.blur(); return true');
-  const tabbed = []; for (let i = 0; i < 3; i++) { await call('POST', S('/actions'), { actions: [{ type: 'key', id: 'k', actions: [{ type: 'keyDown', value: '' }, { type: 'keyDown', value: '' }, { type: 'keyUp', value: '' }, { type: 'keyUp', value: '' }] }] }); await wait(120);
+  const tabbed = []; if (focused) for (let i = 0; i < 3; i++) { await call('POST', S('/actions'), { actions: [{ type: 'key', id: 'k', actions: [{ type: 'keyDown', value: '' }, { type: 'keyDown', value: '' }, { type: 'keyUp', value: '' }, { type: 'keyUp', value: '' }] }] }); await wait(120);
     tabbed.push(await js('const e = document.activeElement, o = getComputedStyle(e); return { tag: e.tagName, id: e.id, outline: o.outlineStyle !== "none" && parseFloat(o.outlineWidth) > 0 }')); }
   ok('keyboard (Option-Tab) reaches the navigation with a visible focus mark', tabbed.some(t => t.tag === 'BUTTON' && t.outline), { tabbed });
   await js('document.querySelector(".srclink").click(); return true'); await wait(250); const srcOpen = await js('return !document.getElementById("srcp").classList.contains("hidden")');
   await call('POST', S('/actions'), { actions: [{ type: 'key', id: 'k', actions: [{ type: 'keyDown', value: '' }, { type: 'keyUp', value: '' }] }] }); await wait(250);
   ok('the sources sheet opens; Escape closes it', srcOpen && await js('return document.getElementById("srcp").classList.contains("hidden")'));
 
-  // the high-risk gestures, with real pointer input
+  // the high-risk gestures, with real pointer input (only with focus: otherwise they cannot run)
+  if (focused) {
   await go(`${base}lya.html?g=3#beat=3`); let a = await st(); await hold(await fig(600, 150)); let b = await st();
   ok('Beat 3: holding the gas warms it', b.T > a.T * 1.5, { T: [a.T, b.T] });
   await go(`${base}lya.html?g=5#beat=5&stage=1`); a = await st(); await drag(await fig(990, 74), await fig(700, 74), 16); b = await st();
@@ -83,6 +86,7 @@ try {
   ok('Beat 10: the loupe follows along the sheet', b.pu < a.pu - 100, { pu: [a.pu, b.pu] });
   await go(`${base}lya.html?g=12#beat=12`); await until('return window.__lyaState()._traceT == null', 8000); a = await st(); await drag(await fig(588, 600), await fig(300, 560), 16); b = await st();
   ok('Beat 12: scanning the spectrum traces another colour', Math.abs(b.pu - a.pu) > 200, { pu: [a.pu, b.pu] });
+  }
 
   // state: a fresh session shows first-use hints and is logged; it resumes after a reload
   await go(`${base}lya.html?s=1#cold=1`); await wait(3500);
