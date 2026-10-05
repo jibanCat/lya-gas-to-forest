@@ -45,7 +45,7 @@ ${srcs}${checks}
     `<li id="${r.anchor}" data-id="${id}"><span class="short">${esc(r.short)}.</span> ${esc(r.citation)}${r.links.length ? ` <span class="links">${refLinks(r)}</span>` : ''}</li>`).join('\n');
   const scenes = Object.values(beats).map(b => `<li>${scene(b.n)} — ${b.entries.map(x => `<a href="#${x.anchor}">${esc(x.title)}</a>`).join(' · ')}</li>`).join('\n');
   return `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Science notes · Lyα: from gas to forest</title>
 <meta name="description" content="Sources, assumptions, teaching simplifications and numerical checks for every scientific claim in Lyα: from gas to forest.">
 <style>

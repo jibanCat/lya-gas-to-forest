@@ -106,10 +106,11 @@ for (const v of Object.values(PROV.validations)) if (v.report) fs.copyFileSync(p
 fs.mkdirSync(path.join(here, 'dist/licenses'), { recursive: true });
 for (const l of fs.readdirSync(path.join(VEN, 'LICENSES'))) fs.copyFileSync(path.join(VEN, 'LICENSES', l), path.join(here, 'dist/licenses', l));
 fs.copyFileSync(path.join(root, 'THIRD_PARTY_LICENSES.md'), path.join(here, 'dist/licenses/THIRD_PARTY_LICENSES.md'));
-fs.writeFileSync(path.join(here, 'dist/index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Lyα: from gas to forest</title><meta http-equiv="refresh" content="0; url=lya.html"><script>location.replace('lya.html' + location.hash);</script></head><body><a href="lya.html">Lyα: from gas to forest</a> · <a href="science/index.html">science notes</a></body></html>\n`);
+// every page declares an (empty) icon, so a browser never asks the domain root for /favicon.ico — outside a project site
+fs.writeFileSync(path.join(here, 'dist/index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><title>Lyα: from gas to forest</title><meta http-equiv="refresh" content="0; url=lya.html"><script>location.replace('lya.html' + location.hash);</script></head><body><a href="lya.html">Lyα: from gas to forest</a> · <a href="science/index.html">science notes</a></body></html>\n`);
 // GitHub Pages serves 404.html for any missing path; under a project page (/<repo>/) it finds its way back to the site's
 // root without hard-coding it (scenes and claims are linked with #fragments, which never reach the server)
-fs.writeFileSync(path.join(here, 'dist/404.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Not found · Lyα: from gas to forest</title>
+fs.writeFileSync(path.join(here, 'dist/404.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex"><title>Not found · Lyα: from gas to forest</title>
 <style>body{margin:0;padding:48px 32px;max-width:640px;background:${TK.paper};color:${TK.ink};font:300 18px/1.5 Georgia,'Times New Roman',serif}a{color:${TK.accent}}.m{color:${TK.muted};font-size:15px}</style></head>
 <body><p>This page does not exist.</p><p><a id="home" href="./">Lyα: from gas to forest</a> · <a id="sci" href="./science/">science notes</a></p>
 <p class="m">A scene can be linked as …/#beat=7, and a claim as …/science/#thermal-doppler-broadening.</p>

@@ -53,9 +53,12 @@ for (const [pg, u] of [[p, base + 'lya.html?e=1#beat=0'], [sci, base + 'science/
 ok('no URL escapes the project path (to the domain root or another path)', !escapes.length, { escapes: escapes.slice(0, 5) });
 if (repo) { const rl = await sci.evaluate(() => [...document.querySelectorAll('a[href^="https://github.com/"]')].map(a => a.href));
   ok('the science notes link the public repository (and no private one)', rl.some(h => h.replace(/\/$/, '') === repo) && !rl.some(h => /Lya_app/i.test(h)), { links: [...new Set(rl)].slice(0, 4) }); }
+// every page declares its icon, so no browser asks the domain root for /favicon.ico (Chrome does when none is declared)
+const icons = []; for (const pg of [p, sci]) icons.push(await pg.evaluate(() => !!document.querySelector('link[rel~="icon"]')));
+ok('every page declares its icon (no /favicon.ico request to the domain root)', icons.every(Boolean), { icons });
 // the 404 page and its way back
 const nf = await ctx.newPage(); r = await nf.goto(base + 'no/such/page'); const back = await nf.evaluate(() => [document.getElementById('home').href, document.getElementById('sci').href]);
-ok('a missing path answers 404 with a way back to the site', r.status() === 404 && back[0] === base && back[1] === base + 'science/', { status: r.status(), back });
+ok('a missing path answers 404 with a way back to the site', r.status() === 404 && back[0] === base && back[1] === base + 'science/' && await nf.evaluate(() => !!document.querySelector('link[rel~="icon"]')), { status: r.status(), back });
 // the app inside "show the physics" renders equations
 await p.goto(base + 'lya.html?s=3#beat=6&adv=1'); await ready(); ok('KaTeX renders in the app', (await p.evaluate(() => document.querySelectorAll('#eqs .katex').length)) > 0);
 // devices: a tablet sees no notice, a phone a gentle one

@@ -26,6 +26,7 @@ for (const m of notes.matchAll(/href="([^"]*)"/g)) {
   else if (h.startsWith('validation/')) { if (!fs.existsSync(path.join(dist, 'science', h))) fail(`science notes: linked report ${h} is missing`); }
   else if (/^https:\/\//.test(h)) nExternal++;
   else if (/^http:\/\//.test(h)) { nExternal++; warn(`science notes: plain-http link ${h}`); }
+  else if (h === 'data:,') {}   // the empty icon declaration (no /favicon.ico request), not a link
   else fail(`science notes: unexpected link ${h}`);
 }
 // the sheets: every [[#anchor|…]] in a beat's public provenance, every source and check, every claim
