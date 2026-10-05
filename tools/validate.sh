@@ -45,6 +45,7 @@ node app/study.mjs "$OUT/study" | tail -1
 node app/touch.mjs "$OUT/touch" | tail -1
 node app/a11y.mjs "$OUT/a11y" | tail -3
 node app/continuous_navigation.mjs "$OUT/continuous_navigation.json" | tail -1   # one fixed place turns every page, 0 → 13 → 0
+node app/tour_check.mjs "$OUT/tour.json" | tail -1   # the guided tour: every slide, in order, by tapping empty paper
 
 step "6/6 load check in every installed engine"
 node app/browsers.mjs "$OUT/browsers"

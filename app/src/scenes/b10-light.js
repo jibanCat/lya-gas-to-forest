@@ -14,6 +14,13 @@ import { WX, wmx, wmu, UG_W, uRuler, windowKernels } from '../primitives/sightli
 import { paperFibres } from '../primitives/material.js';
 
 export const B10 = { yRb: 200, hR: 70, pad: 44, fall: 16, halo: 1, blur: 7 };
+/** for the tour: a colour under thin ink, the colour under the thickest ink, and the window's ends */
+function b10at(kind) {
+  const ug = UG_W(), { tot } = windowKernels(24), mid = ug.length >> 1; let k = 0;
+  if (kind === 'thick') { for (let i = 20; i < ug.length - 20; i++) if (tot[i] > tot[k]) k = i; return ug[k]; }
+  if (kind === 'thin') { let best = null; for (let i = 20; i < ug.length - 20; i++) if (tot[i] > 0.1 && tot[i] < 0.25 && (best == null || Math.abs(i - mid) < Math.abs(best - mid))) best = i; return ug[best ?? 40]; }
+  return kind === 'start' ? ug[20] : ug[ug.length - 21];
+}
 function b10iP(S) { const ug = UG_W(); return clamp(Math.round((S.pu - ug[0]) / (ug[1] - ug[0])), 0, ug.length - 1); }
 /** the window-velocity index under ribbon column xp of W2 */
 function b10col(xp, W2) { const ug = UG_W(), rx0 = wmx(-0.3), rx1 = wmx(4.75), u = (rx0 + (xp + 0.5) / W2 * (rx1 - rx0) - WX.x0) / (WX.x1 - WX.x0) * (WX.xb - WX.xa) * SC.HUB + WX.xa * SC.HUB; return clamp(Math.round((u - ug[0]) / (ug[1] - ug[0])), 0, ug.length - 1); }
@@ -79,6 +86,12 @@ export const sceneLight = {
   keys: 'Left and right arrows move the inspected colour along the ribbon (and the spectrum).',
   eqs: () => metaEqs(10),
   persist: ['pu'],
+  tour: [
+    { say: 'the inked ribbon on a light table: each layer passes a fraction of the light' },
+    { say: 'thin ink: most of the light gets through', int: 'INT-INSPECT-001', to: () => ({ pu: b10at('thin') }), dur: 2.2 },
+    { say: 'thick ink: the fractions multiply — almost nothing gets through', int: 'INT-INSPECT-001', to: () => ({ pu: b10at('thick') }), dur: 2.2 },
+    { say: 'across every colour: what gets through is e^(−τ), the product of all the layers', int: 'INT-INSPECT-001', do: S => { S.pu = b10at('start'); }, dissolve: false, to: () => ({ pu: b10at('end') }), dur: 4.5 },
+  ],
   init(S) {
     const ug = UG_W(), { tot } = windowKernels(24), uB = SC.HUB * SC.parcels[1].x + SC.parcels[1].v; let best = null;
     ug.forEach((u, i) => { if (tot[i] > 0.9 && tot[i] < 1.8) { const d = Math.abs(u - uB); if (!best || d < best.d) best = { u, d }; } });

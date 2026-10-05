@@ -57,6 +57,12 @@ export const sceneDistance = {
   persist: ['va', 'vb', 'vc', 'grad', 'pick'],
   controls: [{ type: 'button', role: 'baseline', why: 'a baseline: every parcel without its own motion (expansion only), for comparison', label: 'expansion alone', act: S => { b7setExp(S); S._intro = null; } },
     { type: 'button', role: 'reset', why: 'restores the toy sightline’s own velocities after the reader has pushed the gas', label: 'the toy’s velocities', act: S => { b7setSim(S); S._intro = App.t - F7.intro[0]; S._introTo = true; } }],
+  tour: [
+    { say: 'three parcels from the same stretch: each lands at its recession plus its own motion' },
+    { say: 'expansion alone: farther gas recedes faster, so they land in order of distance', do: (S, H) => H.press('expansion alone') },
+    { say: 'push the middle parcel toward us: it lands before its neighbour — colour order is not distance order', int: 'INT-VPEC-001', do: S => { S.pick = 'b'; }, dissolve: false, to: { vb: -180 }, dur: 2.4 },
+    { say: 'the toy’s own motions: the two farther parcels land almost on top of each other', do: (S, H) => H.press('the toy’s velocities') },
+  ],
   init(S) { LAW7 = motionLaw(7, 'INT-VPEC-001'); VS7 = LAW7.px; S.pick = 'b'; b7setSim(S); S._introTo = true; S._intro = b7seen() ? null : App.t; },
   afterHash(S) {
     if (S.stage != null) { if (+S.stage >= 3) b7setSim(S); else b7setExp(S); S._intro = null; }   // old step URLs and stills

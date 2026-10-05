@@ -33,6 +33,12 @@ shown under "show the physics" and checked against the app's own values by the r
 **Reading straight through.** "← previous" and "next →" never move: one place on the screen turns every page, from the
 first scene to the last and back, with mouse, touch or keyboard.
 
+**A guided tour.** Tap any empty space, or "continue ›" under "show the physics", and the story moves on like a
+slideshow: each tap plays the next slide of the scene — a step, or one variation acted out with the scene's own controls
+and physics (warmer gas, a pushed parcel, a finer cut, a noisier spectrograph) — then the next scene. A line names what
+each slide shows and where the reader is. A tap during an animation goes straight on; touching anything in the figure
+hands it to the reader. Every scene's slides are checked by `app/tour_check.mjs`.
+
 **Browsers and devices.** Designed for tablets in landscape and larger screens, with mouse, touch or keyboard. See
 `docs/BROWSERS.md` for the tested environments.
 

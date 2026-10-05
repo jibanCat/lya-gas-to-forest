@@ -108,6 +108,14 @@ export const sceneParcel = {
       { type: 'button', role: 'reset', why: 'restores the toy’s parcel after the reader has moved, pushed, warmed or re-set it', label: 'back to the toy’s parcel', act: S => { Object.assign(S, b6sim()); S._ref = null; S._last = null; S._prevFrame = null; } },
     ];
   },
+  tour: [
+    { say: 'one parcel lands where its recession and its own motion put it' },
+    { say: 'move it nearer: it recedes more slowly, so its line lands at a lower velocity', int: 'INT-PLACE-001', do: S => b6revealed(S), dissolve: false, to: { x: 1.6 }, run: S => b6change(S, 'place'), dur: 2.2 },
+    { say: 'push it toward us: its line moves, though the gas stays where it is', int: 'INT-PUSH-001', to: { v: -100 }, run: S => b6change(S, 'motion'), dur: 2.2 },
+    { say: 'warm it: a wider, lower line — the same amount of ink', int: 'INT-WARM-001', to: { T: 8e4 }, log: ['T'], run: S => b6change(S, 'width'), dur: 2.2 },
+    { say: 'more neutral hydrogen: more ink — the optical depth grows in proportion', int: 'INT-AMOUNT-001', to: { logN: 14.8 }, run: S => b6change(S, 'amount'), dur: 2.2 },
+    { say: 'back to the toy’s parcel: place, motion, heat and amount each change its line differently', do: (S, H) => H.press('back to the toy’s parcel') },
+  ],
   init(S) {
     LAWV = motionLaw(6, 'INT-PUSH-001'); LAWT = holdLaw(6, 'INT-WARM-001');
     Object.assign(S, b6sim()); S._ref = null; S._last = null; S._seen = {}; S._hold = null; S._push = null;

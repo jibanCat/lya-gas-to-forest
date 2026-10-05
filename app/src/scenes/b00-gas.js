@@ -21,6 +21,8 @@ const B0 = { box: [110, 34, 700, 390], inset: [872, 262, 178], swayFrom: 0.7, sw
 function b0sway(S) { if (S._held) return S.yaw; if (!motionOK()) return B0.swayTo; return B0.swayFrom + (B0.swayTo - B0.swayFrom) * ease(clamp((App.t - (App.anim.entered || 0)) / B0.drift, 0, 1)); }
 /** the beam on screen: its ends, its height and the band the hand finds it in (INT-PROBE-001 gesture params) */
 function b0beam(S) { const [rx0, ry] = S._g3.ray(0), [rx1] = S._g3.ray(SC.L), q = (interaction(0, 'INT-PROBE-001').gesture || {}).params || {}; return { rx0, rx1, ry, band: q.band_px ?? 22, learnPx: q.learned_px ?? 30 }; }
+/** where along the beam the toy's gas is densest ('max') or emptiest ('min'), away from the ends — for the tour */
+function b0along(kind) { const D = SC.sk.Delta, dx = SC.sk.dx_mpch; let k = -1; for (let i = Math.ceil(1 / dx); i < D.length - 1 / dx; i++) if (k < 0 || (kind === 'max' ? D[i] > D[k] : D[i] < D[k])) k = i; return +((k + 0.5) * dx).toFixed(2); }
 function b0density(x) { const i = clamp(Math.round(x / SC.sk.dx_mpch - 0.5), 0, SC.sk.x.length - 1); return SC.sk.Delta[i]; }
 
 export const sceneGas = {
@@ -28,6 +30,12 @@ export const sceneGas = {
   slug: 'gas-occupies-space',
   keys: 'Left and right arrows move the probe along the beam; up and down arrows tilt the volume.',
   persist: ['px', 'tilt', 'yaw'],
+  tour: [   // the slideshow (runtime: advanceStory): each tap acts out one variation with the scene's own state
+    { say: 'thin gas fills the space between the quasar and us — denser in filaments, emptier in voids' },
+    { say: 'the quasar’s light crosses it along one line, through filaments and voids alike', int: 'INT-PROBE-001', do: S => { S.px = 1; }, dissolve: false, to: { px: 19 }, dur: 4.5 },
+    { say: () => `here it crosses ${densityWord(b0density(b0along('min')))}: the light meets whatever gas lies on its line`, int: 'INT-PROBE-001', to: () => ({ px: b0along('min') }), dur: 2.4 },
+    { say: 'turn the volume: the gas fills three dimensions, but only the gas on the beam absorbs this light', int: 'INT-VIEW-001', do: S => { S._held = true; }, dissolve: false, to: S => ({ yaw: S.yaw > 0 ? -0.55 : 0.55 }), dur: 2.4 },
+  ],
   init(S) { S.px = SC.win.x0 + SC.parcels[1].x; S.tilt = 0.5; S.yaw = B0.swayTo; S._held = false; },
   afterHash(S) { if (S.yaw !== B0.swayTo) S._held = true; },
   draw(g, S) {

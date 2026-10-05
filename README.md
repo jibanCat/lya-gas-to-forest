@@ -45,6 +45,10 @@ Any scene can be linked directly, for example `…/#beat=7`.
 The built site is in `app/dist/`. Open `app/dist/index.html`, or `lya.html`, in a browser. It is a single
 self-contained page with its fonts and data inside, so it works offline.
 
+To read it as a guided tour, tap any empty space (or "continue ›"): each tap plays the next slide of the scene — a step,
+or one variation acted out with the scene's own controls — then the next scene. Everything in the figure stays
+interactive; touching it hands it to you.
+
 To build from source you need Node.js ≥ 20 and Python 3 with PyYAML:
 
 ```

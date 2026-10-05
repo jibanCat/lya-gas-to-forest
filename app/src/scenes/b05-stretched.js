@@ -164,6 +164,7 @@ export const sceneStretched = {
     if (App.adv) ctl.push({ type: 'toggle', key: 'logr', role: 'advanced', why: 'a choice of representation for the ruler (show the physics)', label: 'logarithmic ruler' });
     return ctl;
   },
+  tour: [1, 2, 3, 4, 5, 6, 7].map(k => ({ say: () => { const st = (META(5).stages || [])[k - 1] || {}; return `${st.label} — ${st.text}`; }, sync: S => S.stage === k, ...(k > 1 ? { do: (S, H) => H.choose('stage', k) } : {}) })),
   init(S) { S.stage = 1; S.sel = 0; S.frame = 'obs'; S.logr = false; S._tFrom = 0; S._tTo = b5stageT(1); S._since = App.t; S._free = null; S._play = false; S._hintT = App.t; },
   afterHash(S) { S.stage = clamp(+S.stage || 1, 1, 7); S.sel = clamp(+S.sel || 0, 0, b5peaks().length - 1); if (S.frame === 'cloud') S.frame = 'absorber'; S._tFrom = S._tTo = b5stageT(S.stage); if (!App.adv && !S.probeFrames) { S.frame = 'obs'; S.logr = false; } },
   draw(g, S, t) {

@@ -16,7 +16,7 @@ INCLUDE = [   # files or directories (directories: every tracked file under them
     'docs/',
     # the app: sources, build, vendored assets, the generated site, and its checks and capture tools
     'app/README.md', 'app/index.html', 'app/build.mjs', 'app/science_page.mjs', 'app/src/', 'app/vendor/', 'app/dist/',
-    'app/smoke.mjs', 'app/audit.mjs', 'app/study.mjs', 'app/touch.mjs', 'app/a11y.mjs', 'app/continuous_navigation.mjs', 'app/pages_check.mjs', 'app/safari_check.mjs', 'app/perf.mjs', 'app/release_check.mjs',
+    'app/smoke.mjs', 'app/audit.mjs', 'app/study.mjs', 'app/touch.mjs', 'app/a11y.mjs', 'app/continuous_navigation.mjs', 'app/tour_check.mjs', 'app/pages_check.mjs', 'app/safari_check.mjs', 'app/perf.mjs', 'app/release_check.mjs',
     'app/shoot.mjs', 'app/shots.txt', 'app/record.mjs', 'app/sequence.mjs', 'app/audit_bundle.mjs', 'app/browsers.mjs', 'app/firefox_bidi.mjs', 'app/load_perf.mjs',
     # the science: ledger, references, physics, toy data, oracles, tests, validation reports, notes cited by the ledger
     'science/README.md', 'science/SCIENCE_LEDGER.yaml', 'science/REFERENCES.yaml', 'science/PUBLIC_SCIENCE.yaml',

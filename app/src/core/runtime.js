@@ -7,7 +7,7 @@
  * Titles, statements and equations come from the manifest (core/meta.js). */
 import { TK, STAGE } from '../design/tokens.js';
 import { DESIGN_LINT } from '../design/ink.js';
-import { clamp } from './util.js';
+import { clamp, ease } from './util.js';
 import { App, parseHash, writeHash } from './app.js';
 import { META, metaEqs } from './meta.js';
 import { openSources, closeSources } from './sources.js';
@@ -17,7 +17,7 @@ import { cursorOf, affHitTest, drawAffordance, drawHint, hintUsed, markHint, aff
 export let CV = null;
 export let G = null;
 export let DPR = 1;
-let STAGE_EL, MARGIN, CTRL, EQS, TOPNAV, MICRO, OV, LIVE;
+let STAGE_EL, MARGIN, CTRL, EQS, TOPNAV, MICRO, OV, LIVE, CVX;
 const MAIN = STAGE.MAIN, W = STAGE.W, H = STAGE.H;
 const sceneTitle = sc => META(sc.n).title || '';
 const esc = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -29,13 +29,14 @@ function buildDOM() {
   STAGE_EL.innerHTML = `
     <nav id="topnav" aria-label="beats"></nav>
     <button id="advtoggle" role="switch" aria-checked="false" title="show the physics: the equations behind the picture (key p)"></button>
+    <div id="tourcue"><span id="tsay" aria-live="polite"></span><button id="tgo" type="button" aria-label="continue the story"></button></div>
     <main id="margin"><div id="mtag"></div><h1 id="mtitle"></h1><div id="mtext"></div><div id="ctrl"></div><div id="why"></div><section id="probe" aria-live="polite"></section><section id="eqs" aria-label="the physics"></section><div id="sess"></div></main>
-    <canvas id="cv" tabindex="0" role="application" aria-roledescription="interactive figure" aria-describedby="live"></canvas><div id="ov"></div>
+    <canvas id="cv" tabindex="0" role="application" aria-roledescription="interactive figure" aria-describedby="live"></canvas><canvas id="cvx" aria-hidden="true"></canvas><div id="ov"></div>
     <div id="micro" class="hidden" role="dialog" aria-modal="true" aria-labelledby="mtitle2"><button id="mback">← back to the story</button><h2 id="mtitle2"></h2><div id="mtext2"></div><canvas id="mcv"></canvas><div id="mctrl"></div><div id="meqs"></div></div>
     <div id="srcp" class="hidden" role="dialog" aria-modal="true" aria-labelledby="srct"><button id="srcback">← back to the story</button><div id="srcbody"></div></div>
     <div id="pyp" class="hidden" role="dialog" aria-modal="true" aria-labelledby="pyt"><button id="pyback">← back to the story</button><div id="pybody"></div></div>
     <div id="foot"></div><div id="live" class="vh" aria-live="polite"></div>`;
-  CV = document.getElementById('cv'); MARGIN = document.getElementById('margin'); CTRL = document.getElementById('ctrl'); EQS = document.getElementById('eqs');
+  CV = document.getElementById('cv'); CVX = document.getElementById('cvx'); MARGIN = document.getElementById('margin'); CTRL = document.getElementById('ctrl'); EQS = document.getElementById('eqs');
   TOPNAV = document.getElementById('topnav'); MICRO = document.getElementById('micro'); OV = document.getElementById('ov'); LIVE = document.getElementById('live');
   DPR = Math.min(2, window.devicePixelRatio || 1);
   CV.width = MAIN.w * DPR; CV.height = MAIN.h * DPR; G = CV.getContext('2d');
@@ -44,29 +45,39 @@ function buildDOM() {
   document.getElementById('mback').onclick = () => closeMicro();
   document.getElementById('srcback').onclick = () => { closeSources(); writeHash(); };
   document.getElementById('pyback').onclick = () => closePython();
+  document.getElementById('tgo').onclick = () => advanceStory('cue');
   fit(); window.addEventListener('resize', fit);
   const toLocal = (ev, el, w, h) => { const r = el.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * w, y: (ev.clientY - r.top) / r.height * h }; };
   let down = false, lastPointerT = -9;
   const scene = () => App.scenes[App.i];
+  // slideshow: a short tap on empty paper — no object under the finger, nothing the scene used it for — turns the story on
+  // (advanceStory). A drag, a hold, a reading or any change the tap makes to the scene is never a page turn.
+  let tap = null;
+  const snap = () => { try { return JSON.stringify(App.state, (k, v) => (k && k[0] === '_') ? undefined : v); } catch (e) { return String(Math.random()); } };
+  const used = f => { if (!tap) return f(); const a = snap(); f(); if (snap() !== a) tap.used = true; };
   // pointer, pen and touch alike: the affordance under the pointer is found here and passed to the scene as p.aff
   const at = ev => { const p = toLocal(ev, CV, MAIN.w, MAIN.h); p.touch = ev.pointerType === 'touch'; return p; };
   CV.addEventListener('pointerdown', ev => {
     down = true; lastPointerT = App.t; AFF.kb = false; CV.setPointerCapture(ev.pointerId);
     const p = at(ev), o = affAt(p, p.touch); AFF.active = o ? o.id : null; AFF.hover = AFF.active; AFF.down0 = p;
     if (o) { CV.style.cursor = cursorOf(o, true); if (o.kind === 'select' || o.kind === 'scan') affUse(o); }   // a hold is learned when the scene says so (learned())
-    p.aff = AFF.active; p.kind = o ? o.kind : null; p.pointerType = ev.pointerType; scene().onPointer && scene().onPointer('down', p, App.state); App.hooks.afterPointer && App.hooks.afterPointer('down', p);
+    tap = ev.isPrimary && !o ? { t: performance.now(), x: ev.clientX, y: ev.clientY, used: false } : null;
+    if (o) tourYield();
+    p.aff = AFF.active; p.kind = o ? o.kind : null; p.pointerType = ev.pointerType; used(() => scene().onPointer && scene().onPointer('down', p, App.state)); App.hooks.afterPointer && App.hooks.afterPointer('down', p);
   });
   CV.addEventListener('pointermove', ev => {
     const p = at(ev);
-    if (down) { const o = affObj(AFF.active); if (o && o.kind !== 'hold' && AFF.down0 && Math.hypot(p.x - AFF.down0.x, p.y - AFF.down0.y) > 3) affUse(o); p.aff = AFF.active; }
+    if (down) { const o = affObj(AFF.active); if (o && o.kind !== 'hold' && AFF.down0 && Math.hypot(p.x - AFF.down0.x, p.y - AFF.down0.y) > 3) affUse(o); p.aff = AFF.active; if (tap && Math.hypot(ev.clientX - tap.x, ev.clientY - tap.y) > 10) tap = null; }
     else { const o = affAt(p, false); if ((o ? o.id : null) !== AFF.hover) { AFF.hover = o ? o.id : null; AFF.hoverT = App.t; if (o && App.hooks.onHover) App.hooks.onHover(o); } CV.style.cursor = o ? cursorOf(o) : ''; p.aff = AFF.hover; }
-    scene().onPointer && scene().onPointer(down ? 'drag' : 'move', p, App.state);
+    if (down) used(() => scene().onPointer && scene().onPointer('drag', p, App.state)); else scene().onPointer && scene().onPointer('move', p, App.state);
   });
   const release = ev => {   // pointerup, and pointercancel (a system gesture, palm rejection): a hold or drag always ends
     if (!down && ev.type === 'pointercancel') return;
     down = false; const p = at(ev); p.aff = AFF.active;
     if (AFF.active) { AFF.rel = AFF.active; AFF.relT = App.t; } AFF.active = null;
-    scene().onPointer && scene().onPointer('up', p, App.state);
+    used(() => scene().onPointer && scene().onPointer('up', p, App.state));
+    const t0 = tap; tap = null;
+    if (ev.type === 'pointerup' && t0 && !t0.used && performance.now() - t0.t < 500 && !App.micro && !App.sources && !App.python && !App.probe) return advanceStory('tap');
     if (App.adv) refreshMargin(true);   // "show the physics" prints the state the gesture left (Beat 6's widths, its u)
     const o = p.touch ? null : affAt(p, false); AFF.hover = o ? o.id : null; CV.style.cursor = o ? cursorOf(o) : ''; writeHash();
   };
@@ -74,6 +85,10 @@ function buildDOM() {
   CV.addEventListener('pointerleave', () => { AFF.hover = null; scene().onPointer && scene().onPointer('leave', null, App.state); });
   CV.addEventListener('focus', () => { if (App.t - lastPointerT > 0.3) AFF.kb = true; });
   CV.addEventListener('contextmenu', ev => ev.preventDefault());   // a long press is a hold, not a context menu (touch)
+  STAGE_EL.addEventListener('click', ev => {   // empty paper outside the figure (the margin's prose, the footer): the same slideshow tap
+    if (ev.target.closest('button, a, input, select, textarea, summary, details, [role], [tabindex], #ctrl, #why, #eqs, #probe, #sess, #topnav, #micro, #srcp, #pyp, #ov') || String(getSelection())) return;
+    if (!App.micro && !App.sources && !App.python && !App.probe) advanceStory('tap');
+  });
   MCV.addEventListener('pointermove', ev => { if (App.micro) { const m = microDef(); m && m.onPointer && m.onPointer('move', toLocal(ev, MCV, 1000, 620), App.state); } });
   window.addEventListener('keydown', onKey);
 }
@@ -144,6 +159,7 @@ function renderTopnav() {
 }
 export function go(k, via = 'start') {
   k = clamp(k, 0, App.scenes.length - 1);
+  const turning = App.started && k !== App.i; if (turning) dissolve();
   const from = App.started ? App.scenes[App.i].n : null; App.started = true;
   if (App.sources) closeSources();
   if (App.python) closePython(false);
@@ -151,8 +167,81 @@ export function go(k, via = 'start') {
   const sc = App.scenes[k]; if (sc.init) sc.init(App.state);
   CV.setAttribute('aria-label', `${sceneTitle(sc)}. ${sc.keys || ''}`);
   STAGE_EL.dataset.science = (META(sc.n).science || []).join(' ');
-  renderTopnav(); renderControls(); refreshMargin(false, true); writeHash();
+  TOUR.i = 0; TOUR.anim = null; TOUR.keys = []; tourSync();
+  renderTopnav(); renderControls(); refreshMargin(false, true); writeHash(); renderCue();
+  if (turning) enterText();
   App.hooks.onScene && App.hooks.onScene(sc, { from, via });
+}
+/** between pages and steps the old view dissolves into the new one (≈0.4 s) and the margin's words fade in: a smooth
+ * transition that never blocks a tap (the overlay takes no pointer input; the next tap starts the next one at once).
+ * The navigation itself never fades or moves. Reduced motion and stills skip it. */
+function dissolve() {
+  if (App.rm || App.shoot || !App.started || !CVX) return;
+  CVX.width = CV.width; CVX.height = CV.height; CVX.getContext('2d').drawImage(CV, 0, 0);
+  CVX.style.transition = 'none'; CVX.style.opacity = '1'; void CVX.offsetWidth;
+  CVX.style.transition = 'opacity .42s ease-out'; CVX.style.opacity = '0';
+}
+function enterText() {
+  if (App.rm || App.shoot) return;
+  for (const id of ['mtitle', 'mtext']) { const el = document.getElementById(id); el.classList.remove('enter'); void el.offsetWidth; el.classList.add('enter'); }
+}
+/** the slideshow's next step: this beat's own next step if it has steps (or the scene's own advance), otherwise the next beat */
+export function advanceStory(via = 'tap') {
+  const tour = tourOf();
+  if (tour) { finishSlide(); if (TOUR.i < tour.length - 1) return playSlide(TOUR.i + 1); if (App.i < App.scenes.length - 1) go(App.i + 1, via); return; }
+  const st = CTRL.querySelector('[data-role="step"]');
+  if (st) { const o = [...st.querySelectorAll('.cho')], i = o.findIndex(x => x.classList.contains('on')); if (i >= 0 && i < o.length - 1) { o[i + 1].click(); return; } }   // as if its label were tapped
+  const sc = App.scenes[App.i];
+  if (sc.advance && sc.advance(App.state)) { renderControls(); refreshMargin(true); writeHash(); return; }
+  if (App.i < App.scenes.length - 1) go(App.i + 1, via);
+}
+// ---------------------------------------------------------------------------------------------- the guided tour (slideshow)
+// A beat's `tour` is its slideshow. Slide 1 is the beat as it opens; each tap on empty paper (or "continue ›") plays the
+// next slide: a step of the beat, or one variation acted out with the beat's own state and physics — the state a reader's
+// gesture changes, inside the interaction's declared range (`int`); nothing new is computed. After the last slide a tap
+// turns the page. A slide: { say, int?, do(S, H)?, to?: {key: value} or S => {…}, log?: [keys], run?(S, e, from)?, dur?,
+// sync?(S) }. A tap during a slide finishes it and plays the next; a reader's own gesture or setting stops it where it is;
+// reduced motion and stills jump to its end. The cue line says which slide this is and that a tap continues.
+export const TOUR = { i: 0, anim: null, busy: false, keys: [] };
+const tourOf = () => { const sc = App.scenes[App.i]; return sc && sc.tour && sc.tour.length ? sc.tour : null; };
+const tourHelp = {
+  choose(key, v) { const el = CTRL.querySelector(`[data-fk="c:${key}:${v}"]`); if (el) { if (!el.classList.contains('on')) el.click(); } else App.state[key] = v; },
+  toggle(key, on) { if (!!App.state[key] === on) return; const el = CTRL.querySelector(`[data-fk="t:${key}"]`); if (el) el.click(); else App.state[key] = on; },
+  press(label) { const el = [...CTRL.querySelectorAll('button.btn')].find(b => b.textContent === label); if (el) el.click(); },
+};
+function playSlide(k) {
+  const tour = tourOf(); if (!tour || !tour[k]) return;
+  finishSlide(); TOUR.i = k; const s = tour[k], S = App.state;
+  if (s.do) { if (s.dissolve !== false) dissolve(); TOUR.busy = true; try { s.do(S, tourHelp); } finally { TOUR.busy = false; } }
+  const to = typeof s.to === 'function' ? s.to(S) : s.to; TOUR.keys = Object.keys(to || {});
+  if (to || s.run) {
+    const from = {}; for (const key of Object.keys(to || {})) from[key] = S[key];
+    TOUR.anim = { s, to: to || {}, from, S, t0: App.t, dur: (App.rm || App.shoot) ? 0 : (s.dur ?? 1.8) }; tourTick();
+  } else { renderControls(); refreshMargin(true); writeHash(); }
+  renderCue();
+}
+/** one frame of a playing slide: the state moves from where it was toward the slide's values, eased */
+function tourTick() {
+  const a = TOUR.anim; if (!a) return;
+  if (a.S !== App.state) { TOUR.anim = null; return; }   // the page has turned
+  const u = a.dur ? clamp((App.t - a.t0) / a.dur, 0, 1) : 1, e = ease(u);
+  for (const [k, v] of Object.entries(a.to)) a.S[k] = (a.s.log || []).includes(k) ? a.from[k] * Math.pow(v / a.from[k], e) : a.from[k] + (v - a.from[k]) * e;
+  if (a.s.run) a.s.run(a.S, e, a.from);
+  for (const el of CTRL.querySelectorAll('.rul')) if (el._c && el._c.key in a.to) { const c = el._c, v = a.S[c.key]; el.querySelector('.bead').style.left = `${el._toPos(v) * 230}px`; el.parentNode.querySelector('.cval').textContent = c.fmt ? c.fmt(v) : String(v); }
+  if (u >= 1) { TOUR.anim = null; Object.assign(a.S, a.to); if (a.s.end) a.s.end(a.S); renderControls(); refreshMargin(true); writeHash(); }
+}
+function finishSlide() { const a = TOUR.anim; if (a) { a.dur = 0; tourTick(); } }
+/** the slide the state already shows (a beat's steps): a step chosen by hand or by a link puts the tour there */
+function tourSync() { const tour = tourOf(); if (!tour || !tour.some(s => s.sync)) return; const j = tour.findIndex(s => s.sync && s.sync(App.state)); if (j >= 0) TOUR.i = j; }
+/** a reader's own gesture or setting takes over: a playing slide stops where it is */
+function tourYield() { if (TOUR.busy) return; TOUR.anim = null; tourSync(); renderCue(); }
+function renderCue() {
+  const el = document.getElementById('tourcue'); if (!el) return;
+  const tour = tourOf(); el.hidden = !tour || !!App.probe; if (el.hidden) return;
+  const n = tour.length, i = Math.min(TOUR.i, n - 1), s = tour[i], end = App.i === App.scenes.length - 1 && i === n - 1;
+  document.getElementById('tsay').textContent = (typeof s.say === 'function' ? s.say(App.state) : s.say) || '';
+  el.classList.toggle('end', end);
+  document.getElementById('tgo').textContent = `${i + 1} / ${n} · ${end ? 'the end of the story' : i === n - 1 ? 'tap anywhere: the next beat ›' : 'tap anywhere to continue ›'}`;
 }
 export function setPhysics(on) {
   App.adv = on; const t = document.getElementById('advtoggle'); t.setAttribute('aria-checked', String(on)); App.hooks.onPhysics && App.hooks.onPhysics(on);
@@ -178,19 +267,19 @@ export function renderControls(target = CTRL, list = null) {
     else if (c.type === 'toggle') {
       const on = !!App.state[c.key];
       el.innerHTML = `<button class="tog ${on ? 'on' : ''}" role="switch" aria-checked="${on}" data-fk="t:${c.key}">${on ? '●' : '○'} ${c.label}</button>`;
-      el.querySelector('button').onclick = () => { App.hooks.onControl && App.hooks.onControl(c.label, c.role); App.state[c.key] = !App.state[c.key]; if (c.onChange) c.onChange(App.state); App.anim = { ...App.anim, since: App.t, key: c.key }; renderControls(target, list); refreshMargin(); writeHash(); };
+      el.querySelector('button').onclick = () => { tourYield(); App.hooks.onControl && App.hooks.onControl(c.label, c.role); App.state[c.key] = !App.state[c.key]; if (c.onChange) c.onChange(App.state); App.anim = { ...App.anim, since: App.t, key: c.key }; renderControls(target, list); refreshMargin(); writeHash(); };
     } else if (c.type === 'choice') {
       const id = 'cl-' + c.key;
       el.innerHTML = `<div class="clab" id="${id}">${c.label}</div><div role="radiogroup" aria-labelledby="${id}">` + c.options.map(o => { const on = App.state[c.key] === o.v; return `<span class="cho ${on ? 'on' : ''}" role="radio" aria-checked="${on}" tabindex="${on ? 0 : -1}" data-v="${o.v}" data-fk="c:${c.key}:${o.v}">${o.s}</span>`; }).join('') + `</div>`;
       const opts = [...el.querySelectorAll('.cho')];
-      const pick = s => { App.hooks.onControl && App.hooks.onControl(`${c.label}: ${s.textContent}`, c.role); const v = s.dataset.v; App.state[c.key] = isNaN(+v) ? v : +v; if (c.onChange) c.onChange(App.state); App.anim = { ...App.anim, since: App.t, key: c.key }; renderControls(target, list); refreshMargin(); writeHash(); };
+      const pick = s => { if (c.role === 'step' && !s.classList.contains('on')) dissolve(); { const own = TOUR.busy; setTimeout(() => own || tourYield()); } App.hooks.onControl && App.hooks.onControl(`${c.label}: ${s.textContent}`, c.role); const v = s.dataset.v; App.state[c.key] = isNaN(+v) ? v : +v; if (c.onChange) c.onChange(App.state); App.anim = { ...App.anim, since: App.t, key: c.key }; renderControls(target, list); refreshMargin(); writeHash(); };
       opts.forEach((s, i) => { s.onclick = () => pick(s); s.onkeydown = ev => { const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[ev.key]; if (d) { ev.preventDefault(); pick(opts[(i + d + opts.length) % opts.length]); } else if (ev.key === ' ' || ev.key === 'Enter') { ev.preventDefault(); pick(s); } }; });
       if (!opts.some(s => s.tabIndex === 0) && opts[0]) opts[0].tabIndex = 0;
       if (c.role === 'instrument') el.querySelector('[role="radiogroup"]').classList.add('inst');
       if (c.caption) el.insertAdjacentHTML('beforeend', `<div class="ccap">${c.caption}</div>`);
     } else if (c.type === 'button') {
       el.innerHTML = `<button class="btn" data-fk="b:${c.label}">${c.label}</button>`;
-      el.querySelector('button').onclick = () => { App.hooks.onControl && App.hooks.onControl(c.label, c.role); c.act(App.state); App.anim = { ...App.anim, since: App.t, key: c.key || 'btn' }; renderControls(target, list); refreshMargin(); writeHash(); };
+      el.querySelector('button').onclick = () => { tourYield(); App.hooks.onControl && App.hooks.onControl(c.label, c.role); c.act(App.state); App.anim = { ...App.anim, since: App.t, key: c.key || 'btn' }; renderControls(target, list); refreshMargin(); writeHash(); };
     }
   }
   if (!list) {
@@ -215,10 +304,11 @@ function makeRuler(el, c) {
   const fmt = x => c.fmt ? c.fmt(x) : String(x), id = 'rl-' + c.key;
   el.innerHTML = `<div class="clab" id="${id}">${c.label}<span class="cval">${fmt(v)}</span></div><div class="rul" role="slider" tabindex="0" aria-labelledby="${id}" aria-valuemin="${c.min}" aria-valuemax="${c.max}" aria-valuenow="${v}" aria-valuetext="${fmt(v)}" data-fk="r:${c.key}"><div class="rline"></div>${(c.ticks || []).map(t => `<div class="rtick ${toPos(t.v) < 0.02 ? 'lo' : toPos(t.v) > 0.98 ? 'hi' : ''}" style="left:${toPos(t.v) * W0}px"><span>${t.s}</span></div>`).join('')}<div class="bead" style="left:${toPos(v) * W0}px"></div></div>`;
   const rul = el.querySelector('.rul'), bead = el.querySelector('.bead'), val = el.querySelector('.cval');
+  rul._c = c; rul._toPos = toPos;   // a playing tour slide moves the bead too
   if (c.role === 'instrument') rul.classList.add('inst');   // an instrument setting: a notch on a scale, not a knob
   if (c.caption) el.insertAdjacentHTML('beforeend', `<div class="ccap">${c.caption}</div>`);
   if (c.readout) {   // a reading instrument: role meter, a tick for a marker; operable for precision only when the scene allows
-    rul.classList.add('ro'); rul._c = c; rul._toPos = toPos; rul._v = v;
+    rul.classList.add('ro'); rul._v = v;
     if (!(c.operable && c.operable(App.state))) {
       rul.setAttribute('role', 'meter'); rul.removeAttribute('tabindex'); rul.title = c.title || '';
       rul.addEventListener('pointerdown', () => { AFF.nudge = App.t; App.hooks.onReading && App.hooks.onReading(c.label); });   // a reading pressed like a slider points to the physical gesture
@@ -226,7 +316,7 @@ function makeRuler(el, c) {
     }
     rul.classList.add('op'); rul.title = c.titleOperable || '';
   }
-  const setV = nv => { if (App.hooks.onSetting && App.state[c.key] !== nv) App.hooks.onSetting(c.label, c.role || (c.readout ? 'readout' : 'slider')); App.state[c.key] = nv; bead.style.left = `${toPos(nv) * W0}px`; val.textContent = fmt(nv); rul.setAttribute('aria-valuenow', nv); rul.setAttribute('aria-valuetext', fmt(nv)); if (c.onChange) c.onChange(App.state); refreshMargin(true); };
+  const setV = nv => { tourYield(); if (App.hooks.onSetting && App.state[c.key] !== nv) App.hooks.onSetting(c.label, c.role || (c.readout ? 'readout' : 'slider')); App.state[c.key] = nv; bead.style.left = `${toPos(nv) * W0}px`; val.textContent = fmt(nv); rul.setAttribute('aria-valuenow', nv); rul.setAttribute('aria-valuetext', fmt(nv)); if (c.onChange) c.onChange(App.state); refreshMargin(true); };
   const set = ev => { const r = rul.getBoundingClientRect(); setV(fromPos((ev.clientX - r.left) / r.width)); };
   rul.addEventListener('pointerdown', ev => { rul.setPointerCapture(ev.pointerId); set(ev); rul.onpointermove = set; });
   for (const t of ['pointerup', 'pointercancel']) rul.addEventListener(t, () => { rul.onpointermove = null; writeHash(); });
@@ -329,6 +419,7 @@ export function frame() {
   DESIGN_LINT.scene = `beat ${sc.n}`;
   G.setTransform(DPR, 0, 0, DPR, 0, 0); G.fillStyle = TK.paper; G.fillRect(0, 0, MAIN.w, MAIN.h); OV.innerHTML = '';
   const t0 = performance.now();
+  if (TOUR.anim) try { tourTick(); } catch (e) { console.error(e); TOUR.anim = null; }
   try { sc.draw(G, App.state, App.t); } catch (e) { console.error(e); }
   PERF.draw.push(performance.now() - t0); if (PERF.draw.length > 600) PERF.draw.shift(); PERF.n++;
   syncReadouts();
@@ -365,6 +456,7 @@ export async function boot(prepare) {
   window.__lyaState = () => App.state; window.__lyaLint = () => DESIGN_LINT.hits.slice();   // read-only hooks for app/smoke.mjs
   window.__lyaClock = t => { App.tFixed = t; };   // virtual clock for app/record.mjs (deterministic recordings)
   window.__lyaPerf = (reset = false) => { const d = PERF.draw.slice().sort((a, b) => a - b), r = { frames: PERF.n, samples: d.length, mean_ms: d.reduce((a, b) => a + b, 0) / (d.length || 1), p95_ms: d[Math.floor(0.95 * (d.length - 1))] || 0, max_ms: d[d.length - 1] || 0 }; if (reset) { PERF.draw = []; PERF.n = 0; } return r; };
+  window.__lyaTour = () => { const t = tourOf(); if (!t) return null; const s = t[Math.min(TOUR.i, t.length - 1)]; return { i: TOUR.i, n: t.length, int: s.int || null, key: s.key || null, keys: TOUR.keys.slice(), playing: !!TOUR.anim }; };   // the slideshow's position (app/tour_check.mjs)
   window.__lyaAffs = () => AFF.list.map(o => ({ id: o.id, name: o.name || null, kind: o.kind, int: o.int || null, role: o.role || null, hint: o.hint ? o.hint.text : null }));   // the figure's physical objects (app/audit.mjs)
   window.__lyaChecks = () => App.scenes.flatMap(sc => Object.entries(sc.checks || {}).map(([name, f]) => ({ beat: sc.n, name, ...f() })));   // scene self-checks (app/smoke.mjs)
   for (const sc of App.scenes) if (!META(sc.n).title) console.error(`scene ${sc.n} (${sc.slug}) has no manifest entry`);

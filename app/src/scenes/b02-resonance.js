@@ -52,6 +52,12 @@ export const sceneResonance = {
     { type: 'choice', key: 'mode', role: 'view', why: 'a choice between two ways of looking (one atom and five colours, or one colour and many atoms), not a physical state', label: 'view', options: [{ v: 'one', s: 'one atom, five colours' }, { v: 'many', s: 'one colour, many atoms' }] },
     { type: 'ruler', key: 'v', label: 'atom’s speed along the beam', readout: true, operable: () => hintUsed('b2.push') || App.adv, title: 'a reading — push the atom: drag its motion', titleOperable: 'a reading; drag it for a precise value', min: -40, max: 40, step: 1, fmt: v => `${v > 0 ? '+' : ''}${v} km/s`, ticks: [{ v: -30, s: '−30' }, { v: 0, s: '0' }, { v: 30, s: '+30' }], show: S => S.mode === 'one' },
   ],
+  tour: [
+    { say: S => `one atom moving ${S.v > 0 ? '+' : ''}${Math.round(S.v)} km/s along the beam: only the colour that is Lyα in its own frame is scattered` },
+    { say: 'at rest, it scatters Lyα itself — 1215.67 Å in its own frame', int: 'INT-ATOMV-001', to: { v: 0 } },
+    { say: 'moving toward us, it is in resonance with a different colour: the Doppler shift', int: 'INT-ATOMV-001', to: { v: -30 } },
+    { say: 'one colour, many atoms: only the atoms moving at the right speed respond', do: (S, H) => H.choose('mode', 'many') },
+  ],
   init(S) { LAW2 = motionLaw(2, 'INT-ATOMV-001'); S.v = 15; S.mode = 'one'; },
   draw(g, S, t) {
     const { yB, xAtom } = B2, xObs = 40, xQ = 600;

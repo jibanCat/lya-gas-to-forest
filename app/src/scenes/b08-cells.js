@@ -19,6 +19,12 @@ export const sceneCells = {
   eqs: () => metaEqs(8),
   persist: ['nc'],
   controls: [{ type: 'choice', key: 'nc', role: 'representation', why: 'how finely the stretch is described (sampling), not a physical state of the gas', label: 'cut the stretch into', options: NCELLS.map(n => ({ v: n, s: n === 3 ? '3 parcels' : n === 225 ? 'full sampling' : String(n) })) }],
+  tour: [
+    { say: 'three parcels: a teaching summary of the stretch' },
+    { say: 'cut finer: twelve cells, each mapped by the same rule', do: (S, H) => H.choose('nc', 12) },
+    { say: 'tens of cells: the optical depth approaches the full calculation (dashed)', do: (S, H) => H.choose('nc', 48) },
+    { say: 'the full sampling: it converges on the full calculation', do: (S, H) => H.choose('nc', 225) },
+  ],
   init(S) { S.nc = 3; },
   draw(g, S) {
     drawSlab(g, [120, 6, 800, 150], { tilt: 0.55, focus: true, fade: 0.55, windowX: [SC.win.x0, SC.win.x0 + SC.win.span], quasar: false, observer: false });

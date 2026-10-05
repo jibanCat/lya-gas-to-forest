@@ -4,7 +4,7 @@
 import { TK } from '../design/tokens.js';
 import { Ink } from '../design/ink.js';
 import { clamp, lerp, ease, rgba, fmtA } from '../core/util.js';
-import { App } from '../core/app.js';
+import { App, motionOK } from '../core/app.js';
 import { META } from '../core/meta.js';
 import { P } from '../physics/lya.js';
 import { SC } from '../data/scene-data.js';
@@ -13,6 +13,12 @@ import { drawAtoms } from '../primitives/atoms.js';
 
 const B1F = { y: 70, w: 226, h: 148, xs: [36, 298, 560, 822] }, B1L = { cx: 400, cy: 490, R: 205 }, B1SLAB = [110, 262, 620, 300];
 function b1stage(z) { return clamp(Math.round(z * 3), 0, 3); }
+/** the zoom as drawn: after a slideshow tap it eases to the next scale over 0.8 s; the ruler and keys are shown at once */
+function b1shown(S) {
+  if (S._zT0 == null || !motionOK()) return S.zoom;
+  const u = clamp((App.t - S._zT0) / 0.8, 0, 1); if (u >= 1) { S._zT0 = null; return S.zoom; }
+  return lerp(S._zFrom, S.zoom, ease(u));
+}
 const B1KEY = [['wash', 'smooth wash', 'gas — its density (Beats 0, 7–8, 11–12)'], ['stip', 'faint stipple', 'protons and electrons (here only)'], ['dot', 'dark dots', 'neutral atoms, representative (1–4, 6)'], ['smudge', 'smudge', 'a teaching parcel (Beats 6–8); a “cloud” in 13'], ['cells', 'ruled cells', 'the sightline sampled (8–12)']];
 function b1stipple(g, cx, cy, R, n, t, { alpha = 1, neutral = 5, seed = 5 } = {}) {
   const r = P.rng(seed), tt = App.rm || App.shoot ? 0 : t;
@@ -38,9 +44,14 @@ export const sceneScales = {
   keys: 'Left and right arrows zoom from the volume down to the atoms.',
   persist: ['zoom'],
   get controls() { return [{ type: 'ruler', key: 'zoom', role: 'instrument', why: 'a magnification — a viewpoint on the same gas, like a microscope’s, not a physical state; the instrument’s own setting', caption: 'the magnification — the same gas at every scale', label: 'zoom', min: 0, max: 1, step: 0.01, fmt: z => ((META(1).stages || [])[b1stage(z)] || {}).label || '', ticks: [{ v: 0, s: 'volume' }, { v: 1 / 3, s: 'parcel' }, { v: 2 / 3, s: 'particles' }, { v: 1, s: 'atoms' }] }]; },
+  tour: [0, 1, 2, 3].map(k => ({   // the slideshow: each tap zooms smoothly to the next scale
+    say: () => { const st = (META(1).stages || [])[k] || {}; return `${st.label} — ${st.text}`; },
+    sync: S => b1stage(S.zoom) === k,
+    ...(k ? { do: S => { S._zFrom = b1shown(S); S._zT0 = App.t; S.zoom = k / 3; }, dissolve: false } : {}),
+  })),
   init(S) { S.zoom = 0; S.px = SC.win.x0 + SC.parcels[1].x; },
   draw(g, S, t) {
-    const z = S.zoom, k = b1stage(z), st = META(1).stages || [];
+    const z = b1shown(S), k = b1stage(z), st = META(1).stages || [];
     Ink.note(g, 'same gas, different scale', 535, 36, { align: 'center', size: 17, c: TK.ink });
     const scales = ['20 Mpc/h', '1 Mpc/h', '~10 m', 'not to scale'];
     B1F.xs.forEach((x, j) => {

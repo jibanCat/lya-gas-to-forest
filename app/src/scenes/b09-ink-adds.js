@@ -18,6 +18,11 @@ export const sceneInkAdds = {
   persist: ['wrong'],
   // only "play the stacking again" replays it; the wrong-rule toggle leaves the stack where it is
   controls: [{ type: 'button', role: 'replay', why: 'replays the stacking of the cells’ ink', label: 'play the stacking again', act: S => { S._t0 = App.t; } }, { type: 'toggle', key: 'wrong', role: 'counterfactual', why: 'a deliberately wrong model, to compare with: what if dips added instead of optical depths', label: 'what if dips added instead?' }],
+  tour: [
+    { say: 'every cell lays its ink in velocity space; where contributions overlap, they stack' },
+    { say: 'what if the dips added instead? adding them gives negative light — impossible', do: (S, H) => H.toggle('wrong', true) },
+    { say: 'the ink (optical depth) adds; the light, F = e^(−Στ), stays between 0 and 1', do: (S, H) => H.toggle('wrong', false) },
+  ],
   init(S) { S.wrong = false; S._t0 = App.t; },
   draw(g, S) {
     const ug = UG_W(), yT = 560, { kern, tot } = windowKernels(N9), tmax = Math.max(...tot) * 1.08, my = v => yT - v / tmax * 360;

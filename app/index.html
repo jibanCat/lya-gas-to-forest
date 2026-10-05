@@ -9,7 +9,7 @@
   /* colours come from app/src/design/tokens.js (set as custom properties at boot); these fallbacks match it */
   :root { --paper:#FCFBF8; --light:#FFFDF4; --ink:#1F2732; --graphite:#59616C; --muted:#6F7278; --pencil:#8E959D; --faint:#C9CBCF; --hair:#D9D6CF; --accent:#B93A20; }
   html, body { margin: 0; height: 100%; background: var(--paper); overflow: hidden; color: var(--ink); }
-  #stage { position: absolute; width: 1440px; height: 880px; transform-origin: 0 0; background: var(--paper); }
+  #stage { position: absolute; width: 1440px; height: 880px; transform-origin: 0 0; background: var(--paper); -webkit-tap-highlight-color: transparent; }   /* a tap on empty paper turns the page: no grey flash */
   button { all: unset; cursor: pointer; }
   :focus { outline: none; } :focus-visible { outline: 1.5px solid var(--accent); outline-offset: 3px; border-radius: 1px; }   /* keyboard focus: the affordance grammar's cinnabar hairline, unmistakable; pointer use shows none */
   #cv:focus-visible { outline: 1px dotted var(--graphite); outline-offset: -2px; }   /* the figure itself: quiet — inside it, the focused object carries the cinnabar mark */
@@ -23,6 +23,12 @@
   #topnav button { touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }   /* repeated taps turn pages: no double-tap zoom, no selection, no callout */
   #topnav #nexttitle { display: inline-block; vertical-align: -3px; line-height: 1.2; max-width: 330px; margin-left: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: italic 300 13px 'Fraunces', serif; letter-spacing: 0; color: var(--muted); pointer-events: none; }   /* the next beat's title: a preview, not the target */
   #advtoggle::after { left: -10px; right: -10px; }
+  #tourcue { position: absolute; z-index: 4; right: 32px; top: 49px; width: 650px; text-align: right; white-space: nowrap; pointer-events: none; }   /* the slideshow: what this slide shows; below it, where the reader is and that a tap continues (a strip no figure uses) */
+  #tourcue[hidden] { display: none; }
+  #tsay { display: block; font: italic 300 14px/17px 'Fraunces', serif; color: var(--graphite); overflow: hidden; text-overflow: ellipsis; }
+  #tgo { pointer-events: auto; position: relative; margin-top: 2px; font: 400 11px 'IBM Plex Mono', monospace; letter-spacing: .04em; color: var(--graphite); touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+  #tgo::after { content: ''; position: absolute; left: -10px; right: -10px; top: -7px; bottom: -11px; } #tgo:hover { color: var(--ink); }
+  #tourcue.end #tgo { pointer-events: none; }
   #advtoggle { position: absolute; right: 32px; top: 20px; font: italic 300 15px 'Fraunces', serif; color: var(--graphite); user-select: none; }
   #advtoggle .on { color: var(--accent); }
   #margin { position: absolute; left: 40px; top: 60px; width: 270px; height: 812px; overflow: hidden auto; scrollbar-width: thin; display: flex; flex-direction: column; }   /* scrolls only when a scene's controls and its physics panel exceed the column (Beat 6) */
@@ -67,6 +73,9 @@
   #probe .pa { font: 300 12.5px/1.4 'Inter', sans-serif; color: var(--muted); margin: 8px 0; }
   #probe .popt { display: block; font: 300 14.5px/1.5 'Fraunces', serif; color: var(--muted); margin: 0 0 4px; }
   #probe .popt.on { color: var(--ink); border-bottom: 1px solid var(--ink); display: inline-block; }
+  #cvx { position: absolute; left: 340px; top: 70px; width: 1070px; height: 780px; pointer-events: none; opacity: 0; }   /* the view a page turn dissolves from: it takes no input */
+  #mtitle.enter, #mtext.enter { animation: lyaenter .42s ease-out; } @keyframes lyaenter { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { #mtitle.enter, #mtext.enter { animation: none; } }
   #cv { position: absolute; left: 340px; top: 70px; width: 1070px; height: 780px; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }   /* holds and drags must not select or open a callout */
   #ov { position: absolute; inset: 0; pointer-events: none; } .ovt { position: absolute; white-space: nowrap; }
   #micro { position: absolute; inset: 0; background: var(--paper); z-index: 20; }

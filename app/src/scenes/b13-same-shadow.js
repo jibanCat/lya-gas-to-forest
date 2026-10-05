@@ -36,6 +36,13 @@ export const sceneSameShadow = {
     { type: 'toggle', key: 'metal', role: 'instrument', why: 'which lines the observation includes: information added, not a change to the gas', label: 'add a heavier ion’s line (silicon, Si IV)', show: S => S.phase === 'break' },
     { type: 'toggle', key: 'lyb', role: 'instrument', why: 'which lines the observation includes: information added, not a change to the gas', label: 'add Lyman-β', show: S => S.phase === 'break' },
   ],
+  tour: [
+    { say: 'one recorded line; three gases could have made it — predict which', sync: S => S.phase === 'predict' },
+    { say: 'it was (i), by construction — two others fit, for different reasons', sync: S => S.phase === 'reveal', do: (S, H) => H.choose('phase', 'reveal') },
+    { say: 'to break the tie, add a second line', sync: S => S.phase === 'break' && !S.metal && !S.lyb, do: (S, H) => H.choose('phase', 'break') },
+    { say: 'a heavier ion (Si IV): heat widens it less, motion as much — the hot gas (i) is narrowest', sync: S => S.phase === 'break' && S.metal && !S.lyb, do: (S, H) => H.toggle('metal', true) },
+    { say: 'Lyman-beta, a weaker line: the blend (ii) stands apart; (i) and (iii) stay alike', sync: S => S.phase === 'break' && S.lyb, do: (S, H) => H.toggle('lyb', true) },
+  ],
   init(S) { S.phase = 'predict'; S.pick = ''; S.metal = false; S.lyb = false; },
   draw(g, S) {
     const snr = 20, sig = 1 / snr, ug = b13ug(), Fs = b13F(), data = P.addNoise(Fs[0], snr, 12);

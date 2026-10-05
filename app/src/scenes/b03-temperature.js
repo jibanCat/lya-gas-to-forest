@@ -115,6 +115,11 @@ export const sceneTemperature = {
   get controls() {
     return [b3T(), { type: 'button', role: 'replay', why: 'the quiet replay of the first-encounter formation (once per session)', label: 'replay how this forms (slowly) ▸', act: S => { S._form = { t0: App.t, slow: true }; S.fixedStage = 0; S._vb = null; } }];
   },
+  tour: [
+    { say: 'temperature is random motion: counted by their speed along the beam, the atoms make the line' },
+    { say: 'warmer gas: faster random motion, a wider census — a wider line', int: 'INT-TEMP-001', do: S => { if (S._form) { S._form = null; b3mark(); } }, dissolve: false, to: { T: 4e4 }, log: ['T'], dur: 2.2 },
+    { say: 'cooler gas: slower motion, a narrower line', int: 'INT-TEMP-001', to: { T: 3000 }, log: ['T'], dur: 2.2 },
+  ],
   init(S) { S.T = 1e4; S._vb = null; S._hold = null; S._form = b3seen() ? null : { t0: App.t + 0.5, slow: false }; },
   afterHash(S) { if (S.stage != null) { S.fixedStage = clamp(Math.round(+S.stage), 1, 4); S._form = null; } const d = b3T(); S.T = clamp(+S.T || 1e4, d.min, d.max); },
   draw(g, S, t) {

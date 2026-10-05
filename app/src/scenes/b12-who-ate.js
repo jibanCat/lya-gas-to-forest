@@ -25,6 +25,15 @@ export const B12 = { yR: 262, yV: 392, hV: 7, f1: 450, f0: 630, ly: 715, linger:
 function b12seen() { return onboarded('b12.traced'); }   // once per session
 function b12mark() { markOnboarded('b12.traced'); }
 /** seconds into the causal reveal (99: done; at once in stills and under reduced motion) */
+/** for the tour: the deepest line, a shallow single line, and the ends of the scan */
+function b12at(kind) {
+  const ug = SC.ug, tau = SC.tau, P0 = SC.period; let k = -1;
+  for (let i = 1; i < ug.length - 1; i++) { if (ug[i] < 150 || ug[i] > P0 - 150) continue;
+    if (kind === 'deep' && (k < 0 || tau[i] > tau[k])) k = i;
+    if (kind === 'shallow' && tau[i] > 0.25 && tau[i] < 0.6 && tau[i] >= tau[i - 1] && tau[i] >= tau[i + 1] && (k < 0 || Math.abs(tau[i] - 0.4) < Math.abs(tau[k] - 0.4))) k = i; }
+  if (kind === 'start') return 120; if (kind === 'end') return P0 - 120;
+  return ug[k < 0 ? ug.length >> 1 : k];
+}
 function b12since(S) { return (App.shoot || App.rm || S._traceT == null) ? 99 : App.t - S._traceT; }
 const ramp = (t, [a, b]) => clamp((t - a) / (b - a), 0, 1);
 const uOfX = x => ((x - FX.x0) / (FX.x1 - FX.x0) * SC.period + SC.period) % SC.period;
@@ -71,6 +80,12 @@ export const sceneWhoAte = {
   eqs: () => metaEqs(12),
   persist: ['pu'],
   controls: [{ type: 'button', role: 'replay', why: 'the quiet replay of the causal trace (once per session)', label: 'trace this colour slowly ▸', act: S => { S._traceT = App.t; S._scanning = false; } }],
+  tour: [
+    { say: 'point at a colour: the gas that absorbed it lights up' },
+    { say: 'scan along the spectrum: each colour’s absorbers light up in turn', int: 'INT-SCAN-001', do: S => { S._traceT = null; S._scanning = true; S.pu = b12at('start'); }, dissolve: false, to: () => ({ pu: b12at('end') }), end: S => { S._scanning = false; S._scanEnd = App.t; }, dur: 5 },
+    { say: 'the deepest line: much neutral hydrogen absorbs this colour', int: 'INT-SCAN-001', do: S => { S._scanning = true; }, dissolve: false, to: () => ({ pu: b12at('deep') }), end: S => { S._scanning = false; S._scanEnd = App.t; }, dur: 2.2 },
+    { say: 'a shallow line: only a little gas absorbs here', int: 'INT-SCAN-001', do: S => { S._scanning = true; }, dissolve: false, to: () => ({ pu: b12at('shallow') }), end: S => { S._scanning = false; S._scanEnd = App.t; }, dur: 2.2 },
+  ],
   init(S) {   // start on a colour that two separated regions share; the first time, trace it once on arrival
     const th = invTh(); let best = null;
     for (let i = 0; i < SC.ug.length; i += 2) {

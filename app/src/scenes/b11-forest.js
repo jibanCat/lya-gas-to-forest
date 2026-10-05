@@ -22,6 +22,12 @@ export const sceneForest = {
     { type: 'ruler', key: 'fwhm', role: 'instrument', why: 'the spectrograph’s own setting: turning it is the physical act of observing, and it changes the record, not the gas', label: 'spectrograph resolution (FWHM)', min: 0, max: 200, step: 1, fmt: v => v < 1 ? 'perfect' : `${v} km/s`, ticks: [{ v: 0, s: 'perfect' }, { v: 70, s: '70' }, { v: 150, s: '150' }], onChange: S => { S._obs = true; } },
     { type: 'choice', key: 'snr', role: 'instrument', why: 'how long the spectrograph collects light: a setting of the measurement, not of the gas', caption: 'settings of the spectrograph, not of the gas', label: 'signal-to-noise per pixel', options: [{ v: 0, s: 'no noise' }, { v: 50, s: '50' }, { v: 20, s: '20' }, { v: 5, s: '5' }], onChange: S => { S._obs = true; } },
   ],
+  tour: [
+    { say: 'the forest, as a perfect spectrograph would record it' },
+    { say: 'a real spectrograph blurs it: narrow lines become shallower and wider', key: 'fwhm', to: { fwhm: 50 }, dur: 2.4 },
+    { say: 'and adds noise: the weakest lines hide in it', do: (S, H) => H.choose('snr', 20) },
+    { say: 'a perfect instrument again: the gas wrote the same lines all along', do: (S, H) => { S.fwhm = 0; H.choose('snr', 0); } },
+  ],
   init(S) { S.fwhm = 0; S.snr = 0; S._obs = false; },
   draw(g, S) {
     drawSlab(g, [150, 0, 740, 196], { tilt: 0.55, focus: true, fade: 0.9 });

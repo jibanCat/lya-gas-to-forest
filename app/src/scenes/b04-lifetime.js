@@ -17,6 +17,11 @@ export const sceneLifetime = {
     return [{ type: 'choice', key: 'stage', role: 'step', why: 'a chain of reasoning (a short life → a spread of colours → the core is motion → the wings are lifetime), not a physical state', label: 'step', options: stageOpts(4) },
       { type: 'ruler', key: 'T', role: 'advanced', why: 'the claim (lifetime → wings) does not need it; on the surface it would be a second temperature gesture after Beat 3’s hold, so it is a precision control in “show the physics”', label: 'temperature', min: 2000, max: 1e5, log: true, fmt: fmtT, ticks: logTicks([3e3, 1e4, 3e4, 1e5], v => v >= 1e5 ? '1e5' : v >= 1e4 ? `${v / 1e4}e4` : `${v / 1e3}e3`), show: S => S.stage >= 3 && App.adv }];
   },
+  tour: [
+    ...[1, 2, 3].map(k => ({ say: () => { const st = (META(4).stages || [])[k - 1] || {}; return `${st.label} — ${st.text}`; }, sync: S => S.stage === k, ...(k > 1 ? { do: (S, H) => H.choose('stage', k) } : {}) })),
+    { say: 'warmer gas: the thermal core widens; the natural width does not change', key: 'T', to: { T: 4e4 }, log: ['T'], dur: 2.2 },
+    { say: () => { const st = (META(4).stages || [])[3] || {}; return `${st.label} — ${st.text}`; }, sync: S => S.stage === 4, do: (S, H) => { S.T = 1e4; H.choose('stage', 4); } },
+  ],
   init(S) { S.T = 1e4; S.stage = 1; },
   draw(g, S, t) {
     const st = (META(4).stages || [])[S.stage - 1] || {}, on1 = S.stage === 1;
