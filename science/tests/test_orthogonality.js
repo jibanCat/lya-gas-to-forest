@@ -81,10 +81,11 @@ for (const D of DIMS) for (const val of D.values) {
   cases.push(cs);
 }
 const w0 = P.parcelWidths(base, HUB), b0Drawn = P.bFromFwhm(m0.fwhm);
+const wOwn = P.parcelWidths({ ...base, dvdx: p0r.dvdx }, HUB);   // the same toy parcel with its own velocity gradient (as Beats 7–8 use it); Beat 6 sets it to zero
 check('the toy’s parcel: heat alone is not the drawn width (the size term is printed beside it)', w0.bSize / w0.bThermal > 0.5 && rel(b0Drawn, w0.bThermal) > 0.2, `b_size/b_thermal = ${(w0.bSize / w0.bThermal).toFixed(2)}; drawn b ${b0Drawn.toFixed(2)} vs thermal ${w0.bThermal.toFixed(2)} km/s`);
 const fAmt = 2, fT = 2, tA = tauOf(fine, { ...base, N: base.N * fAmt }), tT = tauOf(fine, { ...base, T: base.T * fT });
 const rep = {
-  base: { x_mpch: base.x, v_kms: base.v, T_K: base.T, log10_N: Math.log10(base.N), sx_mpch: base.sx, b_thermal_kms: w0.bThermal, b_size_kms: w0.bSize, b_drawn_kms: b0Drawn, peak_tau_drawn: m0.peak, hub_kms_per_mpch: HUB },
+  base: { x_mpch: base.x, v_kms: base.v, T_K: base.T, log10_N: Math.log10(base.N), sx_mpch: base.sx, b_thermal_kms: w0.bThermal, b_size_kms: w0.bSize, b_drawn_kms: b0Drawn, own_dvdx_kms_per_mpch: p0r.dvdx, b_size_with_own_gradient_kms: wOwn.bSize, b_with_own_gradient_kms: wOwn.bExpected, peak_tau_drawn: m0.peak, hub_kms_per_mpch: HUB },
   domains: Object.fromEntries(['INT-PLACE-001', 'INT-PUSH-001', 'INT-WARM-001', 'INT-AMOUNT-001'].map(id => [id, dom(id)])),
   grids: { fine_kms: [fine[0], fine[fine.length - 1], fine.length], scene_kms: [app[0], app[app.length - 1], app.length], drawn_kms: [drawn[0], drawn[drawn.length - 1], drawn.length] }, scene_prints_for: (n => `${n} of ${cases.length} cases` + (n < cases.length ? ' (the others run off its grid and print "not measured")' : ''))(cases.filter(c => typeof c.scene_prints === 'object').length),
   max_err: maxErr, cases, checks,

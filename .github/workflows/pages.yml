@@ -27,12 +27,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Tools (Python with PyYAML in a venv; Playwright 1.63 with Chromium, Firefox and WebKit)
+      - name: Tools (Python with PyYAML, NumPy and SciPy in a venv; Playwright 1.63 with Chromium, Firefox and WebKit)
         run: |
           set -euo pipefail
           node --version
           python3 -m venv "$RUNNER_TEMP/venv"
-          "$RUNNER_TEMP/venv/bin/pip" install --quiet pyyaml==6.0.2
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet pyyaml==6.0.2 numpy==2.2.6 scipy==1.15.2
           npm install --global --no-fund --no-audit playwright@1.63.0
           playwright install --with-deps chromium firefox webkit
       - name: Release gate

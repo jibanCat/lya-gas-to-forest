@@ -189,6 +189,21 @@ references:
       value computed as A_r(p) + A_r(e) − E_I/(m_u c^2) is 1.0078250319 (differs by 3e-10; irrelevant).
 
   # ------------------------------------------------------------------ textbooks
+  - id: REF-NIST-ISOTOPES-SI
+    anchor: ref-nist-isotopes-si
+    short: "NIST isotopic compositions (silicon)"
+    kind: database
+    citation: "NIST Atomic Weights and Isotopic Compositions with Relative Atomic Masses, https://physics.nist.gov/comp — silicon entry; relative atomic masses from 'The AME2012 Atomic Mass Evaluation' (Wang, M. et al. 2012, Chinese Physics C 36(12); DOI 10.1088/1674-1137/36/12/003 as given on the NIST page)"
+    identifiers:
+      url: "https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=Si&ascii=ascii2&isotype=some"
+      url_source_note: "https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses"
+    supports:
+      - claim: "²⁸Si relative atomic mass 27.97692653465 u, isotopic composition 0.92223"
+        location: "Silicon entry"
+        location_verified: true
+        how_verified: "The hydrogen-page link previously cited for silicon was split into this record (2026-10-05); values as listed on the silicon page."
+    status: verified
+
   - id: REF-RL79
     anchor: ref-rybicki-lightman-1979
     short: "Rybicki & Lightman 1979"
@@ -349,13 +364,13 @@ references:
     anchor: ref-scipy-wofz
     short: "SciPy scipy.special.wofz"
     kind: documentation
-    citation: "SciPy scipy.special.wofz documentation (v1.18.0 docs page): w(z) = exp(−z²) erfc(−iz); Reference [1] Steven G. Johnson, Faddeeva W function implementation, http://ab-initio.mit.edu/Faddeeva"
-    identifiers: {url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.wofz.html"}
+    citation: "SciPy scipy.special.wofz documentation (v1.15.2 docs page, the version used here; the v1.18.0 page is the same): w(z) = exp(−z²) erfc(−iz); Reference [1] Steven G. Johnson, Faddeeva W function implementation, http://ab-initio.mit.edu/Faddeeva"
+    identifiers: {url: "https://docs.scipy.org/doc/scipy-1.15.2/reference/generated/scipy.special.wofz.html"}
     supports:
       - claim: "scipy.special.wofz computes the Faddeeva function and cites Johnson's Faddeeva package"
         location: "docstring References [1]"
         location_verified: true
-        how_verified: "WebFetch of the docs page (v1.18.0) on 2026-10-02."
+        how_verified: "WebFetch of the docs page (v1.18.0) on 2026-10-02; the v1.15.2 page fetched on 2026-10-05 gives the same definition and the same reference [1]."
       - claim: "H(a,x) = Re w(x + i a)"
         location: "identity (not stated on the scipy page)"
         location_verified: false
@@ -711,7 +726,7 @@ references:
         location_verified: true
         how_verified: "arXiv v4"
       - claim: "re-check: Table 2 column 'TT,TE,EE+lowE+lensing' gives H0 = 67.36 ± 0.54 km s^-1 Mpc^-1, Ωm = 0.3153 ± 0.0073, ΩΛ = 0.6847 ± 0.0073; the caption states that the baseline results are based on TT,TE,EE+lowE+lensing"
-        location: "Table 2, arXiv v4 p. 15, column 'TT,TE,EE+lowE+lensing' (the adjacent column 'TT,TE,EE+lowE+lensing+BAO' gives 67.66, 0.3111, 0.6889)"
+        location: "Table 2, arXiv v4 p. 16, column 'TT,TE,EE+lowE+lensing' (the adjacent column 'TT,TE,EE+lowE+lensing+BAO' gives 67.66, 0.3111, 0.6889)"
         location_verified: true
         how_verified: "2026-10-03: arXiv v4 PDF (9 Aug 2021), pdftotext. h = 0.6736 is H0/100 (not a separate table entry)."
     status: verified

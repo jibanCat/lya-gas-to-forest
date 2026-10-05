@@ -22,13 +22,14 @@ CLASSES = [
     ('science/validation/mapping/oracle.json', 'numerical oracle output', 'this project — `science/oracle/mapping_oracle.py`', OWN, 'generated', 'independent real-to-velocity maps and exact distance–redshift values'),
     ('science/validation/redshift/oracle.json', 'numerical oracle output', 'this project — `science/oracle/redshift_oracle.py` (SciPy integration)', OWN, 'generated', 'comoving distances and their inverse'),
     ('science/validation/degeneracy/oracle.json', 'numerical oracle output', 'this project — `science/oracle/degeneracy_oracle.py`', OWN, 'generated', 'exact-Voigt spectra and Δχ² of the "same shadow" configurations'),
-    ('science/validation/degeneracy/configs.json', 'synthetic teaching configurations', 'this project', OWN, 'authored', 'the three gas configurations of the "same shadow" scene'),
+    ('science/validation/degeneracy/configs.json', 'synthetic teaching configurations', 'this project — `science/tools/same_shadow_configs.py`', OWN, 'generated', 'the three gas configurations of the "same shadow" scene; (iii) computed from (i) by a matching condition'),
+    ('science/validation/computations/app_values.json', 'validation output', 'this project — `science/tests/test_computations.js`', OWN, 'generated', "the app's own values at fixed inputs, which the Python reproductions are checked against"),
     ('science/validation/closure/cases/*.json', 'derived from synthetic inputs', 'this project — `science/oracle/fakespectra_closure.py`, running fake_spectra 2.2.4 (S. Bird, MIT) on controlled synthetic skewers', OWN + '; produced with MIT-licensed fake_spectra', 'generated', 'per-case optical depths and flux from fake_spectra, the browser method and an exact reference'),
     ('science/validation/closure/metrics.json', 'derived from synthetic inputs', 'this project — closure study', OWN, 'generated', 'the closure metrics over all cases'),
     ('science/validation/closure/validation_mode.json', 'derived from synthetic inputs', 'this project — `science/oracle/fakespectra_validation_mode.py`', OWN, 'generated', 'the convention-aligned closure check'),
     ('science/validation/closure/mocksnap.json', 'derived from synthetic inputs', 'this project — `science/oracle/fakespectra_mocksnap.py` (a 3-particle mock snapshot)', OWN, 'generated', 'fake_spectra unit-convention checks'),
     ('science/validation/closure/js_vs_port.json', 'validation output', 'this project', OWN, 'generated', 'browser JavaScript vs its Python port'),
-    ('science/validation/*/report.json', 'validation output', 'this project — `science/tests/` (and `app/smoke.mjs` for render)', OWN, 'generated', 'measured results of each validation; read by the build, never typed'),
+    ('science/validation/*/report.json', 'validation output', 'this project — `science/tests/`, `app/smoke.mjs` (render) and `reproduce/check.py` (the Python reproductions)', OWN, 'generated', 'measured results of each validation; read by the build, never typed'),
 ]
 DATA_EXT = ('.json', '.csv', '.npz', '.npy', '.bin', '.hdf5', '.h5', '.fits', '.dat', '.txt')
 DATA_DIRS = ('science/data/', 'science/validation/')

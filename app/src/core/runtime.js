@@ -11,6 +11,7 @@ import { clamp } from './util.js';
 import { App, parseHash, writeHash } from './app.js';
 import { META, metaEqs } from './meta.js';
 import { openSources, closeSources } from './sources.js';
+import { openPython, closePython, pythonFor } from './python.js';
 import { cursorOf, affHitTest, drawAffordance, drawHint, hintUsed, markHint, affFade } from '../primitives/affordance.js';
 
 export let CV = null;
@@ -32,6 +33,7 @@ function buildDOM() {
     <canvas id="cv" tabindex="0" role="application" aria-roledescription="interactive figure" aria-describedby="live"></canvas><div id="ov"></div>
     <div id="micro" class="hidden" role="dialog" aria-modal="true" aria-labelledby="mtitle2"><button id="mback">← back to the story</button><h2 id="mtitle2"></h2><div id="mtext2"></div><canvas id="mcv"></canvas><div id="mctrl"></div><div id="meqs"></div></div>
     <div id="srcp" class="hidden" role="dialog" aria-modal="true" aria-labelledby="srct"><button id="srcback">← back to the story</button><div id="srcbody"></div></div>
+    <div id="pyp" class="hidden" role="dialog" aria-modal="true" aria-labelledby="pyt"><button id="pyback">← back to the story</button><div id="pybody"></div></div>
     <div id="foot"></div><div id="live" class="vh" aria-live="polite"></div>`;
   CV = document.getElementById('cv'); MARGIN = document.getElementById('margin'); CTRL = document.getElementById('ctrl'); EQS = document.getElementById('eqs');
   TOPNAV = document.getElementById('topnav'); MICRO = document.getElementById('micro'); OV = document.getElementById('ov'); LIVE = document.getElementById('live');
@@ -41,6 +43,7 @@ function buildDOM() {
   document.getElementById('advtoggle').onclick = () => setPhysics(!App.adv);
   document.getElementById('mback').onclick = () => closeMicro();
   document.getElementById('srcback').onclick = () => { closeSources(); writeHash(); };
+  document.getElementById('pyback').onclick = () => closePython();
   fit(); window.addEventListener('resize', fit);
   const toLocal = (ev, el, w, h) => { const r = el.getBoundingClientRect(); return { x: (ev.clientX - r.left) / r.width * w, y: (ev.clientY - r.top) / r.height * h }; };
   let down = false, lastPointerT = -9;
@@ -104,6 +107,8 @@ let SIZER = null;
 function onKey(ev) {
   if (ev.defaultPrevented) return;
   const t = ev.target, inControl = t && t.closest && t.closest('.ctl, #topnav, #micro');
+  if (ev.key === 'Escape' && App.python) { closePython(); ev.preventDefault(); return; }
+  if (App.python) return;   // the Python sheet is open: keys belong to it
   if (ev.key === 'Escape' && App.sources) { closeSources(); writeHash(); ev.preventDefault(); return; }
   if (App.sources) return;   // the sources sheet is open: keys belong to it
   if (ev.key === 'Escape' && App.micro) { closeMicro(); ev.preventDefault(); return; }
@@ -118,14 +123,22 @@ function onKey(ev) {
 
 // ---------------------------------------------------------------------------------------------- navigation
 // previous / next as marginal book navigation: the whole label is the target, and the next beat is named by its title
+// sequential reading: "← previous" and "next →" never change their text, so they never move — the same place on the
+// screen turns the page every time (from Beat 0 the reader can click one spot 13 times). The next beat's title is a
+// quiet preview beside "next →", not part of the target, and cut short rather than wrapped, so it moves nothing.
 function navLink(id, k, text, rel) {
-  const sc = App.scenes[k]; if (!sc) return `<span class="bnav none" id="${id}" aria-hidden="true">${text || ''}</span>`;   // an invisible placeholder keeps "next" in one place
-  const label = text || `next: ${esc(sceneTitle(sc))} →`;
-  return `<button class="bnav" id="${id}" data-k="${k}" aria-label="${rel} beat — beat ${sc.n}: ${esc(sceneTitle(sc))}">${label}</button>`;
+  const sc = App.scenes[k]; if (!sc) return `<span class="bnav none" id="${id}" aria-hidden="true">${text}</span>`;   // an invisible placeholder of the same text keeps the other in place
+  return `<button class="bnav" id="${id}" data-k="${k}" aria-label="${rel} beat — beat ${sc.n}: ${esc(sceneTitle(sc))}">${text}</button>`;
 }
 function renderTopnav() {
+  const had = document.activeElement && TOPNAV.contains(document.activeElement) ? document.activeElement : null;   // keyboard reading keeps its place across pages
+  const hadId = had && had.id, hadK = had && had.classList.contains('bn') ? had.dataset.k : null;
+  const nxt = App.scenes[App.i + 1];
   TOPNAV.innerHTML = App.scenes.map((sc, k) => `<button class="bn ${k === App.i ? 'on' : k < App.i ? 'past' : ''}" data-k="${k}" aria-label="beat ${sc.n}: ${sceneTitle(sc)}" ${k === App.i ? 'aria-current="step"' : ''}>${sc.n}</button>`).join('') +
-    navLink('prev', App.i - 1, '← previous', 'previous') + navLink('next', App.i + 1, null, 'next');
+    navLink('prev', App.i - 1, '← previous', 'previous') + navLink('next', App.i + 1, 'next →', 'next') +
+    `<span id="nexttitle" aria-hidden="true">${nxt ? esc(sceneTitle(nxt)) : ''}</span>`;
+  if (hadId === 'next' || hadId === 'prev') { const el = document.getElementById(hadId); (el && el.tagName === 'BUTTON' ? el : document.getElementById(hadId === 'next' ? 'prev' : 'next')).focus({ preventScroll: true }); }
+  else if (hadK != null) { const el = TOPNAV.querySelector(`.bn[data-k="${hadK}"]`); if (el) el.focus({ preventScroll: true }); }
   TOPNAV.querySelectorAll('.bn').forEach(el => el.onclick = () => go(+el.dataset.k, 'beat number'));
   for (const id of ['prev', 'next']) { const el = document.getElementById(id); if (el.dataset.k) el.onclick = () => go(+el.dataset.k, 'arrow'); }
 }
@@ -133,6 +146,7 @@ export function go(k, via = 'start') {
   k = clamp(k, 0, App.scenes.length - 1);
   const from = App.started ? App.scenes[App.i].n : null; App.started = true;
   if (App.sources) closeSources();
+  if (App.python) closePython(false);
   App.i = k; App.micro = null; MICRO.classList.add('hidden'); App.state = {}; App.anim = { since: App.t, entered: App.t };
   const sc = App.scenes[k]; if (sc.init) sc.init(App.state);
   CV.setAttribute('aria-label', `${sceneTitle(sc)}. ${sc.keys || ''}`);
@@ -143,6 +157,12 @@ export function go(k, via = 'start') {
 export function setPhysics(on) {
   App.adv = on; const t = document.getElementById('advtoggle'); t.setAttribute('aria-checked', String(on)); App.hooks.onPhysics && App.hooks.onPhysics(on);
   renderControls(); refreshMargin(); writeHash();
+  if (on) revealPhysics();
+}
+/** the physics panel, just switched on, is brought into view when the scene's controls have pushed it below the column */
+function revealPhysics() {
+  const r = EQS.getBoundingClientRect(), m = MARGIN.getBoundingClientRect(), s = m.height / MARGIN.clientHeight || 1;   // screen px per CSS px (the stage is scaled)
+  if (EQS.style.display !== 'none' && r.top > m.bottom - 60 * s) MARGIN.scrollTop += (r.top - m.top) / s - 40;
 }
 
 // ---------------------------------------------------------------------------------------------- quiet controls (ARIA slider / radio group / switch / button)
@@ -233,6 +253,10 @@ export function refreshMargin(light = false, develop = false) {
   if (develop && !App.rm && !App.shoot) for (const el of [title, text]) { el.classList.remove('dev'); void el.offsetWidth; el.classList.add('dev'); }
   const eqs = App.adv ? (sc.eqs ? sc.eqs(S) : metaEqs(sc.n)) : [];
   EQS.innerHTML = eqs.map(eqHTML).join('');
+  if (eqs.length && pythonFor(sc.n).length) {   // the third layer, under the physics: hidden until asked for
+    EQS.insertAdjacentHTML('afterbegin', '<button class="pylink" data-fk="py" aria-expanded="false" aria-controls="pyp">reproduce in Python ▸</button>');
+    EQS.querySelector('.pylink').onclick = () => openPython();
+  }
   EQS.style.display = eqs.length ? 'block' : 'none';
   fitEqs(EQS);
   const foot = typeof sc.foot === 'function' ? sc.foot(S) : (sc.foot || '');
@@ -351,6 +375,7 @@ export async function boot(prepare) {
   for (const [kk, v] of Object.entries(h)) if (!['beat', 'adv', 'shoot', 't', 'micro', 'probe', 'rm', 'aff', 'cold', 'src'].includes(kk)) App.state[kk] = isNaN(+v) ? (v === 'true' ? true : v === 'false' ? false : v) : +v;
   const sc = App.scenes[App.i]; if (sc.afterHash) sc.afterHash(App.state);
   renderControls(); refreshMargin();
+  if (App.adv) requestAnimationFrame(revealPhysics);   // a link that opens a scene with the physics on shows it
   if (h.micro) openMicro(h.micro);
   if (h.src === '1') openSources();
   if (h.probe && App.hooks.startProbe) App.hooks.startProbe(h.probe);

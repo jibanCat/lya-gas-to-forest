@@ -69,7 +69,11 @@ const data = { skewer: JSON.parse(rd(path.join(root, 'science/data/toy/skewer.js
 // the public provenance: the app embeds what its "sources & assumptions" sheets show; the science notes get all of it
 const PROV = JSON.parse(rd(path.join(root, 'design/canonical/public_provenance.json')));
 { const refs = new Set(Object.values(PROV.beats).flatMap(b => b.sources.map(s => s.ref)));
-  data.prov = { site: { version: PROV.site.version }, beats: PROV.beats,
+  const REL0 = JSON.parse(rd(path.join(root, 'release.json')));
+  data.prov = { site: { version: PROV.site.version, repository: REL0.repository }, beats: PROV.beats,
+    // what each scene computes and who computes it (the sources sheet), and the Python reproductions (under the physics)
+    computations: Object.fromEntries(Object.entries(PROV.computations || {}).map(([id, c]) => [id, { anchor: c.anchor, title: c.title, owner: c.owner, beats: c.beats, python: c.python,
+      reference: c.reference ? { package: c.reference.package, version: c.reference.version } : null, package: c.package ? { name: c.package.name, version: c.package.version } : null }])),
     references: Object.fromEntries(Object.entries(PROV.references).filter(([, r]) => refs.has(r.anchor)).map(([id, r]) => [id, { anchor: r.anchor, short: r.short, links: r.links }])),
     validations: Object.fromEntries(Object.entries(PROV.validations).map(([id, v]) => [id, { anchor: v.anchor, name: v.name, status: v.status, measured: v.measured }])) }; }
 let html = rd(path.join(here, 'index.html'));

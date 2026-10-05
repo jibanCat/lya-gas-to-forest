@@ -26,6 +26,10 @@ check('linear map within 1% of exact over ≤ 20 Mpc/h (z = 2–4)', Object.entr
 // 4. λ_obs: exp(u/c) vs (1+u/c) over a 20 Mpc/h box at z=3
 const u20 = P.uOfX(20, 0, 3), dl = Math.abs(Math.exp(u20 / P.C.c_kms) - (1 + u20 / P.C.c_kms));
 check('exp(u/c) vs 1+u/c difference over 20 Mpc/h', dl < 1e-4, `${dl.toExponential(2)} (fractional in 1+z)`);
+out.exp_vs_linear_20mpch_z3 = dl;   // public: SCI-MAP-004 quotes it from here
+// public (SCI-MAP-005): the constant-H map's deviation per Mpc/h, and in km/s over 20 Mpc/h at z = 3 (Planck 2018)
+out.linear_map_rel_dev_per_mpch = out.linear_map_max_rel_dev_by_dx['20'] / 20;
+{ const c = out.cases.find(c => c.z0 === 3 && c.dx_mpch === 20 && c.Om === P.COSMO_DEFAULT.Om); out.abs_dev_kms_20mpch_z3 = Math.abs(c.u_map - c.u_log_exact); }
 out.pass = ok;
 fs.writeFileSync(path.join(__dirname, '../validation/mapping/report.json'), JSON.stringify(out, null, 1));
 process.exit(ok ? 0 : 1);

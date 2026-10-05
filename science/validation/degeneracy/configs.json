@@ -1,9 +1,69 @@
 {
- "note": "Single source for the 'same shadow' configurations (SCI-DEG-001; Beat 13). Defined in velocity space so the lines do not depend on the cosmology: u = Hubble-flow position [km/s], su = Hubble-flow width (1σ) [km/s], v = bulk peculiar velocity [km/s], dv = extra peculiar velocity across +1σ [km/s]. Real-space x = u/H, σx = su/H, dv/dx = dv/σx with H = aH/h per Mpc/h. Read by science/oracle/degeneracy_oracle.py, science/tests/test_degeneracy.js and the prototype build.",
- "pixel_kms": 2.5, "u_range_kms": [-150, 150], "npix": 121,
+ "note": "Single source for the 'same shadow' configurations (SCI-DEG-001; Beat 13), written by science/tools/same_shadow_configs.py. Defined in velocity space so the lines do not depend on the cosmology: u = Hubble-flow position [km/s], su = Hubble-flow width (1σ) [km/s], v = bulk peculiar velocity [km/s], dv = extra peculiar velocity across +1σ [km/s]. Real-space x = u/H, σx = su/H, dv/dx = dv/σx with H = aH/h per Mpc/h. Read by the app (Beat 13), science/oracle/degeneracy_oracle.py and science/tests/test_degeneracy.js.",
+ "pixel_kms": 2.5,
+ "u_range_kms": [
+  -150,
+  150
+ ],
+ "npix": 121,
  "configs": {
-  "i":   [{"u": 0.0, "su": 2.23, "N": 2.5e14, "T": 4.5e4, "v": 0.0, "dv": 0.0}],
-  "ii":  [{"u": -39.0, "su": 12.8, "N": 9.75e13, "T": 1e4, "v": 24.9, "dv": 0.0}, {"u": 39.0, "su": 12.8, "N": 9.75e13, "T": 1e4, "v": -24.9, "dv": 0.0}],
-  "iii": [{"u": 0.0, "su": 11.15, "N": 2.5e14, "T": 1e4, "v": 0.0, "dv": 6.2}]
+  "i": [
+   {
+    "u": 0.0,
+    "su": 2.23,
+    "N": 250000000000000.0,
+    "T": 45000.0,
+    "v": 0.0,
+    "dv": 0.0
+   }
+  ],
+  "ii": [
+   {
+    "u": -39.0,
+    "su": 12.8,
+    "N": 97500000000000.0,
+    "T": 10000.0,
+    "v": 24.9,
+    "dv": 0.0
+   },
+   {
+    "u": 39.0,
+    "su": 12.8,
+    "N": 97500000000000.0,
+    "T": 10000.0,
+    "v": -24.9,
+    "dv": 0.0
+   }
+  ],
+  "iii": [
+   {
+    "u": 0.0,
+    "su": 11.15,
+    "N": 250000000000000.0,
+    "T": 10000.0,
+    "v": 0.0,
+    "dv": 5.988250955282366
+   }
+  ]
+ },
+ "construction": {
+  "rule": "b_tot(iii) = b_tot(i), same N and centre; b_tot² = 2kT/m_H + 2(su + dv)²; dv(iii) = √(su_i² + (b_T,i² − b_T,iii²)/2) − su_iii",
+  "constants": {
+   "kB_erg_per_K": 1.380649e-16,
+   "m_H_g": 1.6735328e-24
+  },
+  "b_thermal_kms": {
+   "i": 27.24869964004119,
+   "iii": 12.845160195992374
+  },
+  "b_tot_kms": {
+   "i": 27.430592995288688,
+   "iii": 27.430592995288688
+  },
+  "sigma_u_kms": {
+   "i": 2.23,
+   "iii": 17.138250955282366
+  },
+  "dv_iii_kms": 5.988250955282366
  }
 }

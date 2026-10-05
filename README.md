@@ -113,6 +113,23 @@ calculations:
 The measured results appear in the science notes and in `science/validation/VALIDATION_SUMMARY.md`. No number about
 accuracy is typed by hand: the build fails if a public number does not come from a validation report.
 
+## Who computes what, and reproducing it in Python
+
+Every scientific quantity the app shows has a computation record (`science/COMPUTATION_INVENTORY.yaml`). Each record
+states:
+- who computes the quantity: this app (`lya_app`), an external package, both (the app's result compared with an
+  external reference), or a teaching visualization that computes nothing;
+- the equation, its variables and units, and its constants with their sources;
+- the conventions, assumptions and numerical method;
+- the tested domain, the implementation and the independent check.
+
+The science notes give each record ("How each quantity is computed"); `science/COMPUTATION_MATRIX.md` is the same as a
+table.
+
+Each calculation the app implements has a short, independent Python reproduction (`reproduce/`, NumPy and SciPy
+only). In the app it sits under "show the physics" → "reproduce in Python", hidden until asked for. The release gate
+runs every one and checks that it prints the app's own values (`reproduce/README.md`).
+
 ## Data
 
 The app uses only a small **synthetic** toy data set: a Zel'dovich-approximation volume at z = 3 and one sightline
@@ -155,3 +172,4 @@ Cited literature, published constants and other third-party material are not cov
 | `design/VISUAL_LANGUAGE.md` | the visual and interaction language (the build checks the design tokens against it) |
 | `docs/` | the data record, the browser matrix, the generated control audit, the study protocol |
 | `tools/` | the release gate, the export and hygiene tools, and the release finalizer |
+| `reproduce/` | independent Python reproductions of the app's calculations, and the check that compares them with the app |

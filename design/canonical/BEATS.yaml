@@ -197,7 +197,7 @@ beats:
         consequence: app/src/scenes/b03-temperature.js#b3census
         affects: [the atoms in that bin (ringed in the parcel), their marks in the census, the band of colour offsets they absorb in]
         claims: [SCI-THERM-001, SCI-THERM-002, SCI-REP-001]
-        display: the atoms shown are exactly the representative sample's atoms whose v = g·σ(T) falls in the bin; each absorbs at its own Doppler offset (the natural width is ~2000× narrower), so the line's band is the bin's range, not a one-to-one map of colours to atoms
+        display: the atoms shown are exactly the representative sample's atoms whose v = g·σ(T) falls in the bin; each absorbs at its own Doppler offset (the natural width is {{VAL-TAU-001:fwhm_thermal_over_natural_1e4K:.0f}}× narrower at 10⁴ K), so the line's band is the bin's range, not a one-to-one map of colours to atoms
     visual_transforms:
       - id: VT-THERM-WRITE
         gesture: each atom's speed arrow travels down to one ruler, tail at zero, and its tip leaves a mark at that atom's speed along the beam
@@ -390,13 +390,13 @@ beats:
       - tex: 'u = aH(z)\,x_{\rm com} + v_{\rm pec}'
         note: place
         ids: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003]
-      - tex: 'b^2 \simeq \dfrac{2kT}{m_{\rm H}} + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,aH\,\sigma_x'
-        note: 'spread: heat and the parcel''s size (the Hubble flow across its width σ_x) add in quadrature; here b_size = {{VAL-ORTH-001:base.b_size_kms:.1f}} km/s, comparable to the thermal {{VAL-ORTH-001:base.b_thermal_kms:.1f}} km/s'
-        ids: [SCI-THERM-002, SCI-REP-003]
+      - tex: 'b^2 \simeq \dfrac{2kT}{m_{\rm H}} + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,\Bigl|aH + \dfrac{dv}{dx}\Bigr|\,\sigma_x,\quad \dfrac{dv}{dx} = 0\ \text{here}'
+        note: 'spread: heat and the parcel''s size (the velocity spread across its width σ_x) add in quadrature. This scene isolates these terms by setting the parcel''s own peculiar-velocity gradient to zero, so its size term is the Hubble flow alone: here b_size = {{VAL-ORTH-001:base.b_size_kms:.1f}} km/s, comparable to the thermal {{VAL-ORTH-001:base.b_thermal_kms:.1f}} km/s. It is not the full line-width model of a real absorber, whose own flows change it (Beat 7)'
+        ids: [SCI-THERM-002, SCI-MAP-006, SCI-REP-003]
       - tex: '\tau_0 = \dfrac{N_{\rm HI}\,\sigma_v}{\sqrt{\pi}\,b},\qquad \int\tau\,du = N_{\rm HI}\,\sigma_v'
         note: amount and spread, with the b above (the drawn line's); σ_v = (πe²/m_e c) f λ₀
         ids: [SCI-TAU-001, SCI-THERM-002]
-    science: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-TAU-001, SCI-THERM-002, SCI-ION-001, SCI-ION-002, SCI-REP-001, SCI-REP-003, SCI-REP-005]
+    science: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-MAP-006, SCI-TAU-001, SCI-THERM-002, SCI-ION-001, SCI-ION-002, SCI-REP-001, SCI-REP-003, SCI-REP-005]
     validation: [VAL-MAP-001, VAL-TAU-001, VAL-ORTH-001]
     interactions:
       - id: INT-PLACE-001
@@ -490,7 +490,8 @@ beats:
       - key: bleach
         ask: what sets the neutral amount?
     simplifications:
-      - The parcel is a teaching Gaussian clump summarising one stretch of the real sightline (SCI-REP-003). Its width along the beam is real space, so the Hubble flow across it spreads its line as much as its temperature does; the margin prints both and the drawn line's own width.
+      - The parcel is a teaching Gaussian clump summarising one stretch of the real sightline (SCI-REP-003). Its width along the beam is real space, so the Hubble flow across it spreads its line as much as its temperature does (SCI-MAP-006); the margin prints both and the drawn line's own width.
+      - 'This scene sets the parcel''s own peculiar-velocity gradient to zero (dv/dx = 0), so its width is heat plus the Hubble flow across its size. The same toy parcel with its own infalling gradient, as Beats 7–8 use it, has a narrower line (b = {{VAL-ORTH-001:base.b_with_own_gradient_kms:.1f}} km/s rather than {{VAL-ORTH-001:base.b_drawn_kms:.1f}} km/s) (SCI-REP-003).'
       - Moving the parcel changes only its place; its amount, temperature and own motion travel with it (no density evolution).
       - The "neutral amount" setting changes N_HI directly, holding density, temperature and position fixed; what sets it (ultraviolet light from all galaxies and quasars) is in the microscope (SCI-ION-001).
       - Warming the gas holds N_HI fixed, so that only the width changes; in photoionisation equilibrium the neutral amount would also fall as the gas warms (the recombination rate α_A ∝ T^−0.7, SCI-ION-001).
@@ -586,7 +587,7 @@ beats:
       - tex: '\tau(u) = \int n_{\rm HI}(x)\,\sigma_v\,\phi\bigl(u - u(x);\,b(x)\bigr)\,dx_{\rm prop}'
         note: the continuous version of "every cell contributes"
         ids: [SCI-TAU-002, SCI-SIM-001]
-      - note: 'valid where each sampling element has one velocity and lines span at least two pixels; outside that domain, particle-based codes differ (up to 0.2 in F for unresolved velocity structure, up to 0.46 for lines narrower than two pixels) — stated, not hidden'
+      - note: 'valid where each sampling element has one velocity and lines span at least two pixels; outside that domain, particle-based codes differ (up to {{VAL-CLOSURE-FS:derived.unresolved_max_dF:^.2f}} in F for unresolved velocity structure, in a deliberately exaggerated stress test; up to {{VAL-CLOSURE-FS:derived.narrow_native_max_dF:^.2f}} for lines narrower than two pixels) — stated, not hidden'
         ids: [SCI-TAU-004, SCI-TAU-005]
     science: [SCI-TAU-002, SCI-TAU-004, SCI-TAU-005, SCI-SIM-001, SCI-SIM-002, SCI-SIM-TOY-001, SCI-REP-002, SCI-REP-003]
     validation: [VAL-TOY-001, VAL-CLOSURE-FS]
@@ -688,7 +689,7 @@ beats:
       - tex: '\lambda_{\rm obs} = \lambda_0\,(1+z_0)\,e^{u/c}'
         note: the observed-wavelength ruler — Beat 5's stretch, read in km/s
         ids: [SCI-MAP-004]
-      - note: 'broken line: the data producer''s own spectrum (exact Voigt, an independent code path); the browser''s differs by at most {{VAL-TOY-002:max_abs_dF_gauss:.0e}} in F'
+      - note: 'broken line: the data producer''s own spectrum (exact Voigt, an independent code path); the browser''s differs by at most {{VAL-TOY-002:max_abs_dF_gauss:^.0e}} in F'
         ids: [SCI-SIM-001, SCI-TAU-002]
     science: [SCI-OBS-001, SCI-OBS-002, SCI-MAP-004, SCI-SIM-001, SCI-TAU-002, SCI-SIM-TOY-001, SCI-CTX-003, SCI-CTX-004, SCI-RED-004]
     validation: [VAL-TOY-001, VAL-TOY-002]
@@ -773,20 +774,23 @@ beats:
       Predict which — then see why the shadow alone cannot tell, and what can.
     objective: The spectrum carries physical information, but the inverse problem is not unique; inference must be calibrated, not abandoned.
     action: Choose a gas; reveal; then add a heavier-ion line or Lyman-beta.
-    consequence: All three gases fit the observed line, for two different reasons — the blend (ii) only because of the noise, (iii) because heat and smooth motion widen every hydrogen line alike; a metal line separates heat from bulk motion, and Lyman-beta exposes the hidden column of the blend.
+    consequence: All three gases fit the observed line, for two different reasons — the blend (ii) only because of the noise, (iii) because in this constructed model its smooth motion widens every H I line exactly as (i)'s heat does, so H I absorption alone cannot distinguish them; a metal line separates heat from bulk motion, and Lyman-beta exposes the hidden column of the blend.
     equations:
       - tex: 'b^2 = \dfrac{2kT}{m} + b^2_{\rm bulk}'
-        note: heat broadens light atoms more than heavy ions; bulk motion broadens all alike — every hydrogen line (Lyα, Lyβ, …) sees only the total b, so heat and smooth motion can match in all of them
+        note: heat broadens light atoms more than heavy ions; bulk motion broadens all alike — every H I Lyman-series line (Lyα, Lyβ, …) sees only the total b, so heat and smooth motion can match in all of them
         ids: [SCI-DEG-002, SCI-THERM-002]
-      - tex: '\Delta\chi^2 \approx {{VAL-DEG-001:dchi2.20.ii:.1f}}\ \text{and}\ {{VAL-DEG-001:dchi2.20.iii:.1f}}\ \ (S/N = 20\ \text{per}\ 2.5\ {\rm km\,s^{-1}}\ \text{pixel})'
-        note: 'the blend (ii) is hidden by the noise: at S/N = 50 it shows (Δχ² ≈ {{VAL-DEG-001:dchi2.50.ii:.0f}}). (iii) is hidden by what hydrogen records; its small misfit is the hand-tuning, not physics'
+      - tex: 'b_{\rm tot}^2 = \dfrac{2kT}{m_{\rm H}} + 2\sigma_u^2,\qquad \sigma_u^{\rm (iii)} = \sqrt{\bigl(\sigma_u^{\rm (i)}\bigr)^2 + \tfrac12\bigl(b_T^{\rm (i)\,2} - b_T^{\rm (iii)\,2}\bigr)}'
+        note: '(iii) is computed, not tuned: its smooth extra motion ({{VAL-DEG-001:construction.dv_iii_kms:.2f}} km/s across one standard deviation) is the one that gives it the same total Doppler parameter as (i), b_tot = {{VAL-DEG-001:construction.b_tot_i_kms:.2f}} km/s, with the same column — so every H I line of (iii) equals that of (i)'
+        ids: [SCI-DEG-001, SCI-THERM-002]
+      - tex: '\Delta\chi^2_{\rm (ii)} \approx {{VAL-DEG-001:dchi2.20.ii:.1f}},\ {{VAL-DEG-001:dchi2.50.ii:.0f}},\ {{VAL-DEG-001:dchi2.200.ii:.0f}}\quad\text{at}\ S/N = 20,\ 50,\ 200;\qquad \Delta\chi^2_{\rm (iii)} \le {{VAL-DEG-001:dchi2_iii_max:.3f}}'
+        note: 'per 2.5 km/s pixel, against (i), noise-free. The blend (ii) is measurement-limited: better data reveal it. (iii) stays hidden at every S/N: increasing the signal-to-noise cannot recover information that this H I observable does not encode'
         ids: [SCI-DEG-001, SCI-OBS-002]
       - tex: 'F = e^{-\tau} \approx 0\quad(\tau \gg 1)'
-        note: inside the saturated Lyα core almost no light gets through, however the optical depth is split — so the blend (ii) hides there; Lyβ, with a smaller f λ, is not saturated and shows it
+        note: 'inside the saturated Lyα core almost no light gets through, however the optical depth is split — so the blend (ii) hides there; Lyβ, with a smaller f λ, is not saturated and shows it (Δχ² ≈ {{VAL-DEG-001:dchi2_lyb.20.ii:.0f}} at S/N 20), while (iii) still equals (i)'
         ids: [SCI-DEG-001, SCI-DEG-002, SCI-SAT-001]
-    science: [SCI-DEG-001, SCI-DEG-002, SCI-OBS-002, SCI-THERM-002, SCI-SAT-001, SCI-ATOM-001]
+    science: [SCI-DEG-001, SCI-DEG-002, SCI-OBS-002, SCI-THERM-002, SCI-MAP-006, SCI-SAT-001, SCI-ATOM-001]
     validation: [VAL-DEG-001]
     simplifications:
-      - 'The three configurations were tuned by hand to match. Two kinds of "same shadow" are shown — the blend (ii) is hidden only at the stated resolution and S/N (measurement-limited: better data can break it); heat against smooth motion, (i) against (iii), cannot be told apart by any hydrogen line at any S/N (information-limited: hydrogen records only the line-of-sight distribution of velocity and optical depth). The toy''s small misfit for (iii) is its hand-tuning (SCI-DEG-001).'
+      - 'Two kinds of "same shadow" are shown. The blend (ii) was chosen by hand so that it is hidden at the stated resolution and S/N (measurement-limited: better data can break it). (iii) is computed from (i) by a matching condition — the same column and the same total Doppler parameter — so in this constructed model heat against smooth motion, (i) against (iii), cannot be distinguished by H I absorption alone at any S/N (information-limited: the H I lines record only the line-of-sight distribution of velocity and optical depth) (SCI-DEG-001).'
       - The three gases are called "clouds" for brevity; each is a denser part of the continuous gas, idealised as one or two smooth Gaussian clumps — not a separate object (SCI-REP-003).
       - The three configurations are a constructed degeneracy example, not typical forest absorbers. Configuration (i) is an idealised compact gas clump — unusually hot (45 000 K, hotter than typical forest gas at z ≈ 3) and only about 7 kpc across (proper), far more compact than typical forest gas — built so that its line matches the other two (SCI-DEG-001).

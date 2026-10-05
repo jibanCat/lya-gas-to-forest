@@ -12,15 +12,49 @@ export function rich(t, base = '') { return esc(t).replace(/\[\[#([a-z0-9-]+)\|(
 
 export function sciencePage(prov, { fontsCSS, katexCSS, version, repository = null }) {
   const repo = t => repository ? `<a href="${repository}">${t}</a>` : t;   // the public repository, once it exists (release.json)
-  const katex = require('./vendor/katex/katex.min.js'), { site, beats, entries, references: R, validations: V } = prov;
+  const katex = require('./vendor/katex/katex.min.js'), { site, beats, entries, references: R, validations: V, computations: CP = {} } = prov;
   const tex = (s, display = true) => katex.renderToString(s, { throwOnError: true, displayMode: display, output: 'htmlAndMathml' });
   const byAnchor = Object.fromEntries(Object.values(R).map(r => [r.anchor, r]));
   const vBy = Object.fromEntries(Object.entries(V).map(([id, v]) => [id, v]));
   const refLinks = r => r.links.map(l => l.href ? `<a href="${esc(l.href)}" rel="noopener">${esc(l.label)}</a>` : `<span>${esc(l.label)}</span>`).join(' · ');
   const scene = n => `<a href="../lya.html#beat=${n}">${n} · ${esc(beats[String(n)].title)}</a>`;
   const BASIS = { identity: 'a mathematical identity, following from the claims it builds on', calculation: 'a calculation from the cited inputs', script: 'produced by a deterministic script in this repository', numerical: 'checked numerically against an independent code', constants: 'constants typed independently and compared', 'sign test': 'a sign test', test: 'a convention of this resource, checked by an automated test', model: 'an idealised model chosen by this resource and declared here', analytic: 'compared with an analytic result' };
+  // computation provenance: who computed each quantity (science/COMPUTATION_INVENTORY.yaml, via public_provenance.json)
+  const vAnch = Object.fromEntries(Object.values(V).map(v => [v.anchor, v]));
+  const OWN = c => c.owner === 'lya_app' ? 'Computation: lya_app' : c.owner === 'hybrid' ? `Displayed result: lya_app reduced forward model · Independent reference: ${esc(c.reference.package)} ${esc(c.reference.version)}`
+    : c.owner === 'external_package' ? `Reference: ${esc(c.package.name)} ${esc(c.package.version)}` : 'Teaching visualization';
+  const src = f => repository ? `<a href="${repository}/blob/main/${esc(f)}"><code>${esc(f)}</code></a>` : `<code>${esc(f)}</code>`;
+  const li = xs => xs && xs.length ? `<ul>${xs.map(x => `<li>${rich(x)}</li>`).join('')}</ul>` : '';
+  const kv = (dt, dd) => dd ? `<dt>${dt}</dt><dd>${dd}</dd>` : '';
+  const computedBy = Object.fromEntries(Object.values(entries).map(e => [e.anchor, Object.values(CP).filter(c => c.entries.some(x => x.anchor === e.anchor))]));
+  const compCard = ([id, c]) => `<article class="comp" id="${c.anchor}" data-id="${id}">
+<h4><a class="self" href="#${c.anchor}" aria-label="link to this computation">¶</a> ${esc(c.title)}</h4>
+<p class="owner">${OWN(c)}</p>
+${c.displayed ? `<p class="claim">${rich(c.displayed)}</p>` : c.what ? `<p class="claim">${rich(c.what)}</p>` : ''}
+${(c.equations || []).map(q => `<div class="eq">${tex(q.tex)}${q.meaning ? `<p class="muted">${rich(q.meaning)}</p>` : ''}</div>`).join('')}
+<dl class="kv">${kv('Variables', c.variables && c.variables.length ? `<ul>${c.variables.map(v => `<li><i>${esc(v.symbol)}</i> — ${rich(v.meaning)} <span class="muted">[${esc(v.unit)}]</span></li>`).join('')}</ul>` : '')}
+${kv('Constants', c.constants && c.constants.length ? `<ul>${c.constants.map(k => `<li><i>${esc(k.symbol)}</i> = ${esc(k.value)}${k.ref ? ` — <a href="#${k.ref.anchor}">${esc(k.ref.short)}</a>` : ''}</li>`).join('')}</ul>` : '')}
+${kv('Conventions', li(c.conventions))}${kv('Assumptions', li(c.assumptions))}${kv('Approximations', li(c.approximations))}
+${kv('Numerical method', c.algorithm ? rich(c.algorithm) : '')}${kv('Validated for', c.domain ? rich(c.domain) : '')}
+${kv('Package', c.package ? `${esc(c.package.name)} ${esc(c.package.version)}${c.package.licence ? ` (${esc(c.package.licence)})` : ''}${c.package.ref ? ` — <a href="#${c.package.ref.anchor}">${esc(c.package.ref.short)}</a>` : ''}` : '')}
+${kv('Interface', c.interface ? rich(c.interface) : '')}${kv('Inputs', c.inputs ? rich(c.inputs) : '')}${kv('Conversions by this resource', li(c.conversions))}
+${kv('Independent reference', c.reference ? `${esc(c.reference.package)} ${esc(c.reference.version)} — ${rich(c.reference.role)}${c.reference.record ? ` (<a href="#${c.reference.record}">its record</a>)` : ''}` : '')}
+${kv('Validation', c.validation ? `${c.validation.checks.map(a => `<a href="#${a}">${esc(vAnch[a] ? vAnch[a].name : a)}</a>`).join(' · ')}${c.validation.independent ? `<br>${rich(c.validation.independent)}` : ''}${c.validation.tolerance ? `<br><span class="muted">tolerance: ${rich(c.validation.tolerance)}</span>` : ''}` : '')}
+${kv('Implementation', c.implementation ? `${c.implementation.files.map(src).join(' · ')}${c.implementation.symbols.length ? ` <span class="muted">(${c.implementation.symbols.map(esc).join(', ')})</span>` : ''}` : '')}
+${kv('The physics', c.physics_note ? rich(c.physics_note) : '')}
+${kv('Claims (literature)', c.entries.filter(x => !x.representation).map(x => `<a href="#${x.anchor}">${esc(x.title)}</a>`).join(' · '))}
+${kv('Teaching representation', c.entries.filter(x => x.representation).map(x => `<a href="#${x.anchor}">${esc(x.title)}</a>`).join(' · '))}</dl>
+${c.python ? `<details class="py"><summary>Reproduce in Python ▸</summary>
+<p class="muted">An independent reproduction in Python, with NumPy and SciPy only. Copy it into your own Python, a notebook or Colab; nothing runs on this page.${c.python.note ? ` Note: ${rich(c.python.note)}.` : ''}</p>
+<div class="pcode"><button class="pcopy" type="button">copy</button><pre><code>${esc(c.python.snippet)}</code></pre></div>
+<p class="muted">Expected output — the app's own values, checked automatically (<a href="#check-py-001">Python reproductions</a>):</p><pre class="pout">${esc(c.python.expected.join('\n'))}</pre>
+<p>${repository ? `<a href="${repository}/blob/main/${esc(c.python.script)}">View the full reproduction script</a>` : `Full script: <code>${esc(c.python.script)}</code>`}</p></details>` : ''}
+<p class="meta">${c.beats.length ? `scenes ${c.beats.map(scene).join(', ')} · ` : ''}id ${esc(id)}</p>
+</article>`;
+  const compMatrix = `<table class="matrix"><thead><tr><th>Computation</th><th>Computed by</th><th>Implementation</th><th>Independent check</th><th>Python</th><th>Scenes</th></tr></thead><tbody>${
+    ['lya_app', 'hybrid', 'external_package', 'teaching_visual'].flatMap(o => Object.values(CP).filter(c => c.owner === o)).map(c => `<tr><td><a href="#${c.anchor}">${esc(c.title)}</a></td><td>${c.owner === 'lya_app' ? 'lya_app' : c.owner === 'hybrid' ? `lya_app · reference ${esc(c.reference.package)}` : c.owner === 'external_package' ? `${esc(c.package.name)} ${esc(c.package.version)}` : 'teaching visual'}</td><td>${c.implementation ? c.implementation.symbols.map(esc).join(', ') : '—'}</td><td>${c.validation ? c.validation.checks.map(a => `<a href="#${a}">${esc(vAnch[a] ? vAnch[a].name : a)}</a>`).join(', ') : '—'}</td><td>${c.python ? '✓' : '—'}</td><td>${c.beats.join(', ')}</td></tr>`).join('')}</tbody></table>`;
   const entryCard = ([id, e]) => {
-    const srcs = e.sources.length ? `<dl class="kv"><dt>Sources</dt><dd><ul>${e.sources.map(x => { const r = R[x.ref]; return `<li><a href="#${r.anchor}">${esc(r.short)}</a>${x.location ? ` — <span class="loc">${esc(x.location)}</span>` : ''}${x.role === 'secondary' ? ' <span class="muted">(secondary)</span>' : ''}</li>`; }).join('')}</ul></dd></dl>`
+    const srcs = e.sources.length ? `<dl class="kv"><dt>Sources</dt><dd><ul>${e.sources.map(x => { const r = R[x.ref]; return `<li><a href="#${r.anchor}">${esc(r.short)}</a>${x.location ? ` — <span class="loc">${rich(x.location)}</span>` : ''}${x.role === 'secondary' ? ' <span class="muted">(secondary)</span>' : ''}</li>`; }).join('')}</ul></dd></dl>`
       : `<dl class="kv"><dt>Sources</dt><dd>${e.representation ? 'A teaching representation chosen by this resource — described here so it is not mistaken for physics.' : `No literature source: ${esc(BASIS[e.basis] || 'see the check below')}.`}</dd></dl>`;
     const checks = e.check || e.validations.length ? `<dl class="kv"><dt>How it is checked</dt><dd>${e.check ? `<p>${rich(e.check)}</p>` : ''}${e.validations.map(v => `<p><a href="#${vBy[v].anchor}">${esc(vBy[v].name)}</a> — <span class="status ${vBy[v].status.startsWith('pass') ? 'ok' : 'bad'}">${esc(vBy[v].status)}</span></p>`).join('')}</dd></dl>` : '';
     return `<article class="entry" id="${e.anchor}" data-id="${id}">
@@ -32,6 +66,7 @@ ${e.assumptions.length ? `<dl class="kv"><dt>Assumptions</dt><dd><ul>${e.assumpt
 ${e.validity ? `<dl class="kv"><dt>Valid for</dt><dd>${rich(e.validity)}</dd></dl>` : ''}
 ${e.simplifications.length ? `<dl class="kv"><dt>Simplifications</dt><dd><ul>${e.simplifications.map(a => `<li>${rich(a)}</li>`).join('')}</ul></dd></dl>` : ''}
 ${srcs}${checks}
+${computedBy[e.anchor] && computedBy[e.anchor].length ? `<dl class="kv"><dt>How it is computed</dt><dd>${computedBy[e.anchor].map(c => `<a href="#${c.anchor}">${esc(c.title)}</a> <span class="muted">(${c.owner === 'lya_app' ? 'lya_app' : c.owner === 'hybrid' ? 'lya_app, with an external reference' : c.owner === 'external_package' ? 'external package' : 'teaching visual'})</span>`).join(' · ')}</dd></dl>` : ''}
 <p class="meta">${e.beats.length ? `used in ${e.beats.map(scene).join(', ')} · ` : 'not used by a scene · '}status: ${esc(e.status)} · id ${esc(id)}</p>
 </article>`;
   };
@@ -41,7 +76,8 @@ ${srcs}${checks}
 <h4><a class="self" href="#${v.anchor}" aria-label="link to this check">¶</a> ${esc(v.name)} <span class="status ${v.status.startsWith('pass') ? 'ok' : 'bad'}">${esc(v.status)}</span></h4>
 <p>${rich(v.text)}</p><p class="measured">${rich(v.measured)}</p>${v.criterion ? `<p class="muted">Criterion: ${rich(v.criterion)}</p>` : ''}<p class="meta">id ${esc(id)}</p>
 <p class="muted">${v.report ? `Measured values: <a href="validation/${v.anchor}.json">report (JSON)</a>` : `Measured values: <code>${esc(v.report_path)}</code> in ${repo('the source repository')}`}</p></article>`).join('\n');
-  const refRows = Object.entries(R).filter(([, r]) => used.some(([, e]) => e.sources.some(x => R[x.ref] === r))).sort((a, b) => a[1].short.localeCompare(b[1].short)).map(([id, r]) =>
+  const compRefs = new Set(Object.values(CP).flatMap(c => [...(c.constants || []).map(k => k.ref && k.ref.anchor), c.package && c.package.ref && c.package.ref.anchor].filter(Boolean)));
+  const refRows = Object.entries(R).filter(([, r]) => used.some(([, e]) => e.sources.some(x => R[x.ref] === r)) || compRefs.has(r.anchor)).sort((a, b) => a[1].short.localeCompare(b[1].short)).map(([id, r]) =>
     `<li id="${r.anchor}" data-id="${id}"><span class="short">${esc(r.short)}.</span> ${esc(r.citation)}${r.links.length ? ` <span class="links">${refLinks(r)}</span>` : ''}</li>`).join('\n');
   const scenes = Object.values(beats).map(b => `<li>${scene(b.n)} — ${b.entries.map(x => `<a href="#${x.anchor}">${esc(x.title)}</a>`).join(' · ')}</li>`).join('\n');
   return `<!doctype html>
@@ -56,7 +92,7 @@ ${fontsCSS}
 ${katexCSS}
 </style>
 <style>
-  :root { --paper:#FCFBF8; --ink:#1F2732; --graphite:#59616C; --muted:#6F7278; --hair:#D9D6CF; --accent:#B93A20; }
+  :root { --paper:#FCFBF8; --light:#FFFDF4; --ink:#1F2732; --graphite:#59616C; --muted:#6F7278; --hair:#D9D6CF; --accent:#B93A20; }
   html { background: var(--paper); } body { margin: 0 auto; max-width: 860px; padding: 40px 28px 80px; color: var(--ink); font: 300 15.5px/1.5 'Inter', sans-serif; }
   h1, h2, h3, h4 { font-family: 'Fraunces', serif; font-weight: 300; } h1 { font-size: 34px; margin: 6px 0 4px; } h2 { font-size: 25px; margin: 46px 0 10px; border-top: 1px solid var(--hair); padding-top: 18px; } h3 { font-size: 21px; margin: 34px 0 4px; } h4 { font-size: 19px; margin: 0 0 6px; } p.chap { margin: 0 0 6px; }
   a { color: var(--ink); text-decoration-color: var(--hair); text-underline-offset: 2px; } a:hover { text-decoration-color: var(--accent); } a.self { color: var(--muted); text-decoration: none; font-size: 15px; }
@@ -71,12 +107,17 @@ ${katexCSS}
   ol.refs, ul.plain { padding-left: 18px; } ol.refs li { margin: 6px 0; font-size: 14px; } .short { font-family: 'Fraunces', serif; } .links { font: 400 11.5px 'IBM Plex Mono', monospace; white-space: nowrap; }
   dl.terms dt { font-family: 'Fraunces', serif; font-size: 17px; margin-top: 10px; } dl.terms dd { margin: 2px 0 0; }
   nav.toc a { margin-right: 14px; } :focus-visible { outline: 1px dotted var(--graphite); outline-offset: 3px; }
-  @media (max-width: 640px) { dl.kv { grid-template-columns: 1fr; } body { padding: 24px 16px 60px; } }
+  .comp { margin: 26px 0; padding-top: 4px; } .comp:target { background: #F6F1E7; outline: 8px solid #F6F1E7; } p.owner { font: 400 11.5px 'IBM Plex Mono', monospace; color: var(--graphite); margin: 0 0 6px; }
+  details.py { margin: 8px 0; } details.py summary { cursor: pointer; font: italic 300 15px 'Fraunces', serif; color: var(--graphite); list-style: none; } details.py summary::-webkit-details-marker { display: none; }
+  details.py pre { margin: 6px 0; padding: 10px 12px; background: var(--light); border: 1px solid var(--hair); overflow-x: auto; white-space: pre; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: var(--ink); }
+  details.py pre.pout { background: none; color: var(--graphite); } .pcode { position: relative; } button.pcopy { position: absolute; right: 6px; top: 6px; font: 400 10.5px 'IBM Plex Mono', monospace; color: var(--graphite); background: var(--paper); border: 1px solid var(--hair); padding: 2px 8px; cursor: pointer; }
+  table.matrix { border-collapse: collapse; font-size: 13px; width: 100%; margin: 10px 0 18px; } table.matrix th { text-align: left; font-weight: 400; color: var(--muted); border-bottom: 1px solid var(--hair); padding: 3px 6px; } table.matrix td { border-bottom: 1px solid var(--hair); padding: 3px 6px; vertical-align: top; }
+  @media (max-width: 640px) { dl.kv { grid-template-columns: 1fr; } body { padding: 24px 16px 60px; } table.matrix { font-size: 11.5px; } }
 </style></head><body>
 <div class="top"><a href="../lya.html">← the app</a><span>v${esc(version)}</span></div>
 <h1>Science notes</h1>
 <p class="lede">${rich(site.about)}</p>
-<nav class="toc" aria-label="contents"><a href="#modeled">what is modeled</a><a href="#not-modeled">what is not</a><a href="#toy-and-real">toy and real</a><a href="#claims">the claims, in six chapters</a><a href="#accuracy">7 · validation and accuracy</a><a href="#scenes">by scene</a><a href="#references">references</a><a href="#cite">cite</a></nav>
+<nav class="toc" aria-label="contents"><a href="#modeled">what is modeled</a><a href="#not-modeled">what is not</a><a href="#toy-and-real">toy and real</a><a href="#claims">the claims, in six chapters</a><a href="#accuracy">7 · validation and accuracy</a><a href="#computations">8 · how each quantity is computed</a><a href="#scenes">by scene</a><a href="#references">references</a><a href="#cite">cite</a></nav>
 <h2 id="modeled">What is modeled</h2><ul class="plain">${site.modeled.map(x => `<li>${rich(x)}</li>`).join('')}</ul>
 <h2 id="not-modeled">What the teaching app does not model</h2><ul class="plain">${site.not_modeled.map(x => `<li>${rich(x)}</li>`).join('')}</ul>
 <h2 id="toy-and-real">Toy, oracles and data</h2><dl class="terms">${site.toy_vs_real.map(x => `<dt>${esc(x.term)}</dt><dd>${rich(x.text)}</dd>`).join('')}</dl>
@@ -86,10 +127,21 @@ ${site.chapters.map(c => { const list = used.filter(([, e]) => c.domains.include
 <h2 id="accuracy">7 · Validation and numerical accuracy</h2>
 <p class="muted">Each check is an automated test in ${repo('the source repository')}; its measured values are written by the test, never typed. Status: ${Object.entries(site.statuses).map(([k, v]) => `<b>${esc(k)}</b> — ${esc(v)}`).join('; ')}.</p>
 ${valRows}
+<h2 id="computations">8 · How each quantity is computed</h2>
+<p class="muted">Every scientific number, curve and profile the app shows has a computation record: who computed it, from which relation, with which inputs, constants, conventions and assumptions, by which numerical method, where the code is, how it was checked independently, and — for the calculations this resource implements — a short Python reproduction you can run yourself. Four kinds of provenance are kept apart: the literature (why a physical relation is accepted: the claims above), the computation (how this app produced the displayed result: here), the validation (how the implementation was tested: section 7), and the teaching choices (what was simplified or exaggerated: the simplifications and the teaching visuals below). A record is computed by <b>lya_app</b> (code written for this resource), by an <b>external package</b>, by <b>both</b> (lya_app's result, compared on the same physical inputs with an independent external forward-model code — a lya_app computation whose functions are checked against a mathematical library such as SciPy stays lya_app), or is a <b>teaching visualization</b> that computes nothing. The same records, as a table: <code>science/COMPUTATION_MATRIX.md</code> in ${repo('the source repository')}.</p>
+${compMatrix}
+${['lya_app', 'hybrid', 'external_package', 'teaching_visual'].map(o => Object.entries(CP).filter(([, c]) => c.owner === o).map(compCard).join('\n')).join('\n')}
 <h2 id="scenes">Claims by scene</h2><ul class="plain">${scenes}</ul>
 <h2 id="references">References</h2><ol class="refs">${refRows}</ol>
 <h2 id="cite">Cite and version</h2>
 <p>Lyα: from gas to forest — science notes, version ${esc(version)}. How to cite: see <code>CITATION.cff</code> in ${repo('the source repository')}. Fonts and KaTeX are redistributed under their own licences: <a href="../licenses/THIRD_PARTY_LICENSES.md">third-party licences</a>.</p>
+<script>   // copy a Python reproduction: the code is only copied — nothing runs on this page
+for (const b of document.querySelectorAll('button.pcopy')) b.addEventListener('click', () => {
+  const code = b.parentElement.querySelector('code'), done = ok => { b.textContent = ok ? 'copied' : 'select and copy'; setTimeout(() => { b.textContent = 'copy'; }, 1600); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(code.textContent).then(() => done(true), () => done(false));
+  else { const r = document.createRange(); r.selectNodeContents(code); const s = getSelection(); s.removeAllRanges(); s.addRange(r); let ok = false; try { ok = document.execCommand('copy'); } catch (e) {} done(ok); }
+});
+</script>
 </body></html>
 `;
 }

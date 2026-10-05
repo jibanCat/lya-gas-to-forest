@@ -6,3 +6,6 @@ experiments/data/
 # downloaded upstream sources / caches used for provenance reading (not redistributed)
 science/.cache/
 science/.venv/
+# compiled Python: never committed (it embeds local paths)
+__pycache__/
+*.pyc

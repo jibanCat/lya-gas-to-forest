@@ -139,5 +139,6 @@
   }
  ],
  "b_1e4_kms": 12.845160195992374,
- "pass": true
+ "pass": true,
+ "fwhm_thermal_over_natural_1e4K": 1764.542979473272
 }

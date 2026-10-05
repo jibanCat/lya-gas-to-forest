@@ -88,6 +88,17 @@ try {
   ok('Beat 12: scanning the spectrum traces another colour', Math.abs(b.pu - a.pu) > 200, { pu: [a.pu, b.pu] });
   }
 
+  // continuous reading: the pointer moves once to "next →" and clicks 13 times without moving (then once to "← previous");
+  // the page records each beat it reaches, so one uninterrupted chain of clicks can be checked
+  if (focused) for (const [id, want] of [['next', [...Array(14).keys()].slice(1)], ['prev', [...Array(13).keys()].reverse()]]) {
+    if (id === 'next') await go(`${base}lya.html?cn=1#beat=0`);
+    await js('window.__seq = []; new MutationObserver(() => { const n = +(document.getElementById("mtag").textContent.match(/beat (\\d+)/) || [])[1]; if (window.__seq[window.__seq.length - 1] !== n) window.__seq.push(n); }).observe(document.getElementById("mtag"), { childList: true, characterData: true, subtree: true }); return true');
+    const r = await js(`const r = document.getElementById("${id}").getBoundingClientRect(); return [Math.round(r.left + r.width / 2), Math.round(r.top + r.height / 2)]`);
+    await pointer([{ type: 'pointerMove', x: r[0], y: r[1] }, ...Array.from({ length: 13 }, () => [{ type: 'pointerDown', button: 0 }, { type: 'pointerUp', button: 0 }, { type: 'pause', duration: 150 }]).flat()]); await wait(300);
+    const seq = await js('return window.__seq');
+    ok(`continuous reading: 13 clicks at one place on "${id === 'next' ? 'next →' : '← previous'}" read ${id === 'next' ? '0 → 13' : '13 → 0'}`, seq.join() === want.join(), { seq });
+  }
+
   // state: a fresh session shows first-use hints and is logged; it resumes after a reload
   await go(`${base}lya.html?s=1#cold=1`); await wait(3500);
   const log0 = await js('try { return JSON.parse(sessionStorage.getItem("lyaStudy") || "null") } catch (e) { return null }');

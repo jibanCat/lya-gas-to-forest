@@ -27,7 +27,7 @@ RULES = [   # (category, severity, regex, explanation)
     ('audit bundle', FAIL, r'AUDIT_[AB]\.md|blind-audit bundle output|scratchpad/blind', 'a temporary audit bundle or report'),
     ('internal note', NOTE, r'\bMFH\b|\bPI ruling\b|\bPI review\b|\bPI decision|\bruling A\d+\b|\bpass [1-9]\b|(?<![.\w])PI\b', 'an internal decision or workflow reference'),   # not Math.PI
 ]
-SKIP_DIRS = {'.git', 'node_modules', '__pycache__'}
+SKIP_DIRS = {'.git', 'node_modules'}   # compiled Python (__pycache__) is scanned, and fails: it embeds local paths
 BINARY = re.compile(r'\.(png|jpg|jpeg|gif|mp4|woff2?|ttf|pdf|zip|gz|npz|npy|bin|ico)$', re.I)
 
 SELF = 'tools/hygiene_scan.py'   # the rules above match themselves
@@ -59,6 +59,8 @@ def main():
         p = os.path.join(root, f)
         if not os.path.isfile(p): continue
         scan_text(f, f, out)   # the path itself
+        if '__pycache__' in f.split('/') or f.endswith(('.pyc', '.pyo')):
+            out.append({'category': 'compiled file', 'severity': FAIL, 'file': f, 'line': 0, 'match': os.path.basename(f)})   # it embeds absolute local paths
         if os.path.getsize(p) > 50_000_000: big.append(f)
         if BINARY.search(f): continue
         try: scan_text(f, open(p, encoding='utf-8', errors='ignore').read(), out)

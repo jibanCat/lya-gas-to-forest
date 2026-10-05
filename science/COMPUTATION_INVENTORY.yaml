@@ -1,0 +1,446 @@
+# COMPUTATION_INVENTORY.yaml — who computes every scientific quantity the app shows, and how.
+#
+# Each record answers, for one computed public result: what physical relation is used, who computed it, with which
+# inputs, constants, conventions and assumptions, by which numerical method, where the implementation is, how it was
+# independently validated, and how to reproduce it in Python. The claims themselves (literature provenance) stay in
+# SCIENCE_LEDGER.yaml and are linked by `entries`; validations are VAL-* records there; references are REF-* records in
+# REFERENCES.yaml. science/tools/build_provenance.py checks every record (it fails on a missing field), writes
+# science/COMPUTATION_MATRIX.md, and publishes the records on the science notes ("How each quantity is computed") and on
+# each scene's sources sheet. Numbers in prose come from validation reports ({{VAL-…}}), never typed.
+#
+# compute_owner:
+#   lya_app          computed by scientific code written for this resource (the browser physics, science/js/lyaphys.js,
+#                    or this project's offline generators) — needs equations, variables, constants, conventions,
+#                    assumptions, algorithm, domain, implementation, validation and a Python reproduction
+#   external_package computed by an external scientific package — needs package, version, reference, interface,
+#                    inputs, conventions and the conversions this project makes
+#   hybrid           displayed result computed by lya_app and compared, on the same physical inputs, with an independent
+#                    external forward-model code (an alternative end-to-end implementation) — needs both. A lya_app
+#                    computation whose functions are checked against a mathematical library (the Voigt function against
+#                    SciPy's Faddeeva function, distances against SciPy's quadrature) stays lya_app: the library is a
+#                    validation reference for one function, not an alternative forward model.
+#   teaching_visual  a picture or transform that is not itself a scientific computation — says what it shows and why
+version: 1
+computations:
+
+# ------------------------------------------------------------------------------------------------ lya_app
+- id: COMP-THERM
+  anchor: comp-thermal-width
+  title: Thermal Doppler width
+  compute_owner: lya_app
+  displayed: the width of the thermal line — Beat 3's census width ±b, the thermal part of Beat 6's line, b_T of Beat 13's gases
+  beats: [3, 6, 13]
+  entries: [SCI-THERM-001, SCI-THERM-002]
+  equations:
+    - tex: 'b_T = \sqrt{\dfrac{2k_BT}{m_{\rm H}}},\qquad \phi_{\rm G}(\Delta u) = \dfrac{e^{-\Delta u^2/b_T^2}}{\sqrt{\pi}\,b_T}'
+      meaning: the Doppler parameter of the atoms' Maxwellian line-of-sight velocities, and the normalised thermal profile it sets (∫φ_G du = 1)
+  variables:
+    - {symbol: T, meaning: gas temperature, unit: K}
+    - {symbol: b_T, meaning: thermal Doppler parameter (√2 × the line-of-sight velocity dispersion), unit: km/s}
+    - {symbol: Δu, meaning: velocity offset from the line centre, unit: km/s}
+  constants:
+    - {symbol: k_B, value: '1.380649×10⁻¹⁶ erg/K (exact)', source: REF-CODATA2022}
+    - {symbol: m_H, value: '1.6735328×10⁻²⁴ g — the ¹H atom, 1.00782503223 u', source: REF-NIST-ISOTOPES}
+    - {symbol: m_u, value: '1.66053907×10⁻²⁴ g (the atomic mass constant: u in grams)', source: REF-CODATA2022}
+  conventions: [b in km/s, the 1/e half-width of the Gaussian; velocities along the line of sight]
+  assumptions: [Maxwellian velocities at one temperature (thermal equilibrium of the atoms' motions); no turbulence]
+  approximations: []
+  algorithm: closed form
+  domain: the app's temperatures, 2×10³ to 10⁵ K
+  implementation: {file: science/js/lyaphys.js, symbols: [dopplerB]}
+  validation: {ids: [VAL-TAU-001, VAL-PY-001], independent: 'the analytic Doppler parameter (VAL-TAU-001) and an independent Python implementation', tolerance: 'relative 1e-12'}
+  python: {script: reproduce/beat03_thermal_width.py}
+
+- id: COMP-VOIGT
+  anchor: comp-voigt
+  title: Natural width and the Voigt profile
+  compute_owner: lya_app
+  displayed: the natural (Lorentzian) width and Beat 4's line shape; the profile of every line the app draws with Voigt kernels
+  beats: [2, 4, 6, 7, 8, 13]
+  entries: [SCI-NAT-001, SCI-VOIGT-001, SCI-VOIGT-002]
+  equations:
+    - tex: '\gamma = \dfrac{\Gamma\,\lambda_0}{4\pi},\qquad a = \dfrac{\gamma}{b},\qquad x = \dfrac{\Delta u}{b}'
+      meaning: the natural half-width in velocity, the damping parameter and the dimensionless offset (Γ = A₂₁, the 2p state decays only to 1s)
+    - tex: 'H(a,x) = \operatorname{Re}\,w(x + ia) = \dfrac{a}{\pi}\int_{-\infty}^{\infty}\dfrac{e^{-y^2}\,dy}{(x-y)^2 + a^2},\qquad \phi_{\rm V}(\Delta u) = \dfrac{H(a,\,\Delta u/b)}{\sqrt{\pi}\,b}'
+      meaning: the Voigt–Hjerting function — the thermal Gaussian convolved with the natural Lorentzian — and the normalised profile per unit velocity
+  variables:
+    - {symbol: Γ, meaning: total decay rate of the upper level (A₂₁), unit: s⁻¹}
+    - {symbol: λ₀, meaning: Lyα rest wavelength, unit: cm}
+    - {symbol: γ, meaning: Lorentzian half width at half maximum in velocity, unit: km/s}
+    - {symbol: a, meaning: damping parameter, unit: dimensionless}
+    - {symbol: w(z), meaning: 'the Faddeeva function, w(z) = e^(−z²) erfc(−iz)', unit: dimensionless}
+  constants:
+    - {symbol: A₂₁, value: '6.2649×10⁸ s⁻¹', source: REF-WF09}
+    - {symbol: λ₀, value: '1215.6701 Å (vacuum)', source: REF-NIST-ASD}
+  conventions: [profile normalised per unit velocity (∫φ_V du = 1); b from COMP-THERM (or the total b of a parcel, COMP-PARCEL)]
+  assumptions: [natural broadening from the 2p lifetime only — collisional broadening is negligible at IGM densities]
+  approximations: ['w(z) is evaluated with Humlíček''s (1982) W4 rational approximation, accurate to < 10⁻⁴ (relative) where tested']
+  algorithm: 'Humlíček W4: four regions chosen by |x| + a and by a against 0.195|x| − 0.176, each with its own rational or asymptotic form (region borders as in Zaghloul 2015, Table 1)'
+  domain: a ∈ [10⁻⁶, 1], |x| ≤ 2×10⁴
+  implementation: {file: science/js/lyaphys.js, symbols: [aDamp, voigtH, humlicekW4, phiV]}
+  validation: {ids: [VAL-VOIGT-001, VAL-PY-001], independent: 'SciPy''s Faddeeva function (wofz) on a 42 × 321 grid (VAL-VOIGT-001), and in Python', tolerance: 'relative < 10⁻⁴ for H (the W4 approximation); 1e-12 for γ and a'}
+  python: {script: reproduce/beat04_natural_voigt.py}
+
+- id: COMP-REDSHIFT
+  anchor: comp-redshift-mapping
+  title: Redshift, distance and observed wavelength
+  compute_owner: lya_app
+  displayed: observed wavelengths (Beats 5, 11, 12), the distance to the toy sample (≈ 4.4 Gpc/h), the stretching ribbon's scale
+  beats: [0, 1, 5, 11, 12]
+  entries: [SCI-RED-001, SCI-RED-004, SCI-RED-005, SCI-MAP-004]
+  equations:
+    - tex: '\lambda_{\rm obs} = \lambda_{\rm rest}\,(1 + z),\qquad \chi(z) = \dfrac{c}{H_0}\int_0^z \dfrac{dz''}{E(z'')},\quad E(z) = \sqrt{\Omega_m(1+z)^3 + \Omega_\Lambda}'
+      meaning: the stretch of every wavelength between the absorber's frame and ours, and the comoving distance along the light's path
+    - tex: '\lambda_{\rm obs}(u) = \lambda_0\,(1+z_0)\,e^{u/c}'
+      meaning: the velocity coordinate on the observed-wavelength ruler (log-λ convention; z₀ is the redshift of the u = 0 point)
+  variables:
+    - {symbol: z, meaning: redshift of the absorbing gas, unit: dimensionless}
+    - {symbol: χ, meaning: comoving distance, unit: Mpc/h}
+    - {symbol: u, meaning: velocity coordinate along the sightline, unit: km/s}
+  constants:
+    - {symbol: c, value: '299 792.458 km/s (exact)', source: REF-CODATA2022}
+    - {symbol: 'Ω_m, Ω_Λ', value: '0.3153, 0.6847 (flat; distances in Mpc/h do not depend on h)', source: REF-PLANCK18}
+  conventions: [flat ΛCDM with radiation neglected; distances in comoving Mpc/h; z₀ is the near end of the sightline]
+  assumptions: [FLRW expansion; comoving observers; the gas's own small motion is folded into z for a single absorber]
+  approximations: ['the log-λ and the first-order forms differ by {{VAL-MAP-001:exp_vs_linear_20mpch_z3:.1e}} in 1 + z over 20 Mpc/h at z = 3']
+  algorithm: 'χ(z): composite Simpson''s rule on 512 panels; z(χ): bisection (80 steps)'
+  domain: z from 0.01 to 6 (tested)
+  implementation: {file: science/js/lyaphys.js, symbols: [lambdaObsOfRest, comovingDistance, zOfComoving, lambdaObs]}
+  validation: {ids: [VAL-RED-001, VAL-MAP-001, VAL-PY-001], independent: 'SciPy quadrature (VAL-RED-001), and in Python', tolerance: 'χ relative < 1e-7; identities to 1e-14'}
+  python: {script: reproduce/beat05_redshift_mapping.py}
+
+- id: COMP-VELMAP
+  anchor: comp-velocity-mapping
+  title: Real space to velocity space
+  compute_owner: lya_app
+  displayed: where gas lands in velocity — Beat 6's 363 + 87 = 450 km/s, Beat 7's three parcels, every sightline's u
+  beats: [5, 6, 7, 8, 11, 12]
+  entries: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-MAP-005]
+  equations:
+    - tex: 'u(x) = aH(z)\,x_{\rm com} + v_{\rm pec}(x),\qquad \dfrac{aH(z)}{h} = \dfrac{100\,E(z)}{1+z}\ \ {\rm km\,s^{-1}\ per}\ h^{-1}{\rm Mpc}'
+      meaning: the velocity at which gas at comoving position x absorbs — the Hubble flow from the near edge plus its own peculiar velocity
+  variables:
+    - {symbol: x_com, meaning: 'comoving position from the near edge of the sightline or stretch (an arbitrary zero point)', unit: Mpc/h}
+    - {symbol: v_pec, meaning: 'peculiar velocity along the line of sight; > 0 is away from us (redder)', unit: km/s}
+    - {symbol: u, meaning: 'velocity coordinate, zero at x = 0 (an arbitrary zero point)', unit: km/s}
+    - {symbol: aH/h, meaning: Hubble velocity per comoving Mpc/h, unit: km/s per Mpc/h}
+  constants:
+    - {symbol: 'Ω_m, Ω_Λ', value: '0.3153, 0.6847', source: REF-PLANCK18}
+  conventions: ['the sightline runs from the observer side (x = 0) toward the quasar (+x)', 'v_pec > 0 ⇔ moving away from the observer ⇔ redder', 'u has an arbitrary zero point; observed wavelength follows from COMP-REDSHIFT']
+  assumptions: [aH constant across the box (a local, linear map); first order in v/c]
+  approximations: ['constant H: {{VAL-MAP-001:linear_map_max_rel_dev_by_dx.20:.1%}} from the exact distance–redshift relation over 20 Mpc/h ({{VAL-MAP-001:linear_map_max_rel_dev_by_dx.100:.1%}} at 100 Mpc/h)']
+  algorithm: closed form
+  domain: boxes up to 100 Mpc/h at z = 2–4 (tested)
+  implementation: {file: science/js/lyaphys.js, symbols: [hubblePerMpch, uOfX]}
+  validation: {ids: [VAL-MAP-001, VAL-PY-001], independent: 'the exact log-λ relation integrated numerically (VAL-MAP-001), and in Python', tolerance: 'relative 1e-12 (closed form)'}
+  python: {script: reproduce/beat07_velocity_mapping.py}
+
+- id: COMP-PARCEL
+  anchor: comp-parcel-width
+  title: One parcel's line — its width and depth
+  compute_owner: lya_app
+  displayed: Beat 6's widths (thermal, size, together), its peak optical depth, and the parcel lines of Beats 6–8
+  beats: [6, 7, 8]
+  entries: [SCI-THERM-002, SCI-MAP-006, SCI-TAU-001, SCI-REP-003]
+  equations:
+    - tex: 'b^2 = b_T^2 + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,\Bigl|aH + \dfrac{dv}{dx}\Bigr|\,\sigma_x,\qquad \tau_0 = \dfrac{N_{\rm HI}\,\sigma_v}{\sqrt{\pi}\,b}'
+      meaning: a Gaussian clump of width σ_x with a linear velocity field has a Gaussian spread of velocities that adds in quadrature to the thermal width; τ₀ is the line-centre optical depth of the Doppler profile
+    - tex: '\tau(u) = \sum_{k} N_k\,\sigma_v\,\phi\bigl(u - u_k;\,b_T\bigr),\qquad N_k \propto e^{-s_k^2/2},\ \ u_k = aH\,(x + s_k\sigma_x) + v + \dfrac{dv}{dx}\,s_k\sigma_x'
+      meaning: what the scene draws — the clump cut into sub-cells s_k ∈ [−5, 5], each a thermal line at its own velocity (its sum reproduces the quadrature law above)
+  variables:
+    - {symbol: σ_x, meaning: the clump's 1σ width along the beam, unit: comoving Mpc/h}
+    - {symbol: dv/dx, meaning: 'the parcel''s own peculiar-velocity gradient (Beat 6: set to zero)', unit: km/s per Mpc/h}
+    - {symbol: N_HI, meaning: neutral hydrogen column, unit: cm⁻²}
+    - {symbol: σ_v, meaning: 'integrated cross-section per unit velocity, (πe²/m_e c) f λ₀', unit: cm² km/s}
+  constants:
+    - {symbol: πe²/m_e c, value: '2.6540×10⁻² cm² s⁻¹', source: REF-CODATA2022}
+    - {symbol: f, value: '0.4164 (1s → 2p)', source: REF-WF09}
+  conventions: [x comoving from the near edge of the stretch; the parcel's column N is the total over the clump]
+  assumptions: ['Gaussian density profile along the beam; one temperature; a linear velocity field', 'Beat 6 sets the parcel''s own peculiar-velocity gradient to zero, isolating heat and the Hubble flow across its size; with its own gradient the same parcel has b = {{VAL-ORTH-001:base.b_with_own_gradient_kms:.1f}} km/s']
+  approximations: ['sub-cell sampling: 161 sub-cells over ±5σ in Beats 6–10, 201 in Beat 13; the damping wings are kept (Voigt kernels)']
+  algorithm: 'parcelToCells (sub-cells with Gaussian weights) → tauFromCells (direct summation); parcelWidths gives the analytic widths'
+  domain: Beat 6's control ranges (place, motion, temperature, amount)
+  implementation: {file: science/js/lyaphys.js, symbols: [parcelToCells, parcelTau, parcelWidths, tau0]}
+  validation: {ids: [VAL-ORTH-001, VAL-PY-001], independent: 'the analytic quadrature law and τ₀ (VAL-ORTH-001: the drawn width within 2e-3 of it), and in Python', tolerance: 'relative 1e-12 for the analytic widths and τ₀'}
+  python: {script: reproduce/beat06_parcel_profile.py}
+
+- id: COMP-TAU
+  anchor: comp-optical-depth
+  title: Optical depth — contributions add
+  compute_owner: lya_app
+  displayed: every optical-depth curve (Beats 3, 6–13) and Beat 9's sum
+  beats: [3, 6, 8, 9, 10, 11, 12, 13]
+  entries: [SCI-TAU-001, SCI-TAU-002, SCI-TAU-003, SCI-TAU-005]
+  equations:
+    - tex: '\tau(u) = \sum_j N_j\,\sigma_v\,\phi\bigl(u - u_j;\,b_j\bigr),\qquad \sigma_v = \dfrac{\pi e^2}{m_e c}\,f\,\lambda_0,\qquad N_j = n_{{\rm HI},j}\,\Delta x_{\rm prop}'
+      meaning: each contribution's column times the cross-section per unit velocity times its normalised profile; along a sightline each real-space cell contributes its own column
+  variables:
+    - {symbol: N_j, meaning: neutral column of contribution j, unit: cm⁻²}
+    - {symbol: 'u_j, b_j', meaning: its velocity (COMP-VELMAP) and its Doppler parameter (COMP-THERM), unit: km/s}
+    - {symbol: φ, meaning: 'the Voigt profile (COMP-VOIGT), or its Gaussian core where the wings are negligible', unit: (km/s)⁻¹}
+    - {symbol: Δx_prop, meaning: 'proper cell length, Δx_com · a/h', unit: cm}
+  constants:
+    - {symbol: πe²/m_e c, value: '2.6540×10⁻² cm² s⁻¹', source: REF-CODATA2022}
+    - {symbol: f, value: '0.4164', source: REF-WF09}
+    - {symbol: λ₀, value: '1215.6701 Å', source: REF-NIST-ASD}
+  conventions: [profile sampled at pixel centres (point sampling); each contribution's kernel extends to 8 b and its damping wings until τ < 10⁻⁶; periodic boxes use the nearest image]
+  assumptions: [optical depths of independent absorbers add (a linear, optically passive medium); one velocity per sampling element]
+  approximations: ['the toy forest is drawn with Gaussian kernels: max |ΔF| {{VAL-TOY-001:max_abs_dF_gauss_vs_voigt:.0e}} against Voigt kernels']
+  algorithm: direct summation over contributions on a uniform velocity grid
+  domain: 'one velocity per sampling element and lines resolved by at least two pixels (SCI-TAU-004, SCI-TAU-005)'
+  implementation: {file: science/js/lyaphys.js, symbols: [tauFromCells, cellsFromSkewer]}
+  validation: {ids: [VAL-TAU-001, VAL-INV-001, VAL-PY-001], independent: 'exact Voigt sums and ∫τ du = N σ_v (VAL-TAU-001); the traced contributions sum to τ (VAL-INV-001); and in Python', tolerance: 'relative 1e-4 against exact Voigt (the W4 approximation)'}
+  python: {script: reproduce/beat09_optical_depth.py}
+
+- id: COMP-FLUX
+  anchor: comp-transmission
+  title: Transmission — light multiplies
+  compute_owner: lya_app
+  displayed: every transmitted-flux curve, Beat 10's products and the ink's brightness
+  beats: [5, 9, 10, 11, 12, 13]
+  entries: [SCI-FLUX-001, SCI-SAT-001, SCI-REP-005]
+  equations:
+    - tex: 'F(u) = e^{-\tau(u)} = \prod_j e^{-\tau_j(u)}'
+      meaning: the intrinsic transmission, before any instrument
+  variables:
+    - {symbol: F, meaning: 'transmitted fraction of the continuum (intrinsic)', unit: dimensionless}
+  constants: []
+  conventions: ['intrinsic τ → intrinsic F; the instrument acts afterwards (COMP-INSTR)']
+  assumptions: [absorption only, no source term along the beam (resonant scattering removes light from a narrow beam)]
+  approximations: []
+  algorithm: closed form
+  domain: all τ ≥ 0
+  implementation: {file: science/js/lyaphys.js, symbols: [fluxFromTau, tau0]}
+  validation: {ids: [VAL-REND-001, VAL-PY-001], independent: 'the drawn ink read back from the canvas equals e^(−τ) (VAL-REND-001), and in Python', tolerance: 'relative 1e-12'}
+  python: {script: reproduce/beat10_transmission.py}
+
+- id: COMP-INSTR
+  anchor: comp-instrument
+  title: The instrument — resolution, pixels and noise
+  compute_owner: lya_app
+  displayed: Beat 11's recorded spectrum and Beat 13's noisy line
+  beats: [11, 13]
+  entries: [SCI-OBS-001, SCI-OBS-002]
+  equations:
+    - tex: 'F_{\rm obs}(u) = \bigl(F \ast G_{\rm FWHM}\bigr)(u) + n,\qquad G(u) \propto e^{-u^2/2\sigma^2},\ \ \sigma = \dfrac{\rm FWHM}{2\sqrt{2\ln 2}},\qquad n \sim \mathcal{N}\bigl(0,\,(S/N)^{-2}\bigr)'
+      meaning: the spectrograph convolves the transmitted flux (never τ) with its line-spread function; the detector adds white noise per pixel
+  variables:
+    - {symbol: FWHM, meaning: the resolution, unit: km/s}
+    - {symbol: S/N, meaning: signal-to-noise per pixel (continuum-normalised), unit: dimensionless}
+  constants: []
+  conventions: ['order: intrinsic τ → intrinsic F → line-spread function → pixels → noise; the gas and τ are untouched', 'pixels max(2.5 km/s, FWHM/3) wide']
+  assumptions: [a Gaussian line-spread function; white, flux-independent noise; no sky, no continuum error]
+  approximations: [the kernel is cut at 5σ]
+  algorithm: 'discrete convolution with a normalised Gaussian kernel (edges extended; the toy forest is periodic); noise from a seeded generator (Box–Muller), so a given seed draws the same noise'
+  domain: 'FWHM 0–200 km/s and S/N 5, 20, 50 or no noise (Beat 11); S/N 20 (Beat 13)'
+  implementation: {file: science/js/lyaphys.js, symbols: [convolveLSF, addNoise]}
+  validation: {ids: [VAL-PY-001], independent: 'an independent Python convolution (the noise draw is not reproduced: it depends on the generator)', tolerance: 'relative 1e-4'}
+  python: {script: reproduce/beat11_instrument.py}
+
+- id: COMP-ION
+  anchor: comp-neutral-fraction
+  title: How much of the hydrogen is neutral
+  compute_owner: lya_app
+  displayed: 'the mean density (≈ a dozen atoms per m³), x_HI ≈ 1 in 100 000 (Beats 0, 1), the ultraviolet microscope (Beat 6)'
+  beats: [0, 1, 6]
+  entries: [SCI-CTX-001, SCI-ION-001, SCI-ION-002]
+  equations:
+    - tex: 'x_{\rm HI} = \dfrac{\alpha_A(T)\,n_e}{\Gamma_{\rm HI}},\quad \alpha_A = 4.2\times10^{-13}\Bigl(\dfrac{T}{10^4\,{\rm K}}\Bigr)^{-0.7}\ {\rm cm^3\,s^{-1}},\quad \dfrac{n_e}{n_{\rm H}} = 1 + \dfrac{2Y}{4(1-Y)}'
+      meaning: photoionisation equilibrium in a highly ionised gas (case A), with hydrogen and helium fully ionised
+    - tex: '\bar n_{\rm H}(z) = \dfrac{\Omega_b h^2\,\rho_{{\rm crit},0}h^{-2}\,(1 - Y)}{m_{\rm H}}\,(1+z)^3,\qquad n_{\rm H} = \bar n_{\rm H}\,\Delta'
+      meaning: the mean hydrogen density (proper), and at overdensity Δ
+  variables:
+    - {symbol: Γ_HI, meaning: 'H I photoionisation rate (measured ≈ 0.8×10⁻¹² s⁻¹ at z ≈ 3)', unit: s⁻¹}
+    - {symbol: Δ, meaning: 'overdensity, n_H / n̄_H', unit: dimensionless}
+    - {symbol: Y, meaning: helium mass fraction, unit: dimensionless}
+  constants:
+    - {symbol: 'Ω_b h², Y_P', value: '0.02237, 0.2454', source: REF-PLANCK18}
+    - {symbol: G, value: '6.67430×10⁻⁸ cm³ g⁻¹ s⁻²', source: REF-CODATA2022}
+    - {symbol: m_H, value: '1.6735328×10⁻²⁴ g', source: REF-NIST-ISOTOPES}
+  conventions: [densities proper, in cm⁻³]
+  assumptions: [photoionisation equilibrium; the gas highly ionised (x_HI ≪ 1); case-A recombination fit]
+  approximations: ['α_A is a power-law fit to the case-A rate (compared with Hui & Gnedin 1997 and Draine 2011 in the claim it implements)']
+  algorithm: closed form (the mean density is the toy generator's, science/data/toy/zeldovich3d.py)
+  domain: the app's temperatures and overdensities, where x_HI ≪ 1
+  implementation: {file: science/js/lyaphys.js, symbols: [alphaA, neOverNH, neutralFraction, nHIRelative]}
+  validation: {ids: [VAL-TOY-001, VAL-PY-001], independent: 'x_HI at mean density checked against the literature range (VAL-TOY-001), and in Python from the cosmological parameters', tolerance: 'relative 1e-6'}
+  python: {script: reproduce/beat01_neutral_fraction.py}
+
+- id: COMP-INV
+  anchor: comp-inverse-trace
+  title: Tracing a colour back to the gas
+  compute_owner: lya_app
+  displayed: Beat 12's ledger — which places contribute to one colour's optical depth
+  beats: [12]
+  entries: [SCI-TAU-002, SCI-TAU-003]
+  equations:
+    - tex: '\tau_j(u) = \tau_0(N_j, b_j)\,e^{-(u - u_j)^2/b_j^2},\qquad \tau(u) = \sum_j \tau_j(u),\qquad F(u) = \prod_j e^{-\tau_j(u)}'
+      meaning: each cell's own optical depth at the chosen colour (the Gaussian kernels the toy forest is drawn with); the contributions sum to the spectrum's τ
+  variables:
+    - {symbol: τ_j(u), meaning: cell j's contribution at velocity u, unit: dimensionless}
+  constants: []
+  conventions: ['the same kernels and cut as the drawn spectrum; places are grouped by contiguity along the line — a display choice']
+  assumptions: ['the forward-model truth is known: the toy''s gas is traced, not inferred']
+  approximations: ['cells under the display cut stay in the ledger''s "rest" (median {{VAL-INV-001:omitted_fraction.median:.1%}} of a pixel''s τ)']
+  algorithm: direct evaluation per cell within the kernel cut
+  domain: the toy sightline
+  implementation: {file: science/js/lyaphys.js, symbols: [tauContributions]}
+  validation: {ids: [VAL-INV-001, VAL-PY-001], independent: 'the traced contributions sum to the spectrum''s own τ at every pixel (VAL-INV-001); the same sum in Python (reproduce/beat09_optical_depth.py)', tolerance: 'relative 1e-12 (the sum)'}
+  python: {script: reproduce/beat09_optical_depth.py, note: 'this reproduces the sum the trace relies on — contributions add, and the transmission is their product — on a small example with Voigt kernels; the trace itself uses the Gaussian kernels above, and VAL-INV-001 checks that its contributions sum to τ'}
+
+- id: COMP-DEG
+  anchor: comp-same-shadow
+  title: The constructed "same shadow"
+  compute_owner: lya_app
+  displayed: Beat 13's three gases, their Lyα, Lyβ and Si IV lines, and the Δχ² that separates them
+  beats: [13]
+  entries: [SCI-DEG-001, SCI-DEG-002, SCI-MAP-006, SCI-OBS-002]
+  equations:
+    - tex: 'b_{\rm tot}^2 = \dfrac{2kT}{m_{\rm H}} + 2\sigma_u^2,\quad \sigma_u = s_u + \delta v,\qquad \delta v^{\rm (iii)} = \sqrt{\bigl(s_u^{\rm (i)}\bigr)^2 + \tfrac12\bigl(b_T^{\rm (i)\,2} - b_T^{\rm (iii)\,2}\bigr)} - s_u^{\rm (iii)}'
+      meaning: 'a clump''s total Doppler parameter, and the matching condition b_tot(iii) = b_tot(i) that gives (iii) its smooth extra velocity ({{VAL-DEG-001:construction.dv_iii_kms:.4f}} km/s)'
+    - tex: '\Delta\chi^2 = \sum_k \bigl(F^{(n)}_k - F^{(i)}_k\bigr)^2\,(S/N)^2,\qquad \tau_{\rm Ly\beta}(u) = \dfrac{(f\lambda)_{\rm Ly\beta}}{(f\lambda)_{\rm Ly\alpha}}\,\tau_{\rm Ly\alpha}(u)'
+      meaning: noise-free Δχ² against (i) over 121 pixels of 2.5 km/s; the Lyβ line as the app draws it
+  variables:
+    - {symbol: s_u, meaning: 'Hubble-flow width of a clump (1σ)', unit: km/s}
+    - {symbol: δv, meaning: 'extra smooth peculiar velocity across 1σ', unit: km/s}
+    - {symbol: S/N, meaning: signal-to-noise per 2.5 km/s pixel, unit: dimensionless}
+  constants:
+    - {symbol: 'f, λ (Lyβ)', value: '0.079142, 1025.72221 Å', source: REF-NIST-ASD}
+    - {symbol: 'm (Si IV panel)', value: '28 m_H (²⁸Si: 27.9769 u, 92.2 % of silicon)', source: REF-NIST-ISOTOPES-SI}
+    - {symbol: 'Si IV λ1394', value: '1393.76 Å, f = 0.513 — names the line; the panel''s column is illustrative', source: REF-NIST-ASD}
+  conventions: ['configurations in velocity space (so they do not depend on the cosmology), from their single source science/validation/degeneracy/configs.json']
+  assumptions: ['idealised Gaussian clumps with smooth (linear) velocity fields, one temperature each — a constructed example, not typical absorbers', 'perfect resolution; white noise (COMP-INSTR)']
+  approximations: ['clumps cut into 201 sub-cells over ±5σ; Lyβ keeps Lyα''s damping constant (its wings are immaterial at these columns)']
+  algorithm: 'construction by the matching rule (science/tools/same_shadow_configs.py); lines by parcelToCells → tauFromCells; Δχ² by direct summation'
+  domain: S/N 20 to 200
+  implementation: {file: [science/tools/same_shadow_configs.py, science/js/lyaphys.js, app/src/scenes/b13-same-shadow.js], symbols: [same_shadow_configs, parcelToCells, tauFromCells, b13tau]}
+  validation: {ids: [VAL-DEG-001, VAL-PY-001], independent: 'an exact-Voigt sub-cell oracle (VAL-DEG-001) and a Python sub-cell sum with SciPy''s Faddeeva function — two implementations, neither the app''s', tolerance: 'Δχ²(ii) within 5 % (oracle) and 1e-3 (Python); Δχ²(iii) < 1e-4 on the exact-Voigt paths (the oracle and Python), < 1e-2 as the app draws it with Humlíček''s W4'}
+  python: {script: reproduce/beat13_degeneracy.py, note: 'the matching condition is closed form; the lines are summed over each clump''s sub-cells, with no closed form, so that (iii) matches (i) is computed, not assumed'}
+
+# ------------------------------------------------------------------------------------------------ hybrid
+- id: COMP-SIGHTLINE
+  anchor: comp-toy-sightline
+  title: The toy sightline's spectrum
+  compute_owner: hybrid
+  displayed: the toy forest (Beats 8–12) — the continuous sightline, its optical depth and transmission
+  beats: [8, 9, 10, 11, 12]
+  entries: [SCI-SIM-001, SCI-SIM-TOY-001, SCI-TAU-002, SCI-TAU-004]
+  equations:
+    - tex: 'N_j = n_{{\rm HI},j}\,\Delta x_{\rm com}\,\dfrac{a}{h},\quad u_j = aH\,x_j + v_{{\rm pec},j},\quad b_j = \sqrt{2kT_j/m_{\rm H}},\qquad \tau(u) = \sum_j N_j\,\sigma_v\,\phi(u - u_j;\,b_j),\quad F = e^{-\tau}'
+      meaning: the reduced forward model the app runs on the toy's real-space pixels
+  variables:
+    - {symbol: 'n_HI,j, T_j, v_pec,j', meaning: 'the toy skewer''s real-space pixels (neutral density, temperature, peculiar velocity)', unit: 'cm⁻³ (proper), K, km/s'}
+  constants:
+    - {symbol: Γ_HI (measured), value: '{{VAL-TOY-001:gamma12_measured_z3:g}}×10⁻¹² s⁻¹ at z ≈ 3', source: REF-BB13}
+    - {symbol: Γ_HI (toy), value: 'tuned to {{VAL-TOY-001:gamma_ratio:.1f}}× the measured rate so that ⟨F⟩ = 0.68 (the mean-flux target) — a calibration', source: REF-BECKER13}
+  conventions: [x comoving Mpc/h; v_pec > 0 away from the observer; periodic 20 Mpc/h box]
+  assumptions: [one velocity and one temperature per real-space cell (single-stream); Zel'dovich toy density field, not a hydrodynamic simulation]
+  approximations: ['drawn with Gaussian kernels (max |ΔF| {{VAL-TOY-001:max_abs_dF_gauss_vs_voigt:.0e}} against Voigt kernels)']
+  algorithm: cellsFromSkewer → tauFromCells (direct summation) → fluxFromTau
+  domain: 'the toy at its own sampling, inside the declared closure domain (one velocity per sampling element; lines resolved by at least two pixels)'
+  implementation: {file: science/js/lyaphys.js, symbols: [cellsFromSkewer, tauFromCells, fluxFromTau]}
+  validation: {ids: [VAL-TOY-002, VAL-CLOSURE-FS, VAL-PY-001], independent: 'the toy generator''s own exact-Voigt τ (VAL-TOY-002); fake_spectra 2.2.4 on synthetic test skewers (VAL-CLOSURE-FS); the accumulation in Python', tolerance: 'as drawn max |ΔF| < 1e-3 against the generator; declared-domain closure criteria against fake_spectra'}
+  python: {script: reproduce/beat09_optical_depth.py, note: 'the same accumulation on a small example; the full sightline is checked against the two independent codes'}
+  reference: {package: fake_spectra, version: 2.2.4, ref: REF-FAKESPECTRA, role: 'independent reference implementation (validation only: no scene shows a fake_spectra spectrum)', record: COMP-FAKESPECTRA}
+
+# ------------------------------------------------------------------------------------------------ external packages
+- id: COMP-FAKESPECTRA
+  anchor: comp-fake-spectra
+  title: fake_spectra 2.2.4 — the external reference spectra
+  compute_owner: external_package
+  displayed: 'the closure numbers in the science notes (VAL-CLOSURE-FS); no scene shows a fake_spectra spectrum'
+  beats: [8]
+  entries: [SCI-SIM-002, SCI-SIM-003, SCI-TAU-005]
+  package: {name: fake_spectra, version: 2.2.4, ref: REF-FAKESPECTRA, licence: MIT}
+  interface: 'fake_spectra.spectra.Spectra on mock Gadget-format snapshots (science/oracle/fakespectra_mocksnap.py writes them; science/oracle/fakespectra_run_closure.py runs Spectra and reads τ)'
+  inputs: 'particle positions, velocities, temperatures, smoothing lengths and neutral hydrogen of synthetic test cases (science/validation/closure/cases)'
+  conventions: ['thermal width with 1.00794 m_p (b {{VAL-CLOSURE-FS:derived.b_mass_rel:.2%}} small)', 'stored τ is the pixel-averaged τ when the pixel is at least b/2 wide, the pixel-centre value otherwise', 'damping wings truncated at half a box; τ tail floor 10⁻⁷; 7-node kernel quadrature', 'its get_velocity returns √a × the peculiar velocity on the tested path (SCI-SIM-003)']
+  conversions: ['this project writes its synthetic skewers as mock snapshots in Gadget units (comoving kpc/h; velocities with the √a factor) and compares τ and F on the same pixel grid', 'skewer velocities are never taken from get_velocity']
+  validation: {ids: [VAL-CLOSURE-FS], independent: 'compared with this project''s real-space method and an exact reference on the same cases', tolerance: 'declared-domain criteria (max |ΔF| ≤ 0.01; |Δ⟨F⟩| ≤ 1e-3)'}
+
+- id: COMP-WOFZ
+  anchor: comp-faddeeva-oracle
+  title: SciPy's Faddeeva function — the Voigt oracle
+  compute_owner: external_package
+  displayed: 'nothing directly: it is the accuracy reference for the app''s Voigt function and for the oracles'
+  beats: [4]
+  entries: [SCI-VOIGT-002]
+  package: {name: SciPy, version: '{{VAL-VOIGT-001:scipy:s}}', ref: REF-SCIPY-WOFZ, licence: BSD-3-Clause}
+  interface: 'scipy.special.wofz (science/oracle/voigt_oracle.py, degeneracy_oracle.py, tau_oracle.py; reproduce/*.py)'
+  inputs: 'complex argument x + i a on the test grid'
+  conventions: ['H(a, x) = Re w(x + i a)']
+  conversions: []
+  validation: {ids: [VAL-VOIGT-001], independent: 'the reference itself (Faddeeva package algorithms)', tolerance: '—'}
+
+# ------------------------------------------------------------------------------------------------ teaching visuals
+- id: TV-ATOMS
+  anchor: tv-representative-atoms
+  title: Representative atoms
+  compute_owner: teaching_visual
+  beats: [1, 2, 3, 4, 6]
+  entries: [SCI-REP-001]
+  what: dots that stand for neutral atoms — a cartoon sample, their number proportional to N_HI; not simulation particles and not to scale
+  physics_note: the absorption is computed from N_HI and the profiles above, never from the drawn dots
+
+- id: TV-VOLUME
+  anchor: tv-teaching-volume
+  title: The 3D volume
+  compute_owner: teaching_visual
+  beats: [0, 1]
+  entries: [SCI-REP-002]
+  what: the toy's density field drawn as a slab that fades away from the beam; only gas on the beam absorbs
+  physics_note: the sightline's spectrum uses the beam's own pixels (COMP-SIGHTLINE)
+
+- id: TV-PARCELS
+  anchor: tv-teaching-parcels
+  title: Parcels and clouds
+  compute_owner: teaching_visual
+  beats: [6, 7, 8, 13]
+  entries: [SCI-REP-003]
+  what: three Gaussian parcels summarising peak regions of the continuous sightline, and Beat 13's idealised clumps — a teaching decomposition, not separate clouds
+  physics_note: their lines are computed (COMP-PARCEL, COMP-DEG); Beat 8 shows the full sightline the parcels summarise
+
+- id: TV-NATWIDTH
+  anchor: tv-magnified-natural-width
+  title: Magnified natural width
+  compute_owner: teaching_visual
+  beats: [2, 4]
+  entries: [SCI-REP-004]
+  what: the natural width (≈ 0.006 km/s) magnified wherever it must be seen, and labelled (×500 in Beat 2, ×1200 in Beat 4)
+  physics_note: the computed profiles use the true width (COMP-VOIGT)
+
+- id: TV-INK
+  anchor: tv-ink-rendering
+  title: Ink and its brightness
+  compute_owner: teaching_visual
+  beats: [5, 6, 9, 10]
+  entries: [SCI-REP-005]
+  what: ink stands for optical depth; where it is drawn as light, its brightness is e^(−τ)
+  physics_note: 'the rendering performs Beer–Lambert, checked from the canvas (VAL-REND-001)'
+
+- id: TV-RIBBON
+  anchor: tv-stretching-ribbon
+  title: The stretching ribbon
+  compute_owner: teaching_visual
+  beats: [5]
+  entries: [SCI-REP-007]
+  what: Beat 5's schematic field and ribbon — shadows drawn about 60× wider than real forest lines, the low-redshift forest exaggerated, Lyα only
+  physics_note: wavelengths and redshifts on the ribbon are computed (COMP-REDSHIFT)
+
+- id: TV-TIMING
+  anchor: tv-animation-timing
+  title: Animation and timing
+  compute_owner: teaching_visual
+  beats: [0, 2, 3, 5, 7, 9, 12, 13]
+  entries: []
+  what: reveals, holds and replays; their speed and duration have no physical meaning (atoms' motions are slowed enormously so they can be seen)
+  physics_note: every drawn state is a computed physical state; time is only how it is shown
+
+- id: TV-FOCUS
+  anchor: tv-cinnabar-focus
+  title: The red colour
+  compute_owner: teaching_visual
+  beats: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+  entries: []
+  what: cinnabar red marks the current causal focus — what the reader is acting on and its consequence — never a physical category
+  physics_note: colour carries no physical value

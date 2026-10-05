@@ -210,7 +210,7 @@
        "entry": "mean-hydrogen-density"
       },
       {
-       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
        "entry": "comoving-distance"
       }
      ]
@@ -233,6 +233,13 @@
    ],
    "validations": [
     "check-toy-001"
+   ],
+   "computations": [
+    "comp-redshift-mapping",
+    "comp-neutral-fraction",
+    "tv-teaching-volume",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "1": {
@@ -328,7 +335,7 @@
        "entry": "mean-hydrogen-density"
       },
       {
-       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
        "entry": "comoving-distance"
       }
      ]
@@ -404,6 +411,13 @@
    ],
    "validations": [
     "check-toy-001"
+   ],
+   "computations": [
+    "comp-redshift-mapping",
+    "comp-neutral-fraction",
+    "tv-representative-atoms",
+    "tv-teaching-volume",
+    "tv-cinnabar-focus"
    ]
   },
   "2": {
@@ -533,6 +547,13 @@
    ],
    "validations": [
     "check-map-001"
+   ],
+   "computations": [
+    "comp-voigt",
+    "tv-representative-atoms",
+    "tv-magnified-natural-width",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "3": {
@@ -622,11 +643,11 @@
      "ref": "ref-draine-2011",
      "locations": [
       {
-       "location": "ch. 6, §6.3–6.4 (Doppler broadening; Lyα f = 0.4164 as corrected)",
+       "location": "ch. 6, §6.5 'Doppler Broadening: The Voigt Line Profile' (p. 58); Lyα f = 0.4164 per the author's errata to p. 58",
        "entry": "maxwellian-velocities"
       },
       {
-       "location": "ch. 6, §6.3–6.4",
+       "location": "ch. 6, §6.5 (p. 58)",
        "entry": "thermal-doppler-broadening"
       }
      ]
@@ -657,7 +678,7 @@
      "ref": "ref-mcquinn-2016",
      "locations": [
       {
-       "location": "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; Eq. (3)",
+       "location": "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; §2.1, Eq. (3): T = T0 Δ^(γ−1)",
        "entry": "igm-temperature"
       }
      ]
@@ -668,6 +689,13 @@
    ],
    "validations": [
     "check-tau-001"
+   ],
+   "computations": [
+    "comp-thermal-width",
+    "comp-optical-depth",
+    "tv-representative-atoms",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "4": {
@@ -800,7 +828,7 @@
      "ref": "ref-humlicek-1982",
      "locations": [
       {
-       "location": "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which [[#check-voigt-001|Voigt function accuracy]] tests every region, including the tiny-a regime Zaghloul (2015) flags",
+       "location": "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which [[#check-voigt-001|Voigt function accuracy]] tests every region down to a = 10⁻⁶; the regime where Zaghloul (2015) reports W4 failing (a < 10⁻⁷) lies below every damping parameter used here",
        "entry": "voigt-numerics"
       }
      ]
@@ -840,6 +868,13 @@
    "validations": [
     "check-voigt-001",
     "check-tau-001"
+   ],
+   "computations": [
+    "comp-voigt",
+    "comp-faddeeva-oracle",
+    "tv-representative-atoms",
+    "tv-magnified-natural-width",
+    "tv-cinnabar-focus"
    ]
   },
   "5": {
@@ -1059,7 +1094,7 @@
      "ref": "ref-planck-2018",
      "locations": [
       {
-       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
        "entry": "comoving-distance"
       },
       {
@@ -1154,6 +1189,15 @@
    ],
    "validations": [
     "check-red-001"
+   ],
+   "computations": [
+    "comp-redshift-mapping",
+    "comp-velocity-mapping",
+    "comp-transmission",
+    "tv-ink-rendering",
+    "tv-stretching-ribbon",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "6": {
@@ -1171,10 +1215,11 @@
      ]
     },
     {
-     "tex": "b^2 \\simeq \\dfrac{2kT}{m_{\\rm H}} + b_{\\rm size}^2,\\qquad b_{\\rm size} = \\sqrt{2}\\,aH\\,\\sigma_x",
-     "note": "spread: heat and the parcel's size (the Hubble flow across its width σ_x) add in quadrature; here b_size = 23.8 km/s, comparable to the thermal 21.4 km/s",
+     "tex": "b^2 \\simeq \\dfrac{2kT}{m_{\\rm H}} + b_{\\rm size}^2,\\qquad b_{\\rm size} = \\sqrt{2}\\,\\Bigl|aH + \\dfrac{dv}{dx}\\Bigr|\\,\\sigma_x,\\quad \\dfrac{dv}{dx} = 0\\ \\text{here}",
+     "note": "spread: heat and the parcel's size (the velocity spread across its width σ_x) add in quadrature. This scene isolates these terms by setting the parcel's own peculiar-velocity gradient to zero, so its size term is the Hubble flow alone: here b_size = 23.8 km/s, comparable to the thermal 21.4 km/s. It is not the full line-width model of a real absorber, whose own flows change it (Beat 7)",
      "entries": [
       "thermal-doppler-broadening",
+      "velocity-gradient-broadening",
       "teaching-parcels"
      ]
     },
@@ -1209,6 +1254,15 @@
      "title": "Peculiar-velocity sign convention",
      "assumptions": [],
      "validity": "always",
+     "representation": false
+    },
+    {
+     "anchor": "velocity-gradient-broadening",
+     "title": "Velocity-gradient (Hubble) broadening of an extended absorber",
+     "assumptions": [
+      "Gaussian density profile along the beam; a linear velocity field across it; one temperature"
+     ],
+     "validity": "smooth, single-stream flow across the clump ([[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); a real absorber's flow need not be linear",
      "representation": false
     },
     {
@@ -1308,6 +1362,10 @@
        "entry": "real-to-velocity-mapping"
       },
       {
+       "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+       "entry": "velocity-gradient-broadening"
+      },
+      {
        "location": "§II.A, Eqs. (14)–(19): τ = ∫nσ ds; τ0 = Nσλ/(√π b)",
        "entry": "optical-depth-one-absorber"
       },
@@ -1340,6 +1398,15 @@
      ]
     },
     {
+     "ref": "ref-rauch-1998",
+     "locations": [
+      {
+       "location": "§3.3 (arXiv v1 p. 14): in CDM collapse models, low-column clouds are cool but large, 'so that the Hubble expansion dominates the line broadening'",
+       "entry": "velocity-gradient-broadening"
+      }
+     ]
+    },
+    {
      "ref": "ref-rybicki-lightman-1979",
      "locations": [
       {
@@ -1356,7 +1423,7 @@
      "ref": "ref-draine-2011",
      "locations": [
       {
-       "location": "ch. 6, §6.3–6.4",
+       "location": "ch. 6, §6.5 (p. 58)",
        "entry": "thermal-doppler-broadening"
       },
       {
@@ -1398,7 +1465,8 @@
     }
    ],
    "simplifications": [
-    "The parcel is a teaching Gaussian clump summarising one stretch of the real sightline ([[#teaching-parcels|Parcels are a teaching decomposition of a continuous sightline]]). Its width along the beam is real space, so the Hubble flow across it spreads its line as much as its temperature does; the margin prints both and the drawn line's own width.",
+    "The parcel is a teaching Gaussian clump summarising one stretch of the real sightline ([[#teaching-parcels|Parcels are a teaching decomposition of a continuous sightline]]). Its width along the beam is real space, so the Hubble flow across it spreads its line as much as its temperature does ([[#velocity-gradient-broadening|Velocity-gradient (Hubble) broadening of an extended absorber]]); the margin prints both and the drawn line's own width.",
+    "This scene sets the parcel's own peculiar-velocity gradient to zero (dv/dx = 0), so its width is heat plus the Hubble flow across its size. The same toy parcel with its own infalling gradient, as Beats 7–8 use it, has a narrower line (b = 23.3 km/s rather than 32.0 km/s) ([[#teaching-parcels|Parcels are a teaching decomposition of a continuous sightline]]).",
     "Moving the parcel changes only its place; its amount, temperature and own motion travel with it (no density evolution).",
     "The \"neutral amount\" setting changes N_HI directly, holding density, temperature and position fixed; what sets it (ultraviolet light from all galaxies and quasars) is in the microscope ([[#photoionisation-equilibrium|Photoionisation equilibrium and the neutral-amount control]]).",
     "Warming the gas holds N_HI fixed, so that only the width changes; in photoionisation equilibrium the neutral amount would also fall as the gas warms (the recombination rate α_A ∝ T^−0.7, [[#photoionisation-equilibrium|Photoionisation equilibrium and the neutral-amount control]]).",
@@ -1408,6 +1476,18 @@
     "check-map-001",
     "check-tau-001",
     "check-orth-001"
+   ],
+   "computations": [
+    "comp-thermal-width",
+    "comp-voigt",
+    "comp-velocity-mapping",
+    "comp-parcel-width",
+    "comp-optical-depth",
+    "comp-neutral-fraction",
+    "tv-representative-atoms",
+    "tv-teaching-parcels",
+    "tv-ink-rendering",
+    "tv-cinnabar-focus"
    ]
   },
   "7": {
@@ -1557,6 +1637,14 @@
    "validations": [
     "check-map-001",
     "check-red-001"
+   ],
+   "computations": [
+    "comp-voigt",
+    "comp-velocity-mapping",
+    "comp-parcel-width",
+    "tv-teaching-parcels",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "8": {
@@ -1574,7 +1662,7 @@
     },
     {
      "tex": null,
-     "note": "valid where each sampling element has one velocity and lines span at least two pixels; outside that domain, particle-based codes differ (up to 0.2 in F for unresolved velocity structure, up to 0.46 for lines narrower than two pixels) — stated, not hidden",
+     "note": "valid where each sampling element has one velocity and lines span at least two pixels; outside that domain, particle-based codes differ (up to 0.20 in F for unresolved velocity structure, in a deliberately exaggerated stress test; up to 0.46 for lines narrower than two pixels) — stated, not hidden",
      "entries": [
       "unresolved-velocity-structure",
       "discretisation-limits"
@@ -1588,7 +1676,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.3% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -1604,7 +1692,7 @@
      "anchor": "discretisation-limits",
      "title": "Discretisation limits — pixel size, pixel averaging and the periodic box",
      "assumptions": [],
-     "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW +93 %); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. Mean τ vs mean F per pixel differ by ≥ 7×10⁻³ at 10 km/s pixels, and by up to 0.3 for narrow saturated lines. Both codes truncate wings at half a box: for an LLS/DLA, F changes by up to 0.28 and EW by 10 % against a true periodic sum. None of these occur in the toy at its sampling.",
+     "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW up to +93%); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. The pixel-mean flux and the flux of the pixel-mean τ differ by 7e-03 to 0.31 at 10 km/s pixels (the larger for narrow saturated lines). Both codes truncate wings at half a box: for an LLS/DLA in a 5 Mpc/h box the optical depth dropped against a true periodic sum reaches 8.8. None of these occur in the toy at its sampling.",
      "representation": false
     },
     {
@@ -1686,7 +1774,7 @@
        "entry": "discretisation-limits"
       },
       {
-       "location": "v2.2.4 sdist (PyPI 2025-08-11); conventions documented in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)",
+       "location": "v2.2.4 sdist (PyPI 2025-08-11): H mass 1.00794 m_p, line_data.py:21 and absorption.h:4; pixel-centre value or pixel average (the b/2 rule), singleabs.h:104-126; wings stopped at half a box, absorption.cpp:248-278; tail floor τ < 10⁻⁷, spectra.py:135 and absorption.cpp:250-278; 7-node kernel quadrature, singleabs.h:8, 143-167; Lyα data, atom.dat:7. Full notes in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)",
        "entry": "fake-spectra-conventions"
       }
      ]
@@ -1718,6 +1806,16 @@
    "validations": [
     "check-toy-001",
     "check-closure-fs"
+   ],
+   "computations": [
+    "comp-voigt",
+    "comp-velocity-mapping",
+    "comp-parcel-width",
+    "comp-optical-depth",
+    "comp-toy-sightline",
+    "comp-fake-spectra",
+    "tv-teaching-parcels",
+    "tv-cinnabar-focus"
    ]
   },
   "9": {
@@ -1741,7 +1839,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.3% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -1757,7 +1855,7 @@
      "anchor": "discretisation-limits",
      "title": "Discretisation limits — pixel size, pixel averaging and the periodic box",
      "assumptions": [],
-     "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW +93 %); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. Mean τ vs mean F per pixel differ by ≥ 7×10⁻³ at 10 km/s pixels, and by up to 0.3 for narrow saturated lines. Both codes truncate wings at half a box: for an LLS/DLA, F changes by up to 0.28 and EW by 10 % against a true periodic sum. None of these occur in the toy at its sampling.",
+     "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW up to +93%); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. The pixel-mean flux and the flux of the pixel-mean τ differ by 7e-03 to 0.31 at 10 km/s pixels (the larger for narrow saturated lines). Both codes truncate wings at half a box: for an LLS/DLA in a 5 Mpc/h box the optical depth dropped against a true periodic sum reaches 8.8. None of these occur in the toy at its sampling.",
      "representation": false
     },
     {
@@ -1814,6 +1912,14 @@
    ],
    "validations": [
     "check-tau-001"
+   ],
+   "computations": [
+    "comp-optical-depth",
+    "comp-transmission",
+    "comp-toy-sightline",
+    "tv-ink-rendering",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "10": {
@@ -1942,6 +2048,13 @@
    "validations": [
     "check-tau-001",
     "check-rend-001"
+   ],
+   "computations": [
+    "comp-optical-depth",
+    "comp-transmission",
+    "comp-toy-sightline",
+    "tv-ink-rendering",
+    "tv-cinnabar-focus"
    ]
   },
   "11": {
@@ -2024,7 +2137,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.3% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -2124,7 +2237,7 @@
        "entry": "toy-volume"
       },
       {
-       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
        "entry": "comoving-distance"
       }
      ]
@@ -2157,6 +2270,15 @@
    "validations": [
     "check-toy-001",
     "check-toy-002"
+   ],
+   "computations": [
+    "comp-redshift-mapping",
+    "comp-velocity-mapping",
+    "comp-optical-depth",
+    "comp-transmission",
+    "comp-instrument",
+    "comp-toy-sightline",
+    "tv-cinnabar-focus"
    ]
   },
   "12": {
@@ -2180,7 +2302,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.3% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -2278,7 +2400,7 @@
      "ref": "ref-planck-2018",
      "locations": [
       {
-       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+       "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
        "entry": "comoving-distance"
       }
      ]
@@ -2291,6 +2413,16 @@
    "validations": [
     "check-tau-001",
     "check-inv-001"
+   ],
+   "computations": [
+    "comp-redshift-mapping",
+    "comp-velocity-mapping",
+    "comp-optical-depth",
+    "comp-transmission",
+    "comp-inverse-trace",
+    "comp-toy-sightline",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   },
   "13": {
@@ -2300,15 +2432,23 @@
    "equations": [
     {
      "tex": "b^2 = \\dfrac{2kT}{m} + b^2_{\\rm bulk}",
-     "note": "heat broadens light atoms more than heavy ions; bulk motion broadens all alike — every hydrogen line (Lyα, Lyβ, …) sees only the total b, so heat and smooth motion can match in all of them",
+     "note": "heat broadens light atoms more than heavy ions; bulk motion broadens all alike — every H I Lyman-series line (Lyα, Lyβ, …) sees only the total b, so heat and smooth motion can match in all of them",
      "entries": [
       "breaking-the-degeneracy",
       "thermal-doppler-broadening"
      ]
     },
     {
-     "tex": "\\Delta\\chi^2 \\approx 2.8\\ \\text{and}\\ 0.9\\ \\ (S/N = 20\\ \\text{per}\\ 2.5\\ {\\rm km\\,s^{-1}}\\ \\text{pixel})",
-     "note": "the blend (ii) is hidden by the noise: at S/N = 50 it shows (Δχ² ≈ 17). (iii) is hidden by what hydrogen records; its small misfit is the hand-tuning, not physics",
+     "tex": "b_{\\rm tot}^2 = \\dfrac{2kT}{m_{\\rm H}} + 2\\sigma_u^2,\\qquad \\sigma_u^{\\rm (iii)} = \\sqrt{\\bigl(\\sigma_u^{\\rm (i)}\\bigr)^2 + \\tfrac12\\bigl(b_T^{\\rm (i)\\,2} - b_T^{\\rm (iii)\\,2}\\bigr)}",
+     "note": "(iii) is computed, not tuned: its smooth extra motion (5.99 km/s across one standard deviation) is the one that gives it the same total Doppler parameter as (i), b_tot = 27.43 km/s, with the same column — so every H I line of (iii) equals that of (i)",
+     "entries": [
+      "same-shadow-degeneracy",
+      "thermal-doppler-broadening"
+     ]
+    },
+    {
+     "tex": "\\Delta\\chi^2_{\\rm (ii)} \\approx 2.8,\\ 17,\\ 279\\quad\\text{at}\\ S/N = 20,\\ 50,\\ 200;\\qquad \\Delta\\chi^2_{\\rm (iii)} \\le 0.002",
+     "note": "per 2.5 km/s pixel, against (i), noise-free. The blend (ii) is measurement-limited: better data reveal it. (iii) stays hidden at every S/N: increasing the signal-to-noise cannot recover information that this H I observable does not encode",
      "entries": [
       "same-shadow-degeneracy",
       "noise-model"
@@ -2316,7 +2456,7 @@
     },
     {
      "tex": "F = e^{-\\tau} \\approx 0\\quad(\\tau \\gg 1)",
-     "note": "inside the saturated Lyα core almost no light gets through, however the optical depth is split — so the blend (ii) hides there; Lyβ, with a smaller f λ, is not saturated and shows it",
+     "note": "inside the saturated Lyα core almost no light gets through, however the optical depth is split — so the blend (ii) hides there; Lyβ, with a smaller f λ, is not saturated and shows it (Δχ² ≈ 103 at S/N 20), while (iii) still equals (i)",
      "entries": [
       "same-shadow-degeneracy",
       "breaking-the-degeneracy",
@@ -2331,7 +2471,7 @@
      "assumptions": [
       "white noise as in [[#noise-model|Noise model and signal-to-noise]]; perfect resolution"
      ],
-     "validity": "(ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in any line of one species, for Gaussian velocity structure",
+     "validity": "(ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in H I absorption alone (every Lyman-series line), for this constructed model's Gaussian clumps with smooth (linear) velocity fields",
      "representation": false
     },
     {
@@ -2343,7 +2483,7 @@
       "a common non-thermal (bulk) width shared by both species — an assumption that need not hold everywhere (Rauch et al. 1996), and a stronger one for H I with a metal ion than for two metal ions",
       "illustrative metal column"
      ],
-     "validity": "Illustrative. Si IV separates heat from motion only where silicon is present in the same gas. Lyβ helps only in some cases: in real spectra it lies inside the Lyα forest of lower-redshift gas, so blending and contamination must be modelled; its smaller f λ makes it useful mainly where Lyα saturates; and it needs wavelength coverage down to 1026 Å in the absorber's frame. Like every hydrogen line, Lyβ cannot separate heat from smooth motion ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
+     "validity": "Illustrative. Si IV separates heat from motion only where silicon is present in the same gas. Lyβ helps only in some cases: in real spectra it lies inside the Lyα forest of lower-redshift gas, so blending and contamination must be modelled; its smaller f λ makes it useful mainly where Lyα saturates; and it needs wavelength coverage down to 1026 Å in the absorber's frame. Like every H I line, Lyβ cannot separate heat from smooth motion ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
      "representation": false
     },
     {
@@ -2363,6 +2503,15 @@
       "Maxwellian velocities ([[#maxwellian-velocities|Maxwellian velocities; one line-of-sight component is Gaussian]])"
      ],
      "validity": "all thermal widths considered",
+     "representation": false
+    },
+    {
+     "anchor": "velocity-gradient-broadening",
+     "title": "Velocity-gradient (Hubble) broadening of an extended absorber",
+     "assumptions": [
+      "Gaussian density profile along the beam; a linear velocity field across it; one temperature"
+     ],
+     "validity": "smooth, single-stream flow across the clump ([[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); a real absorber's flow need not be linear",
      "representation": false
     },
     {
@@ -2389,8 +2538,29 @@
      "ref": "ref-rauch-1996",
      "locations": [
       {
+       "location": "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — a bulk width common to all species and a thermal width scaling as m^(−½); the paper separates temperature from bulk motion with ions of different mass — with lines of one mass, Eq. (1) cannot separate T from b_b (our inference)",
+       "entry": "same-shadow-degeneracy"
+      },
+      {
        "location": "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — two ions of different mass (C IV and Si IV) separate temperature from bulk motion",
        "entry": "breaking-the-degeneracy"
+      }
+     ]
+    },
+    {
+     "ref": "ref-meiksin-2009",
+     "locations": [
+      {
+       "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+       "entry": "same-shadow-degeneracy"
+      },
+      {
+       "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+       "entry": "thermal-doppler-broadening"
+      },
+      {
+       "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+       "entry": "velocity-gradient-broadening"
       }
      ]
     },
@@ -2402,7 +2572,7 @@
        "entry": "breaking-the-degeneracy"
       },
       {
-       "location": "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (sum 0.079142; f-weighted centre 1025.72221 Å)",
+       "location": "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (multiplet value 0.079142; f-weighted centre 1025.72221 Å)",
        "entry": "breaking-the-degeneracy"
       },
       {
@@ -2412,7 +2582,7 @@
      ]
     },
     {
-     "ref": "ref-nist-isotopes",
+     "ref": "ref-nist-isotopes-si",
      "locations": [
       {
        "location": "Silicon entry: ²⁸Si 27.9769 u, 92.2 % of silicon",
@@ -2430,6 +2600,19 @@
       {
        "location": "Table 6, entry 1, p. 578 (λ 1215.67 Å, A = 6.2649e8 s⁻¹, f = 0.41641, g 2–6)",
        "entry": "lya-transition-data"
+      }
+     ]
+    },
+    {
+     "ref": "ref-rauch-1998",
+     "locations": [
+      {
+       "location": "§2.4 (arXiv v1 p. 7): 'For stronger Lyα lines the higher order Lyman lines can provide additional constraints when fitted simultaneously'; §3.4 (p. 15): for saturated, blended lines 'simultaneous fits to the higher order Lyman lines (which are less saturated owing to their lower oscillator strengths) can only help to some degree'",
+       "entry": "breaking-the-degeneracy"
+      },
+      {
+       "location": "§3.3 (arXiv v1 p. 14): in CDM collapse models, low-column clouds are cool but large, 'so that the Hubble expansion dominates the line broadening'",
+       "entry": "velocity-gradient-broadening"
       }
      ]
     },
@@ -2455,7 +2638,7 @@
      "ref": "ref-draine-2011",
      "locations": [
       {
-       "location": "ch. 6, §6.3–6.4",
+       "location": "ch. 6, §6.5 (p. 58)",
        "entry": "thermal-doppler-broadening"
       },
       {
@@ -2463,24 +2646,26 @@
        "entry": "saturation-curve-of-growth"
       }
      ]
-    },
-    {
-     "ref": "ref-meiksin-2009",
-     "locations": [
-      {
-       "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
-       "entry": "thermal-doppler-broadening"
-      }
-     ]
     }
    ],
    "simplifications": [
-    "The three configurations were tuned by hand to match. Two kinds of \"same shadow\" are shown — the blend (ii) is hidden only at the stated resolution and S/N (measurement-limited: better data can break it); heat against smooth motion, (i) against (iii), cannot be told apart by any hydrogen line at any S/N (information-limited: hydrogen records only the line-of-sight distribution of velocity and optical depth). The toy's small misfit for (iii) is its hand-tuning ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
+    "Two kinds of \"same shadow\" are shown. The blend (ii) was chosen by hand so that it is hidden at the stated resolution and S/N (measurement-limited: better data can break it). (iii) is computed from (i) by a matching condition — the same column and the same total Doppler parameter — so in this constructed model heat against smooth motion, (i) against (iii), cannot be distinguished by H I absorption alone at any S/N (information-limited: the H I lines record only the line-of-sight distribution of velocity and optical depth) ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
     "The three gases are called \"clouds\" for brevity; each is a denser part of the continuous gas, idealised as one or two smooth Gaussian clumps — not a separate object ([[#teaching-parcels|Parcels are a teaching decomposition of a continuous sightline]]).",
     "The three configurations are a constructed degeneracy example, not typical forest absorbers. Configuration (i) is an idealised compact gas clump — unusually hot (45 000 K, hotter than typical forest gas at z ≈ 3) and only about 7 kpc across (proper), far more compact than typical forest gas — built so that its line matches the other two ([[#same-shadow-degeneracy|The \"same shadow\" configurations]])."
    ],
    "validations": [
     "check-deg-001"
+   ],
+   "computations": [
+    "comp-thermal-width",
+    "comp-voigt",
+    "comp-optical-depth",
+    "comp-transmission",
+    "comp-instrument",
+    "comp-same-shadow",
+    "tv-teaching-parcels",
+    "tv-animation-timing",
+    "tv-cinnabar-focus"
    ]
   }
  },
@@ -2636,7 +2821,7 @@
     },
     {
      "ref": "REF-DRAINE11",
-     "location": "ch. 6, §6.3–6.4 (Doppler broadening; Lyα f = 0.4164 as corrected)",
+     "location": "ch. 6, §6.5 'Doppler Broadening: The Voigt Line Profile' (p. 58); Lyα f = 0.4164 per the author's errata to p. 58",
      "role": "secondary"
     }
    ],
@@ -2678,7 +2863,7 @@
     },
     {
      "ref": "REF-DRAINE11",
-     "location": "ch. 6, §6.3–6.4",
+     "location": "ch. 6, §6.5 (p. 58)",
      "role": "secondary"
     },
     {
@@ -2705,7 +2890,7 @@
    "title": "Natural broadening from the finite lifetime of 2p",
    "domain": "atomic / radiation",
    "status": "verified",
-   "claim": "Because the 2p state has a finite lifetime (1/A21 ≈ 1.6 ns), even a stationary atom's response is a Lorentzian with half-width γ = Γλ0/4π ≈ 0.0061 km/s, Γ = A21 (2p decays only to 1s). This is ~2000× narrower (FWHM) than the thermal width at 10⁴ K, but falls off only as 1/Δv².",
+   "claim": "Because the 2p state has a finite lifetime (1/A21 ≈ 1.6 ns), even a stationary atom's response is a Lorentzian with half-width γ = Γλ0/4π ≈ 0.0061 km/s, Γ = A21 (2p decays only to 1s). This is 1765× narrower (FWHM) than the thermal width at 10⁴ K, but falls off only as 1/Δv².",
    "equations": [
     {
      "tex": "\\gamma = \\frac{\\Gamma\\lambda_0}{4\\pi} = 6.06\\times10^{-3}\\ {\\rm km\\,s^{-1}},\\qquad a = \\gamma/b",
@@ -2792,7 +2977,7 @@
    "title": "Numerical Voigt implementation in the app",
    "domain": "numerics",
    "status": "verified-numeric",
-   "claim": "The app evaluates H(a,x) with Humlicek's (1982) W4 rational approximation at all (a, x). Against the Faddeeva function (SciPy's wofz) it is accurate to < 10⁻⁴ (relative) over a ∈ [10⁻⁶, 1], |x| ≤ 2×10⁴ (measured values in [[#check-voigt-001|Voigt function accuracy]]). The Tepper-García (2006) approximation was tested and rejected: 2–6 % errors for 2 < |x| < 6.",
+   "claim": "The app evaluates H(a,x) with Humlicek's (1982) W4 rational approximation at all (a, x). Against the Faddeeva function (SciPy's wofz) it is accurate to < 10⁻⁴ (relative) over a ∈ [10⁻⁶, 1], |x| ≤ 2×10⁴ (measured values in [[#check-voigt-001|Voigt function accuracy]]).",
    "equations": [],
    "convention": null,
    "assumptions": [],
@@ -2801,7 +2986,7 @@
    "sources": [
     {
      "ref": "REF-HUMLICEK82",
-     "location": "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which [[#check-voigt-001|Voigt function accuracy]] tests every region, including the tiny-a regime Zaghloul (2015) flags",
+     "location": "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which [[#check-voigt-001|Voigt function accuracy]] tests every region down to a = 10⁻⁶; the regime where Zaghloul (2015) reports W4 failing (a < 10⁻⁷) lies below every damping parameter used here",
      "role": "primary"
     },
     {
@@ -2963,7 +3148,7 @@
     },
     {
      "ref": "REF-PLANCK18",
-     "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)",
+     "location": "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)",
      "role": "primary"
     }
    ],
@@ -3165,7 +3350,7 @@
    "title": "Velocity coordinate ↔ observed wavelength",
    "domain": "conventions",
    "status": "verified",
-   "claim": "The velocity ruler is converted to observed wavelength with λ_obs = λ0(1+z0)e^(u/c) (the log-λ convention); to first order this equals λ0(1+z0)(1+u/c). Over 20 Mpc/h at z = 3 the two differ by 2.8×10⁻⁵ in 1+z.",
+   "claim": "The velocity ruler is converted to observed wavelength with λ_obs = λ0(1+z0)e^(u/c) (the log-λ convention); to first order this equals λ0(1+z0)(1+u/c). Over 20 Mpc/h at z = 3 the two differ by 2.9e-05 in 1+z.",
    "equations": [
     {
      "tex": "\\lambda_{\\rm obs} = \\lambda_0\\,(1+z_0)\\,e^{u/c}",
@@ -3206,7 +3391,7 @@
    "title": "Validity of the constant-H (linear) map",
    "domain": "numerics / cosmology",
    "status": "verified-numeric",
-   "claim": "Treating aH as constant across the box deviates from the exact distance–redshift relation by ~10⁻⁴ per Mpc/h (0.2 % over 20 Mpc/h, ≈ 4 km/s at z = 3; ≤ 1 % up to 100 Mpc/h).",
+   "claim": "Treating aH as constant across the box deviates from the exact distance–redshift relation by 1e-04 per Mpc/h (0.2% over 20 Mpc/h, 3.9 km/s at z = 3; 1.0% at 100 Mpc/h).",
    "equations": [],
    "convention": null,
    "assumptions": [],
@@ -3223,6 +3408,48 @@
    "used": true,
    "representation": false,
    "basis": "numerical"
+  },
+  "SCI-MAP-006": {
+   "anchor": "velocity-gradient-broadening",
+   "title": "Velocity-gradient (Hubble) broadening of an extended absorber",
+   "domain": "cosmology / kinematics",
+   "status": "verified",
+   "claim": "Gas that is extended along the line of sight spreads its absorption in velocity: the Hubble flow across its depth, and any internal peculiar-velocity gradient, give its parts different line-of-sight velocities, and this bulk spread adds to the thermal motion of its atoms. For a Gaussian clump of width σ_x with a linear velocity field, the spread is a Gaussian of dispersion |aH + dv/dx|·σ_x, i.e. a Doppler parameter b_size = √2·|aH + dv/dx|·σ_x, which adds in quadrature to the thermal b; this expression is the resource's own algebra (a Gaussian velocity spread convolved with the thermal Gaussian), checked analytically and by [[#check-orth-001|One parcel, four separate variables]] — the sources give the physics, not the formula. In CDM collapse models the low-column-density forest clouds are cool but large, so this term can dominate their widths.",
+   "equations": [
+    {
+     "tex": "b^2 = b_{\\rm thermal}^2 + b_{\\rm size}^2,\\qquad b_{\\rm size} = \\sqrt{2}\\,\\left|aH + \\tfrac{dv}{dx}\\right|\\sigma_x",
+     "meaning": null
+    }
+   ],
+   "convention": "x comoving in Mpc/h, aH in km/s per Mpc/h ([[#real-to-velocity-mapping|Real space → velocity space map]]); σ_x the clump's 1σ width along the beam",
+   "assumptions": [
+    "Gaussian density profile along the beam; a linear velocity field across it; one temperature"
+   ],
+   "validity": "smooth, single-stream flow across the clump ([[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); a real absorber's flow need not be linear",
+   "simplifications": [],
+   "sources": [
+    {
+     "ref": "REF-RAUCH98",
+     "location": "§3.3 (arXiv v1 p. 14): in CDM collapse models, low-column clouds are cool but large, 'so that the Hubble expansion dominates the line broadening'",
+     "role": "primary"
+    },
+    {
+     "ref": "REF-MEIKSIN09",
+     "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+     "role": "primary"
+    }
+   ],
+   "check": "a Gaussian velocity spread convolved with a Gaussian thermal profile is a Gaussian whose b² is the sum; [[#check-orth-001|One parcel, four separate variables]] checks the drawn width against it",
+   "validations": [
+    "VAL-ORTH-001"
+   ],
+   "beats": [
+    6,
+    13
+   ],
+   "used": true,
+   "representation": false,
+   "basis": "analytic"
   },
   "SCI-TAU-001": {
    "anchor": "optical-depth-one-absorber",
@@ -3283,7 +3510,7 @@
    "assumptions": [
     "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
    ],
-   "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.3% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+   "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
    "simplifications": [
     "The app works on real-space cells; fake_spectra deposits particle kernels in velocity space ([[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]])."
    ],
@@ -3366,7 +3593,7 @@
    ],
    "convention": "the app's default = point sampling of τ at pixel centres on a uniform u grid; nearest periodic image per cell",
    "assumptions": [],
-   "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW +93 %); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. Mean τ vs mean F per pixel differ by ≥ 7×10⁻³ at 10 km/s pixels, and by up to 0.3 for narrow saturated lines. Both codes truncate wings at half a box: for an LLS/DLA, F changes by up to 0.28 and EW by 10 % against a true periodic sum. None of these occur in the toy at its sampling.",
+   "validity": "[[#check-closure-fs|Closure against fake_spectra]]: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW up to +93%); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. The pixel-mean flux and the flux of the pixel-mean τ differ by 7e-03 to 0.31 at 10 km/s pixels (the larger for narrow saturated lines). Both codes truncate wings at half a box: for an LLS/DLA in a 5 Mpc/h box the optical depth dropped against a true periodic sum reaches 8.8. None of these occur in the toy at its sampling.",
    "simplifications": [],
    "sources": [
     {
@@ -3755,23 +3982,39 @@
    "anchor": "same-shadow-degeneracy",
    "title": "The \"same shadow\" configurations",
    "domain": "inference",
-   "status": "verified-numeric",
-   "claim": "A constructed degeneracy example, not a model of typical forest absorbers: (i) one unusually hot, idealised compact gas clump (T = 4.5×10⁴ K, Hubble width 2.23 km/s — about 7 kpc proper, far more compact than typical forest gas — N = 2.5×10¹⁴, at rest); (ii) two cold clouds (T = 10⁴ K, Hubble width 12.8 km/s each, 78 km/s apart in Hubble flow, 9.75×10¹³ each, approaching at ±24.9 km/s); (iii) one cold cloud stretched along the line (T = 10⁴ K, Hubble width 11.15 km/s, N = 2.5×10¹⁴, +6.2 km/s extra across 1σ) give Lyα lines indistinguishable at S/N = 20 per 2.5 km/s pixel with perfect resolution (Δχ² ≈ 2.8 and 0.9 over 121 pixels; 17 and 5.4 at S/N = 50, where the blend begins to show). (i) and (iii) are exactly degenerate in any H I line in the limit of a Gaussian velocity structure. These are two different kinds of degeneracy. The blend (ii) is measurement-limited: higher S/N, resolution or wavelength coverage can break it. Heat against smooth motion, (i) against (iii), is information-limited for hydrogen: every H I line depends only on the line-of-sight distribution of velocity and optical depth, in which thermal and smooth bulk broadening of one species are the same Gaussian, so another H I line gives no independent distinction — a line of a different mass does ([[#breaking-the-degeneracy|What breaks the degeneracy]]). The blend hides because its two components overlap inside the saturated Lyα core, where the transmitted flux is near zero however the optical depth is split ([[#saturation-curve-of-growth|Saturation and the curve of growth]]); Lyβ, with a smaller f λ, is not saturated there and separates it ([[#breaking-the-degeneracy|What breaks the degeneracy]]). The toy's residual for (iii) (Δχ² ≈ 0.9 at S/N = 20) comes from hand-tuning, not physics.",
+   "status": "verified",
+   "claim": "A constructed degeneracy example, not a model of typical forest absorbers: (i) one unusually hot, idealised compact gas clump (T = 4.5×10⁴ K, Hubble width 2.23 km/s — about 7 kpc proper, far more compact than typical forest gas — N = 2.5×10¹⁴, at rest); (ii) two cold clouds (T = 10⁴ K, Hubble width 12.8 km/s each, 78 km/s apart in Hubble flow, 9.75×10¹³ each, approaching at ±24.9 km/s); (iii) one cold cloud stretched along the line (T = 10⁴ K, Hubble width 11.15 km/s, N = 2.5×10¹⁴) whose smooth extra velocity across 1σ (5.988 km/s) is computed from (i), not tuned: it is the value that gives (iii) the same total Doppler parameter as (i), b_tot² = 2kT/m_H + 2σ_u² = (27.431 km/s)², with the same column. At S/N = 20 per 2.5 km/s pixel with perfect resolution the three Lyα lines are not significantly distinguishable (Δχ² ≈ 2.8 for the blend over 121 pixels); the blend shows by S/N = 50 (Δχ² ≈ 17) and grows as (S/N)², while (iii) stays at Δχ² ≤ 0.002 at every S/N up to 200, in Lyα and in Lyβ. In this constructed model (i) and (iii) are degenerate in every H I Lyman-series line: for a Gaussian clump with a smooth (linear) velocity field the H I profile is a Voigt profile fixed by b_tot and N alone. These are two different kinds of degeneracy. The blend (ii) is measurement-limited: higher S/N, resolution or wavelength coverage can break it. Heat against smooth motion, (i) against (iii), is information-limited for hydrogen: every H I line depends only on the line-of-sight distribution of velocity and optical depth, in which thermal and smooth bulk broadening of one species are the same Gaussian, so another H I line gives no independent distinction — a line of a different mass does ([[#breaking-the-degeneracy|What breaks the degeneracy]]). The blend hides because its two components overlap inside the saturated Lyα core, where the transmitted flux is near zero however the optical depth is split ([[#saturation-curve-of-growth|Saturation and the curve of growth]]); Lyβ, with a smaller f λ, is not saturated there and separates it ([[#breaking-the-degeneracy|What breaks the degeneracy]]). What remains of (iii)'s difference is numerical: the clumps are cut at ±5σ (exact-Voigt path, max |ΔF| 4e-06), and the app adds its Voigt approximation's own error (max |ΔF| 4e-05; [[#voigt-numerics|Numerical Voigt implementation in the app]]).",
    "equations": [
     {
      "tex": "\\Delta\\chi^2 = \\sum_k \\bigl(F^{(n)}_k - F^{(i)}_k\\bigr)^2/\\sigma_F^2",
      "meaning": null
+    },
+    {
+     "tex": "b_{\\rm tot}^2 = \\frac{2kT}{m_{\\rm H}} + 2\\sigma_u^2,\\quad \\sigma_u = s_u + \\delta v,\\qquad \\delta v^{\\rm (iii)} = \\sqrt{\\bigl(s_u^{\\rm (i)}\\bigr)^2 + \\tfrac12\\bigl(b_T^{\\rm (i)\\,2} - b_T^{\\rm (iii)\\,2}\\bigr)} - s_u^{\\rm (iii)}",
+     "meaning": null
     }
    ],
-   "convention": "noise-free Δχ² against configuration (i); configurations defined in velocity space (science/validation/degeneracy/configs.json, single source), so they do not depend on the cosmology",
+   "convention": "noise-free Δχ² against configuration (i), σ_F = 1/(S/N) per 2.5 km/s pixel; configurations defined in velocity space (single source science/validation/degeneracy/configs.json, written by science/tools/same_shadow_configs.py), so they do not depend on the cosmology",
    "assumptions": [
     "white noise as in [[#noise-model|Noise model and signal-to-noise]]; perfect resolution"
    ],
-   "validity": "(ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in any line of one species, for Gaussian velocity structure",
+   "validity": "(ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in H I absorption alone (every Lyman-series line), for this constructed model's Gaussian clumps with smooth (linear) velocity fields",
    "simplifications": [
-    "parameters tuned by hand-search to match"
+    "(i) and (ii) are chosen by hand; (iii) is computed from (i) by the matching condition",
+    "idealised Gaussian clumps, not typical forest absorbers"
    ],
-   "sources": [],
+   "sources": [
+    {
+     "ref": "REF-RAUCH96",
+     "location": "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — a bulk width common to all species and a thermal width scaling as m^(−½); the paper separates temperature from bulk motion with ions of different mass — with lines of one mass, Eq. (1) cannot separate T from b_b (our inference)",
+     "role": "primary"
+    },
+    {
+     "ref": "REF-MEIKSIN09",
+     "location": "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature",
+     "role": "primary"
+    }
+   ],
    "check": "independent recomputation with wofz (science/oracle/degeneracy_oracle.py)",
    "validations": [
     "VAL-DEG-001"
@@ -3788,7 +4031,7 @@
    "title": "What breaks the degeneracy",
    "domain": "inference",
    "status": "verified",
-   "claim": "Thermal width scales as m^(−½) while bulk motion broadens all species alike, so a heavier ion's line in the same gas separates heat from motion (Si IV: m ≈ 28 m_H). Lyβ (f λ 6.24× smaller) saturates differently and exposes columns hidden in saturated Lyα.",
+   "claim": "Thermal width scales as m^(−½) while bulk motion broadens all species alike, so a heavier ion's line in the same gas separates heat from motion (Si IV: m ≈ 28 m_H). Lyβ (f λ 6.24× smaller) saturates differently and can, in some cases, expose columns hidden in saturated Lyα.",
    "equations": [
     {
      "tex": "b^2 = \\frac{2kT}{m} + b^2_{\\rm bulk},\\qquad \\frac{(f\\lambda)_{\\rm Ly\\beta}}{(f\\lambda)_{\\rm Ly\\alpha}} = \\frac{0.079142\\times1025.722}{0.4164\\times1215.67} = 0.160",
@@ -3802,7 +4045,7 @@
     "a common non-thermal (bulk) width shared by both species — an assumption that need not hold everywhere (Rauch et al. 1996), and a stronger one for H I with a metal ion than for two metal ions",
     "illustrative metal column"
    ],
-   "validity": "Illustrative. Si IV separates heat from motion only where silicon is present in the same gas. Lyβ helps only in some cases: in real spectra it lies inside the Lyα forest of lower-redshift gas, so blending and contamination must be modelled; its smaller f λ makes it useful mainly where Lyα saturates; and it needs wavelength coverage down to 1026 Å in the absorber's frame. Like every hydrogen line, Lyβ cannot separate heat from smooth motion ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
+   "validity": "Illustrative. Si IV separates heat from motion only where silicon is present in the same gas. Lyβ helps only in some cases: in real spectra it lies inside the Lyα forest of lower-redshift gas, so blending and contamination must be modelled; its smaller f λ makes it useful mainly where Lyα saturates; and it needs wavelength coverage down to 1026 Å in the absorber's frame. Like every H I line, Lyβ cannot separate heat from smooth motion ([[#same-shadow-degeneracy|The \"same shadow\" configurations]]).",
    "simplifications": [
     "the Si IV column is chosen for visibility",
     "Lyβ is drawn as a clean line, without the lower-redshift Lyα forest it lies in"
@@ -3819,18 +4062,23 @@
      "role": "primary"
     },
     {
-     "ref": "REF-NIST-ISOTOPES",
+     "ref": "REF-NIST-ISOTOPES-SI",
      "location": "Silicon entry: ²⁸Si 27.9769 u, 92.2 % of silicon",
      "role": "primary"
     },
     {
      "ref": "REF-NIST-ASD",
-     "location": "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (sum 0.079142; f-weighted centre 1025.72221 Å)",
+     "location": "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (multiplet value 0.079142; f-weighted centre 1025.72221 Å)",
      "role": "primary"
     },
     {
      "ref": "REF-WF09",
      "location": "Table 6, entry No. 2 (1s–3p), p. 578: f = 0.079142",
+     "role": "primary"
+    },
+    {
+     "ref": "REF-RAUCH98",
+     "location": "§2.4 (arXiv v1 p. 7): 'For stronger Lyα lines the higher order Lyman lines can provide additional constraints when fitted simultaneously'; §3.4 (p. 15): for saturated, blended lines 'simultaneous fits to the higher order Lyman lines (which are less saturated owing to their lower oscillator strengths) can only help to some degree'",
      "role": "primary"
     },
     {
@@ -3885,13 +4133,13 @@
    "assumptions": [],
    "validity": "fake_spectra 2.2.4 (PyPI sdist sha256 4cc80e6c…eb84), MIT licence",
    "simplifications": [
-    "Differences that matter for closure: thermal width uses 1.00794 m_p (b 0.37% small; up to |ΔF| 5.5e-03 in a forest); stored τ is pixel-averaged τ ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]]); wings truncated at half a box; tail floor τ < 10⁻⁷; 7-node kernel quadrature (its own error up to 1.8e-04 in F for isolated lines, 1.5e-02 for broad cold kernels).",
+    "Differences that matter for closure: thermal width uses 1.00794 m_p (b 0.37% small; up to |ΔF| 5.5e-03 in a forest); stored τ is the pixel-averaged τ when the pixel is at least b/2 wide, the pixel-centre value otherwise ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]]); wings truncated at half a box; tail floor τ < 10⁻⁷. Its total difference from an exact calculation is up to 1.8e-04 in F for isolated lines, almost all from its pixel quadrature (1.8e-04); its 7-node kernel quadrature alone contributes up to 2.2e-07 there, and dominates for broad cold kernels (1.5e-02 in F).",
     "Lyα data in atom.dat: 1215.6701 Å, f 0.4164, Γ 6.265×10⁸ s⁻¹ — same as [[#lya-transition-data|Lyα (H I 1s → 2p) transition data]] to within 6e-06 in F."
    ],
    "sources": [
     {
      "ref": "REF-FAKESPECTRA",
-     "location": "v2.2.4 sdist (PyPI 2025-08-11); conventions documented in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)",
+     "location": "v2.2.4 sdist (PyPI 2025-08-11): H mass 1.00794 m_p, line_data.py:21 and absorption.h:4; pixel-centre value or pixel average (the b/2 rule), singleabs.h:104-126; wings stopped at half a box, absorption.cpp:248-278; tail floor τ < 10⁻⁷, spectra.py:135 and absorption.cpp:250-278; 7-node kernel quadrature, singleabs.h:8, 143-167; Lyα data, atom.dat:7. Full notes in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)",
      "role": "primary"
     },
     {
@@ -3916,7 +4164,7 @@
    "title": "Exporting skewers from fake_spectra 2.2.4 — a velocity-convention compatibility note",
    "domain": "data",
    "status": "verified",
-   "claim": "During compatibility testing, the velocity returned through the tested export path — fake_spectra 2.2.4, Spectra.get_velocity on a Gadget-format snapshot — differed from the convention this resource requires (the proper peculiar velocity in km/s, [[#comoving-coordinates|Comoving vs physical coordinates and h-units]]). On a mock snapshot at a = 0.25 with known particle velocities, the returned value was 0.5 of the true peculiar velocity for every moving particle, equal to √a — consistent with the √a unit conversion being applied once more than this convention needs. The resource therefore never takes skewer velocities from that path: it constructs the line-of-sight velocity independently from the stored quantities (the toy from its displacement field). Two other observations on the same version, for anyone exporting skewers: turn_off_selfshield also set Γ_HI to zero, and get_velocity and HDF5Snapshot.get_npart needed a float32 workaround under NumPy 2.",
+   "claim": "During compatibility testing, the velocity returned through the tested export path — fake_spectra 2.2.4, Spectra.get_velocity on a Gadget-format snapshot — differed from the convention this resource requires (the proper peculiar velocity in km/s, [[#comoving-coordinates|Comoving vs physical coordinates and h-units]]). On a mock snapshot at a = 0.25 with known particle velocities, the returned value was 0.5 of the true peculiar velocity in the pixel of every moving particle, equal to √a — consistent with the √a unit conversion being applied once more than this convention needs. The resource therefore never takes skewer velocities from that path: it constructs the line-of-sight velocity independently from the stored quantities (the toy from its displacement field). One other observation on the same version (2.2.4), for anyone exporting skewers under NumPy 2: get_velocity fails unless its arrays, promoted to float64, are cast back to float32, and HDF5Snapshot.get_npart overflows (2³² × uint32) on headers that store particle counts as uint32, as Gadget does — the mock snapshots store them as int64.",
    "equations": [
     {
      "tex": "v_{\\rm returned}/v_{\\rm pec} = \\sqrt{a}\\ \\text{on the tested path (mock snapshot)};\\quad\\text{used here: } v_{\\rm pec}\\ \\text{computed independently}",
@@ -3925,12 +4173,12 @@
    ],
    "convention": "v_pec in km/s, proper peculiar velocity ([[#comoving-coordinates|Comoving vs physical coordinates and h-units]])",
    "assumptions": [],
-   "validity": "fake_spectra 2.2.4 (PyPI sdist) and the upstream master branch as inspected on 2026-10-02; the tested path only. If an upstream issue is filed, this note will link it.",
+   "validity": "fake_spectra 2.2.4 (PyPI sdist), the tested path only; the √a observation also holds on the upstream master branch as inspected on 2026-10-02. If an upstream issue is filed, this note will link it.",
    "simplifications": [],
    "sources": [
     {
      "ref": "REF-FAKESPECTRA",
-     "location": "spectra.py:954 (second √a); abstractsnapshot.py:114-119 (first √a); spectra.py:669-672 (self-shield/Γ)",
+     "location": "spectra.py:954 (second √a); abstractsnapshot.py:114-119 (first √a); under NumPy 2: spectra.py:952-955 (float64 promotion), abstractsnapshot.py:226-228 (get_npart)",
      "role": "primary"
     }
    ],
@@ -4044,7 +4292,7 @@
     },
     {
      "ref": "REF-MCQUINN16",
-     "location": "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; Eq. (3)",
+     "location": "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; §2.1, Eq. (3): T = T0 Δ^(γ−1)",
      "role": "primary"
     }
    ],
@@ -4252,7 +4500,7 @@
    "title": "Parcels are a teaching decomposition of a continuous sightline",
    "domain": "representation",
    "status": "verified",
-   "claim": "The three parcels a, b, c summarise three n_HI peak regions of the real toy sightline (HI-weighted position, width, column, temperature, velocity and gradient). They are not discrete clouds; Beat 8 dissolves them back into cells. A parcel has a size along the beam, so the velocity spread across it widens its line too: for a Gaussian clump of width σ_x, b_size = √2·|aH + dv/dx|·σ_x adds in quadrature to the thermal b. Beat 6's parcel carries no internal gradient (dv/dx = 0 there), so its size term is the Hubble flow alone, b_size = √2·aH·σ_x; for the parcel it starts from, b_size = 23.8 km/s against a thermal 21.4 km/s, so the drawn line is 32.0 km/s wide (b) — Beat 6's figure names both parts, and \"show the physics\" prints each and the drawn line's own width.",
+   "claim": "The three parcels a, b, c summarise three n_HI peak regions of the real toy sightline (HI-weighted position, width, column, temperature, velocity and gradient). They are not discrete clouds; Beat 8 dissolves them back into cells. A parcel has a size along the beam, so the velocity spread across it widens its line too (the physics is [[#velocity-gradient-broadening|Velocity-gradient (Hubble) broadening of an extended absorber]]). Beat 6 isolates the declared terms by setting the parcel's own peculiar-velocity gradient to zero (dv/dx = 0 there), so its size term is the Hubble flow alone, b_size = √2·aH·σ_x; for the parcel it starts from, b_size = 23.8 km/s against a thermal 21.4 km/s, so the drawn line is 32.0 km/s wide (b) — Beat 6's figure names both parts, and \"show the physics\" prints each and the drawn line's own width. The same toy parcel with its own gradient (-70 km/s per Mpc/h: infall, partly cancelling the Hubble flow), as Beats 7–8 use it, has b_size = 9.1 km/s and b = 23.3 km/s.",
    "equations": [
     {
      "tex": "b^2 \\simeq b_{\\rm thermal}^2 + b_{\\rm size}^2,\\qquad b_{\\rm size} = \\sqrt{2}\\,\\left|aH + \\tfrac{dv}{dx}\\right|\\sigma_x",
@@ -4499,6 +4747,18 @@
     }
    ]
   },
+  "REF-NIST-ISOTOPES-SI": {
+   "anchor": "ref-nist-isotopes-si",
+   "short": "NIST isotopic compositions (silicon)",
+   "kind": "database",
+   "citation": "NIST Atomic Weights and Isotopic Compositions with Relative Atomic Masses, https://physics.nist.gov/comp — silicon entry; relative atomic masses from 'The AME2012 Atomic Mass Evaluation' (Wang, M. et al. 2012, Chinese Physics C 36(12); DOI 10.1088/1674-1137/36/12/003 as given on the NIST page)",
+   "links": [
+    {
+     "label": "link",
+     "href": "https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=Si&ascii=ascii2&isotype=some"
+    }
+   ]
+  },
   "REF-RL79": {
    "anchor": "ref-rybicki-lightman-1979",
    "short": "Rybicki & Lightman 1979",
@@ -4565,11 +4825,11 @@
    "anchor": "ref-scipy-wofz",
    "short": "SciPy scipy.special.wofz",
    "kind": "documentation",
-   "citation": "SciPy scipy.special.wofz documentation (v1.18.0 docs page): w(z) = exp(−z²) erfc(−iz); Reference [1] Steven G. Johnson, Faddeeva W function implementation, http://ab-initio.mit.edu/Faddeeva",
+   "citation": "SciPy scipy.special.wofz documentation (v1.15.2 docs page, the version used here; the v1.18.0 page is the same): w(z) = exp(−z²) erfc(−iz); Reference [1] Steven G. Johnson, Faddeeva W function implementation, http://ab-initio.mit.edu/Faddeeva",
    "links": [
     {
      "label": "link",
-     "href": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.wofz.html"
+     "href": "https://docs.scipy.org/doc/scipy-1.15.2/reference/generated/scipy.special.wofz.html"
     }
    ]
   },
@@ -5042,18 +5302,28 @@
    "name": "Toy sightline: line kernels, neutral fraction, and the mean-flux calibration",
    "text": "On the toy sightline, the spectrum as drawn (Gaussian thermal kernels) is compared with the same sum using full Voigt kernels. The neutral fraction at mean density is computed from the measured ultraviolet background and checked to be about one in 10⁵. The mean transmitted flux is a calibration, not a test: the toy's ultraviolet background is tuned so that its mean flux matches the observed value, which is why the toy's ultraviolet is about three times the measured one.",
    "status": "pass",
-   "measured": "3/3 checks; Gauss vs Voigt max |ΔF| 5.7e-04; x_HI at mean density with the measured Γ_HI = 6.16e-06; ⟨F⟩ = 0.680, a calibration (Γ_HI tuned to 3.0× measured to meet it)",
+   "measured": "3/3 checks; Gauss vs Voigt max |ΔF| 5.7e-04; neutral fraction x_HI = 6.16e-06 at mean density and T0 = 13000 K, for the measured Γ_HI = 0.8e-12 s⁻¹; ⟨F⟩ = 0.680, a calibration (Γ_HI tuned to 3.0× measured to meet it)",
    "criterion": "max |ΔF| < 1e-3 between Gaussian and Voigt kernels; x_HI at mean density between 5×10⁻⁶ and 8×10⁻⁶; ⟨F⟩ = 0.68 ± 0.01 (a calibration: the toy's Γ_HI is tuned to meet it)",
    "report": "science/validation/toy/report.json",
    "report_path": "science/validation/toy/report.json"
   },
+  "VAL-PY-001": {
+   "anchor": "check-py-001",
+   "name": "Python reproductions",
+   "text": "Each calculation this resource implements has a short, independent Python reproduction (NumPy and SciPy only) of the equation it publishes. Every reproduction is run on its own: its printed output must equal the expected output formatted from the app's own values at the same inputs, and every full-precision value must agree with the app's within the tolerance it states.",
+   "status": "pass",
+   "measured": "10/10 reproductions: each snippet, run alone, prints its expected output (formatted from the app's own values); 74/74 full-precision values agree with the app within their stated tolerances (largest relative deviation 1e-04)",
+   "criterion": "every snippet's output equals its expected output; every script exits 0; every value within its stated tolerance",
+   "report": "science/validation/reproduce/report.json",
+   "report_path": "science/validation/reproduce/report.json"
+  },
   "VAL-DEG-001": {
    "anchor": "check-deg-001",
    "name": "Same-shadow degeneracy",
-   "text": "The Δχ² separating the three “same shadow” gas configurations is recomputed independently with exact Voigt profiles.",
+   "text": "The third “same shadow” configuration is checked to follow from its matching condition (the same total Doppler parameter and column as the first); the Δχ² separating the configurations is recomputed independently with exact Voigt profiles, in Lyα and Lyβ, at signal-to-noise 20, 50, 100 and 200.",
    "status": "pass",
-   "measured": "4/4 checks; Δχ²(S/N=20): ii 2.79, iii 0.87; max |ΔF| vs an independent calculation 3.6e-05",
-   "criterion": "browser and oracle Δχ² agree to 5 %",
+   "measured": "13/13 checks; (iii) constructed by the matching rule (dv = 5.9883 km/s, b_tot = 27.4306 km/s for both); Lyα Δχ²(ii) at S/N 20 / 50 / 100 / 200: 2.79 / 17.4 / 70 / 279, Lyβ 103 at S/N 20; Δχ²(iii) ≤ 9e-06 exact-Voigt, ≤ 2e-03 as the app draws it (S/N ≤ 200, Lyα and Lyβ); max |ΔF| vs an independent calculation 3.6e-05",
+   "criterion": "(iii) equals the matching rule to 1e-9 km/s and b_tot(iii) = b_tot(i) to 1e-12; Δχ²(ii) browser vs oracle within 5 % at every S/N in Lyα and Lyβ; Δχ²(iii) < 1e-4 on the exact-Voigt path; the app's max |F(iii) − F(i)| < 1e-4 (its Voigt approximation)",
    "report": "science/validation/degeneracy/report.json",
    "report_path": "science/validation/degeneracy/report.json"
   },
@@ -5116,6 +5386,1837 @@
    "criterion": "declared domain (one velocity per sampling element, b ≥ 2Δu): max |ΔF| ≤ 0.01, |Δ⟨F⟩| ≤ 1e-3, |ΔEW/EW| ≤ 1 %, P1D within 1 % (k ≤ 0.05 s/km) and 2 % (k ≤ 0.1); where fake_spectra's own error exceeds half the tolerance, compare with the exact reference; out-of-domain cases listed with measured values",
    "report": null,
    "report_path": "science/validation/closure/metrics.json"
+  }
+ },
+ "computations": {
+  "COMP-THERM": {
+   "anchor": "comp-thermal-width",
+   "title": "Thermal Doppler width",
+   "owner": "lya_app",
+   "displayed": "the width of the thermal line — Beat 3's census width ±b, the thermal part of Beat 6's line, b_T of Beat 13's gases",
+   "beats": [
+    3,
+    6,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "maxwellian-velocities",
+     "title": "Maxwellian velocities; one line-of-sight component is Gaussian",
+     "representation": false
+    },
+    {
+     "anchor": "thermal-doppler-broadening",
+     "title": "Doppler parameter and the thermal (Gaussian) profile",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "b_T = \\sqrt{\\dfrac{2k_BT}{m_{\\rm H}}},\\qquad \\phi_{\\rm G}(\\Delta u) = \\dfrac{e^{-\\Delta u^2/b_T^2}}{\\sqrt{\\pi}\\,b_T}",
+     "meaning": "the Doppler parameter of the atoms' Maxwellian line-of-sight velocities, and the normalised thermal profile it sets (∫φ_G du = 1)"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "T",
+     "meaning": "gas temperature",
+     "unit": "K"
+    },
+    {
+     "symbol": "b_T",
+     "meaning": "thermal Doppler parameter (√2 × the line-of-sight velocity dispersion)",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "Δu",
+     "meaning": "velocity offset from the line centre",
+     "unit": "km/s"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "k_B",
+     "value": "1.380649×10⁻¹⁶ erg/K (exact)",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    },
+    {
+     "symbol": "m_H",
+     "value": "1.6735328×10⁻²⁴ g — the ¹H atom, 1.00782503223 u",
+     "ref": {
+      "anchor": "ref-nist-isotopes",
+      "short": "NIST isotopic compositions"
+     }
+    },
+    {
+     "symbol": "m_u",
+     "value": "1.66053907×10⁻²⁴ g (the atomic mass constant: u in grams)",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    }
+   ],
+   "conventions": [
+    "b in km/s",
+    "the 1/e half-width of the Gaussian; velocities along the line of sight"
+   ],
+   "assumptions": [
+    "Maxwellian velocities at one temperature (thermal equilibrium of the atoms' motions); no turbulence"
+   ],
+   "approximations": [],
+   "algorithm": "closed form",
+   "domain": "the app's temperatures, 2×10³ to 10⁵ K",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "dopplerB"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-tau-001",
+     "check-py-001"
+    ],
+    "independent": "the analytic Doppler parameter ([[#check-tau-001|Optical depth]]) and an independent Python implementation",
+    "tolerance": "relative 1e-12"
+   },
+   "python": {
+    "script": "reproduce/beat03_thermal_width.py",
+    "snippet": "import numpy as np\n\nk_B = 1.380649e-16      # Boltzmann constant, erg/K (exact, SI 2019)\nm_H = 1.6735328e-24     # mass of the 1H atom, g (1.00782503223 u, NIST)\n\ndef b_thermal(T):\n    \"\"\"Doppler parameter of the thermal (Gaussian) profile, km/s: b = sqrt(2 k_B T / m_H)\"\"\"\n    return np.sqrt(2 * k_B * T / m_H) / 1e5\n\nfor T in (4.0e3, 1.0e4, 4.2e4):\n    print(f\"T = {T:7.0f} K  ->  b = {b_thermal(T):.3f} km/s\")",
+    "expected": [
+     "T =    4000 K  ->  b = 8.124 km/s",
+     "T =   10000 K  ->  b = 12.845 km/s",
+     "T =   42000 K  ->  b = 26.325 km/s"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-VOIGT": {
+   "anchor": "comp-voigt",
+   "title": "Natural width and the Voigt profile",
+   "owner": "lya_app",
+   "displayed": "the natural (Lorentzian) width and Beat 4's line shape; the profile of every line the app draws with Voigt kernels",
+   "beats": [
+    2,
+    4,
+    6,
+    7,
+    8,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "natural-broadening",
+     "title": "Natural broadening from the finite lifetime of 2p",
+     "representation": false
+    },
+    {
+     "anchor": "voigt-profile",
+     "title": "The Voigt profile — normalisation, definition and asymptotics",
+     "representation": false
+    },
+    {
+     "anchor": "voigt-numerics",
+     "title": "Numerical Voigt implementation in the app",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "\\gamma = \\dfrac{\\Gamma\\,\\lambda_0}{4\\pi},\\qquad a = \\dfrac{\\gamma}{b},\\qquad x = \\dfrac{\\Delta u}{b}",
+     "meaning": "the natural half-width in velocity, the damping parameter and the dimensionless offset (Γ = A₂₁, the 2p state decays only to 1s)"
+    },
+    {
+     "tex": "H(a,x) = \\operatorname{Re}\\,w(x + ia) = \\dfrac{a}{\\pi}\\int_{-\\infty}^{\\infty}\\dfrac{e^{-y^2}\\,dy}{(x-y)^2 + a^2},\\qquad \\phi_{\\rm V}(\\Delta u) = \\dfrac{H(a,\\,\\Delta u/b)}{\\sqrt{\\pi}\\,b}",
+     "meaning": "the Voigt–Hjerting function — the thermal Gaussian convolved with the natural Lorentzian — and the normalised profile per unit velocity"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "Γ",
+     "meaning": "total decay rate of the upper level (A₂₁)",
+     "unit": "s⁻¹"
+    },
+    {
+     "symbol": "λ₀",
+     "meaning": "Lyα rest wavelength",
+     "unit": "cm"
+    },
+    {
+     "symbol": "γ",
+     "meaning": "Lorentzian half width at half maximum in velocity",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "a",
+     "meaning": "damping parameter",
+     "unit": "dimensionless"
+    },
+    {
+     "symbol": "w(z)",
+     "meaning": "the Faddeeva function, w(z) = e^(−z²) erfc(−iz)",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "A₂₁",
+     "value": "6.2649×10⁸ s⁻¹",
+     "ref": {
+      "anchor": "ref-wiese-fuhr-2009",
+      "short": "Wiese & Fuhr 2009"
+     }
+    },
+    {
+     "symbol": "λ₀",
+     "value": "1215.6701 Å (vacuum)",
+     "ref": {
+      "anchor": "ref-nist-asd",
+      "short": "NIST ASD (Kramida et al. 2024)"
+     }
+    }
+   ],
+   "conventions": [
+    "profile normalised per unit velocity (∫φ_V du = 1); b from [[#comp-thermal-width|Thermal Doppler width]] (or the total b of a parcel",
+    "[[#comp-parcel-width|One parcel's line — its width and depth]])"
+   ],
+   "assumptions": [
+    "natural broadening from the 2p lifetime only — collisional broadening is negligible at IGM densities"
+   ],
+   "approximations": [
+    "w(z) is evaluated with Humlíček's (1982) W4 rational approximation, accurate to < 10⁻⁴ (relative) where tested"
+   ],
+   "algorithm": "Humlíček W4: four regions chosen by |x| + a and by a against 0.195|x| − 0.176, each with its own rational or asymptotic form (region borders as in Zaghloul 2015, Table 1)",
+   "domain": "a ∈ [10⁻⁶, 1], |x| ≤ 2×10⁴",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "aDamp",
+     "voigtH",
+     "humlicekW4",
+     "phiV"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-voigt-001",
+     "check-py-001"
+    ],
+    "independent": "SciPy's Faddeeva function (wofz) on a 42 × 321 grid ([[#check-voigt-001|Voigt function accuracy]]), and in Python",
+    "tolerance": "relative < 10⁻⁴ for H (the W4 approximation); 1e-12 for γ and a"
+   },
+   "python": {
+    "script": "reproduce/beat04_natural_voigt.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nk_B, m_H = 1.380649e-16, 1.6735328e-24      # erg/K; g (the 1H atom)\nA21 = 6.2649e8                              # 2p -> 1s decay rate, 1/s (Wiese & Fuhr 2009)\nlambda0 = 1215.6701e-8                      # Lya, cm (vacuum)\n\ngamma = A21 * lambda0 / (4 * np.pi) / 1e5   # Lorentzian half width in velocity, km/s\nb = np.sqrt(2 * k_B * 1.0e4 / m_H) / 1e5    # thermal Doppler parameter at 1e4 K, km/s\na = gamma / b                               # Voigt damping parameter\n\ndef H(a, x):\n    \"\"\"Voigt-Hjerting function: H(a, x) = Re w(x + i a); the line profile is H(a, du/b) / (sqrt(pi) b)\"\"\"\n    return wofz(x + 1j * a).real\n\nprint(f\"natural half width gamma = {gamma:.4e} km/s\")\nprint(f\"damping parameter a at 1e4 K = {a:.4e}\")\nprint(f\"thermal FWHM / natural FWHM at 1e4 K = {np.sqrt(np.log(2)) * b / gamma:.0f}\")\nfor x in (0, 1, 2, 4, 10, 100):\n    print(f\"H(a, {x:3d}) = {H(a, x):.3e}\")",
+    "expected": [
+     "natural half width gamma = 6.0607e-03 km/s",
+     "damping parameter a at 1e4 K = 4.7182e-04",
+     "thermal FWHM / natural FWHM at 1e4 K = 1765",
+     "H(a,   0) = 9.995e-01",
+     "H(a,   1) = 3.679e-01",
+     "H(a,   2) = 1.842e-02",
+     "H(a,   4) = 1.863e-05",
+     "H(a,  10) = 2.703e-06",
+     "H(a, 100) = 2.662e-08"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-REDSHIFT": {
+   "anchor": "comp-redshift-mapping",
+   "title": "Redshift, distance and observed wavelength",
+   "owner": "lya_app",
+   "displayed": "observed wavelengths (Beats 5, 11, 12), the distance to the toy sample (≈ 4.4 Gpc/h), the stretching ribbon's scale",
+   "beats": [
+    0,
+    1,
+    5,
+    11,
+    12
+   ],
+   "entries": [
+    {
+     "anchor": "cosmological-redshift",
+     "title": "Cosmological redshift stretches every wavelength by the same factor",
+     "representation": false
+    },
+    {
+     "anchor": "comoving-distance",
+     "title": "Comoving distance along the light's path (Planck 2018)",
+     "representation": false
+    },
+    {
+     "anchor": "forest-written-along-the-way",
+     "title": "The forest is written along the way",
+     "representation": false
+    },
+    {
+     "anchor": "velocity-to-wavelength",
+     "title": "Velocity coordinate ↔ observed wavelength",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "\\lambda_{\\rm obs} = \\lambda_{\\rm rest}\\,(1 + z),\\qquad \\chi(z) = \\dfrac{c}{H_0}\\int_0^z \\dfrac{dz'}{E(z')},\\quad E(z) = \\sqrt{\\Omega_m(1+z)^3 + \\Omega_\\Lambda}",
+     "meaning": "the stretch of every wavelength between the absorber's frame and ours, and the comoving distance along the light's path"
+    },
+    {
+     "tex": "\\lambda_{\\rm obs}(u) = \\lambda_0\\,(1+z_0)\\,e^{u/c}",
+     "meaning": "the velocity coordinate on the observed-wavelength ruler (log-λ convention; z₀ is the redshift of the u = 0 point)"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "z",
+     "meaning": "redshift of the absorbing gas",
+     "unit": "dimensionless"
+    },
+    {
+     "symbol": "χ",
+     "meaning": "comoving distance",
+     "unit": "Mpc/h"
+    },
+    {
+     "symbol": "u",
+     "meaning": "velocity coordinate along the sightline",
+     "unit": "km/s"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "c",
+     "value": "299 792.458 km/s (exact)",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    },
+    {
+     "symbol": "Ω_m, Ω_Λ",
+     "value": "0.3153, 0.6847 (flat; distances in Mpc/h do not depend on h)",
+     "ref": {
+      "anchor": "ref-planck-2018",
+      "short": "Planck Collaboration 2020"
+     }
+    }
+   ],
+   "conventions": [
+    "flat ΛCDM with radiation neglected; distances in comoving Mpc/h; z₀ is the near end of the sightline"
+   ],
+   "assumptions": [
+    "FLRW expansion; comoving observers; the gas's own small motion is folded into z for a single absorber"
+   ],
+   "approximations": [
+    "the log-λ and the first-order forms differ by 2.9e-05 in 1 + z over 20 Mpc/h at z = 3"
+   ],
+   "algorithm": "χ(z): composite Simpson's rule on 512 panels; z(χ): bisection (80 steps)",
+   "domain": "z from 0.01 to 6 (tested)",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "lambdaObsOfRest",
+     "comovingDistance",
+     "zOfComoving",
+     "lambdaObs"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-red-001",
+     "check-map-001",
+     "check-py-001"
+    ],
+    "independent": "SciPy quadrature ([[#check-red-001|Redshift and frames]]), and in Python",
+    "tolerance": "χ relative < 1e-7; identities to 1e-14"
+   },
+   "python": {
+    "script": "reproduce/beat05_redshift_mapping.py",
+    "snippet": "import numpy as np\nfrom scipy.integrate import quad\n\nc = 299792.458                   # km/s\nlambda0 = 1215.6701              # Lya rest wavelength, Angstrom (vacuum)\nOm, OL = 0.3153, 0.6847          # Planck 2018, flat; distances in Mpc/h do not depend on h\nz = 3.0\n\nE = lambda zz: np.sqrt(Om * (1 + zz)**3 + OL)\nlambda_obs = lambda0 * (1 + z)                              # every wavelength is stretched by 1 + z\nchi = c / 100 * quad(lambda zz: 1 / E(zz), 0, z)[0]          # comoving distance, Mpc/h\naH_h = 100 * E(z) / (1 + z)                                 # Hubble velocity per comoving Mpc/h at z, km/s\nu = aH_h * 4.4                                              # across a 4.4 Mpc/h stretch of gas, km/s\ndlambda = lambda_obs * (np.exp(u / c) - 1)                  # its width in observed wavelength (log-lambda convention)\n\nprint(f\"Lya absorbed at z = 3 is observed at {lambda_obs:.2f} Angstrom\")\nprint(f\"comoving distance to z = 3: {chi:.1f} Mpc/h\")\nprint(f\"aH/h at z = 3: {aH_h:.2f} km/s per Mpc/h\")\nprint(f\"4.4 Mpc/h of Hubble flow: {u:.1f} km/s = {dlambda:.2f} Angstrom observed\")",
+    "expected": [
+     "Lya absorbed at z = 3 is observed at 4862.68 Angstrom",
+     "comoving distance to z = 3: 4383.8 Mpc/h",
+     "aH/h at z = 3: 114.19 km/s per Mpc/h",
+     "4.4 Mpc/h of Hubble flow: 502.4 km/s = 8.16 Angstrom observed"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-VELMAP": {
+   "anchor": "comp-velocity-mapping",
+   "title": "Real space to velocity space",
+   "owner": "lya_app",
+   "displayed": "where gas lands in velocity — Beat 6's 363 + 87 = 450 km/s, Beat 7's three parcels, every sightline's u",
+   "beats": [
+    5,
+    6,
+    7,
+    8,
+    11,
+    12
+   ],
+   "entries": [
+    {
+     "anchor": "real-to-velocity-mapping",
+     "title": "Real space → velocity space map",
+     "representation": false
+    },
+    {
+     "anchor": "comoving-coordinates",
+     "title": "Comoving vs physical coordinates and h-units",
+     "representation": false
+    },
+    {
+     "anchor": "peculiar-velocity-sign",
+     "title": "Peculiar-velocity sign convention",
+     "representation": false
+    },
+    {
+     "anchor": "linear-map-validity",
+     "title": "Validity of the constant-H (linear) map",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "u(x) = aH(z)\\,x_{\\rm com} + v_{\\rm pec}(x),\\qquad \\dfrac{aH(z)}{h} = \\dfrac{100\\,E(z)}{1+z}\\ \\ {\\rm km\\,s^{-1}\\ per}\\ h^{-1}{\\rm Mpc}",
+     "meaning": "the velocity at which gas at comoving position x absorbs — the Hubble flow from the near edge plus its own peculiar velocity"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "x_com",
+     "meaning": "comoving position from the near edge of the sightline or stretch (an arbitrary zero point)",
+     "unit": "Mpc/h"
+    },
+    {
+     "symbol": "v_pec",
+     "meaning": "peculiar velocity along the line of sight; > 0 is away from us (redder)",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "u",
+     "meaning": "velocity coordinate, zero at x = 0 (an arbitrary zero point)",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "aH/h",
+     "meaning": "Hubble velocity per comoving Mpc/h",
+     "unit": "km/s per Mpc/h"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "Ω_m, Ω_Λ",
+     "value": "0.3153, 0.6847",
+     "ref": {
+      "anchor": "ref-planck-2018",
+      "short": "Planck Collaboration 2020"
+     }
+    }
+   ],
+   "conventions": [
+    "the sightline runs from the observer side (x = 0) toward the quasar (+x)",
+    "v_pec > 0 ⇔ moving away from the observer ⇔ redder",
+    "u has an arbitrary zero point; observed wavelength follows from [[#comp-redshift-mapping|Redshift, distance and observed wavelength]]"
+   ],
+   "assumptions": [
+    "aH constant across the box (a local",
+    "linear map); first order in v/c"
+   ],
+   "approximations": [
+    "constant H: 0.2% from the exact distance–redshift relation over 20 Mpc/h (1.0% at 100 Mpc/h)"
+   ],
+   "algorithm": "closed form",
+   "domain": "boxes up to 100 Mpc/h at z = 2–4 (tested)",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "hubblePerMpch",
+     "uOfX"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-map-001",
+     "check-py-001"
+    ],
+    "independent": "the exact log-λ relation integrated numerically ([[#check-map-001|Real space to velocity space]]), and in Python",
+    "tolerance": "relative 1e-12 (closed form)"
+   },
+   "python": {
+    "script": "reproduce/beat07_velocity_mapping.py",
+    "snippet": "import numpy as np\n\nOm, OL, z = 0.3153, 0.6847, 3.0\naH_h = 100 * np.sqrt(Om * (1 + z)**3 + OL) / (1 + z)    # km/s per comoving Mpc/h (independent of h)\n\nx = np.array([1.9303074084405747, 3.175154331970289, 3.8278357071063325])   # parcels a, b, c: comoving Mpc/h\nv_pec = np.array([62.0, 87.0, 20.0])                                         # their own motion, km/s\n\nu_hubble = aH_h * x              # expansion alone: the order in velocity follows the order in space\nu = aH_h * x + v_pec             # with their own motion: b and c land close together\nfor name, uh, uu in zip(\"abc\", u_hubble, u):\n    print(f\"parcel {name}: expansion alone {uh:.1f} km/s, with its own motion {uu:.1f} km/s\")",
+    "expected": [
+     "parcel a: expansion alone 220.4 km/s, with its own motion 282.4 km/s",
+     "parcel b: expansion alone 362.6 km/s, with its own motion 449.6 km/s",
+     "parcel c: expansion alone 437.1 km/s, with its own motion 457.1 km/s"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-PARCEL": {
+   "anchor": "comp-parcel-width",
+   "title": "One parcel's line — its width and depth",
+   "owner": "lya_app",
+   "displayed": "Beat 6's widths (thermal, size, together), its peak optical depth, and the parcel lines of Beats 6–8",
+   "beats": [
+    6,
+    7,
+    8
+   ],
+   "entries": [
+    {
+     "anchor": "thermal-doppler-broadening",
+     "title": "Doppler parameter and the thermal (Gaussian) profile",
+     "representation": false
+    },
+    {
+     "anchor": "velocity-gradient-broadening",
+     "title": "Velocity-gradient (Hubble) broadening of an extended absorber",
+     "representation": false
+    },
+    {
+     "anchor": "optical-depth-one-absorber",
+     "title": "Optical depth of one absorber",
+     "representation": false
+    },
+    {
+     "anchor": "teaching-parcels",
+     "title": "Parcels are a teaching decomposition of a continuous sightline",
+     "representation": true
+    }
+   ],
+   "equations": [
+    {
+     "tex": "b^2 = b_T^2 + b_{\\rm size}^2,\\qquad b_{\\rm size} = \\sqrt{2}\\,\\Bigl|aH + \\dfrac{dv}{dx}\\Bigr|\\,\\sigma_x,\\qquad \\tau_0 = \\dfrac{N_{\\rm HI}\\,\\sigma_v}{\\sqrt{\\pi}\\,b}",
+     "meaning": "a Gaussian clump of width σ_x with a linear velocity field has a Gaussian spread of velocities that adds in quadrature to the thermal width; τ₀ is the line-centre optical depth of the Doppler profile"
+    },
+    {
+     "tex": "\\tau(u) = \\sum_{k} N_k\\,\\sigma_v\\,\\phi\\bigl(u - u_k;\\,b_T\\bigr),\\qquad N_k \\propto e^{-s_k^2/2},\\ \\ u_k = aH\\,(x + s_k\\sigma_x) + v + \\dfrac{dv}{dx}\\,s_k\\sigma_x",
+     "meaning": "what the scene draws — the clump cut into sub-cells s_k ∈ [−5, 5], each a thermal line at its own velocity (its sum reproduces the quadrature law above)"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "σ_x",
+     "meaning": "the clump's 1σ width along the beam",
+     "unit": "comoving Mpc/h"
+    },
+    {
+     "symbol": "dv/dx",
+     "meaning": "the parcel's own peculiar-velocity gradient (Beat 6: set to zero)",
+     "unit": "km/s per Mpc/h"
+    },
+    {
+     "symbol": "N_HI",
+     "meaning": "neutral hydrogen column",
+     "unit": "cm⁻²"
+    },
+    {
+     "symbol": "σ_v",
+     "meaning": "integrated cross-section per unit velocity, (πe²/m_e c) f λ₀",
+     "unit": "cm² km/s"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "πe²/m_e c",
+     "value": "2.6540×10⁻² cm² s⁻¹",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    },
+    {
+     "symbol": "f",
+     "value": "0.4164 (1s → 2p)",
+     "ref": {
+      "anchor": "ref-wiese-fuhr-2009",
+      "short": "Wiese & Fuhr 2009"
+     }
+    }
+   ],
+   "conventions": [
+    "x comoving from the near edge of the stretch; the parcel's column N is the total over the clump"
+   ],
+   "assumptions": [
+    "Gaussian density profile along the beam; one temperature; a linear velocity field",
+    "Beat 6 sets the parcel's own peculiar-velocity gradient to zero, isolating heat and the Hubble flow across its size; with its own gradient the same parcel has b = 23.3 km/s"
+   ],
+   "approximations": [
+    "sub-cell sampling: 161 sub-cells over ±5σ in Beats 6–10, 201 in Beat 13; the damping wings are kept (Voigt kernels)"
+   ],
+   "algorithm": "parcelToCells (sub-cells with Gaussian weights) → tauFromCells (direct summation); parcelWidths gives the analytic widths",
+   "domain": "Beat 6's control ranges (place, motion, temperature, amount)",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "parcelToCells",
+     "parcelTau",
+     "parcelWidths",
+     "tau0"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-orth-001",
+     "check-py-001"
+    ],
+    "independent": "the analytic quadrature law and τ₀ ([[#check-orth-001|One parcel, four separate variables]]: the drawn width within 2e-3 of it), and in Python",
+    "tolerance": "relative 1e-12 for the analytic widths and τ₀"
+   },
+   "python": {
+    "script": "reproduce/beat06_parcel_profile.py",
+    "snippet": "import numpy as np\n\nk_B, m_H = 1.380649e-16, 1.6735328e-24                  # erg/K; g (the 1H atom)\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # (pi e^2 / m_e c) f lambda0: cm^2 km/s\nOm, OL, z = 0.3153, 0.6847, 3.0\naH_h = 100 * np.sqrt(Om * (1 + z)**3 + OL) / (1 + z)    # km/s per comoving Mpc/h\n\n# the toy's parcel b, as Beat 6 starts it\nT, sigma_x, N = 27744.0, 0.14721893675599934, 10**14.27  # K; comoving Mpc/h (1 sigma); cm^-2\n\ndef widths(dvdx):\n    \"\"\"thermal b, size b (Gaussian clump with a linear velocity field), and their quadrature sum, km/s\"\"\"\n    b_th = np.sqrt(2 * k_B * T / m_H) / 1e5\n    b_size = np.sqrt(2) * abs(aH_h + dvdx) * sigma_x\n    return b_th, b_size, np.hypot(b_th, b_size)\n\nb_th, b_size, b = widths(0.0)                           # this scene: the parcel's own gradient switched off\ntau0 = N * sigma_v / (np.sqrt(np.pi) * b)                # peak optical depth of the Doppler profile\nprint(f\"thermal b = {b_th:.2f} km/s, size b = {b_size:.2f} km/s, together b = {b:.2f} km/s\")\nprint(f\"peak optical depth tau0 = {tau0:.2f}\")\n_, b_size_own, b_own = widths(-70.41475616076316)       # the same parcel with its own (infalling) gradient\nprint(f\"with its own gradient: size b = {b_size_own:.2f} km/s, b = {b_own:.2f} km/s\")",
+    "expected": [
+     "thermal b = 21.40 km/s, size b = 23.77 km/s, together b = 31.98 km/s",
+     "peak optical depth tau0 = 4.41",
+     "with its own gradient: size b = 9.11 km/s, b = 23.26 km/s"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-TAU": {
+   "anchor": "comp-optical-depth",
+   "title": "Optical depth — contributions add",
+   "owner": "lya_app",
+   "displayed": "every optical-depth curve (Beats 3, 6–13) and Beat 9's sum",
+   "beats": [
+    3,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "optical-depth-one-absorber",
+     "title": "Optical depth of one absorber",
+     "representation": false
+    },
+    {
+     "anchor": "optical-depth-accumulation",
+     "title": "Line-of-sight accumulation of optical depth in velocity space",
+     "representation": false
+    },
+    {
+     "anchor": "optical-depths-add",
+     "title": "Why optical depths add",
+     "representation": false
+    },
+    {
+     "anchor": "discretisation-limits",
+     "title": "Discretisation limits — pixel size, pixel averaging and the periodic box",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "\\tau(u) = \\sum_j N_j\\,\\sigma_v\\,\\phi\\bigl(u - u_j;\\,b_j\\bigr),\\qquad \\sigma_v = \\dfrac{\\pi e^2}{m_e c}\\,f\\,\\lambda_0,\\qquad N_j = n_{{\\rm HI},j}\\,\\Delta x_{\\rm prop}",
+     "meaning": "each contribution's column times the cross-section per unit velocity times its normalised profile; along a sightline each real-space cell contributes its own column"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "N_j",
+     "meaning": "neutral column of contribution j",
+     "unit": "cm⁻²"
+    },
+    {
+     "symbol": "u_j, b_j",
+     "meaning": "its velocity ([[#comp-velocity-mapping|Real space to velocity space]]) and its Doppler parameter ([[#comp-thermal-width|Thermal Doppler width]])",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "φ",
+     "meaning": "the Voigt profile ([[#comp-voigt|Natural width and the Voigt profile]]), or its Gaussian core where the wings are negligible",
+     "unit": "(km/s)⁻¹"
+    },
+    {
+     "symbol": "Δx_prop",
+     "meaning": "proper cell length, Δx_com · a/h",
+     "unit": "cm"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "πe²/m_e c",
+     "value": "2.6540×10⁻² cm² s⁻¹",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    },
+    {
+     "symbol": "f",
+     "value": "0.4164",
+     "ref": {
+      "anchor": "ref-wiese-fuhr-2009",
+      "short": "Wiese & Fuhr 2009"
+     }
+    },
+    {
+     "symbol": "λ₀",
+     "value": "1215.6701 Å",
+     "ref": {
+      "anchor": "ref-nist-asd",
+      "short": "NIST ASD (Kramida et al. 2024)"
+     }
+    }
+   ],
+   "conventions": [
+    "profile sampled at pixel centres (point sampling); each contribution's kernel extends to 8 b and its damping wings until τ < 10⁻⁶; periodic boxes use the nearest image"
+   ],
+   "assumptions": [
+    "optical depths of independent absorbers add (a linear",
+    "optically passive medium); one velocity per sampling element"
+   ],
+   "approximations": [
+    "the toy forest is drawn with Gaussian kernels: max |ΔF| 6e-04 against Voigt kernels"
+   ],
+   "algorithm": "direct summation over contributions on a uniform velocity grid",
+   "domain": "one velocity per sampling element and lines resolved by at least two pixels ([[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]], [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "tauFromCells",
+     "cellsFromSkewer"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-tau-001",
+     "check-inv-001",
+     "check-py-001"
+    ],
+    "independent": "exact Voigt sums and ∫τ du = N σ_v ([[#check-tau-001|Optical depth]]); the traced contributions sum to τ ([[#check-inv-001|Tracing a colour back to the gas]]); and in Python",
+    "tolerance": "relative 1e-4 against exact Voigt (the W4 approximation)"
+   },
+   "python": {
+    "script": "reproduce/beat09_optical_depth.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # (pi e^2 / m_e c) f lambda0: cm^2 km/s\ngamma = 6.2649e8 * 1215.6701e-8 / (4 * np.pi) / 1e5      # natural half width, km/s\n\ndef tau(u, u0, N, b):\n    \"\"\"one contribution: N sigma_v phi(u - u0), phi = H(a, x) / (sqrt(pi) b) with x = (u - u0)/b, a = gamma/b\"\"\"\n    return N * sigma_v * wofz((u - u0) / b + 1j * gamma / b).real / (np.sqrt(np.pi) * b)\n\ncells = [(-20.0, 5e13, 15.0), (0.0, 1e14, 20.0), (25.0, 3e13, 12.0)]   # (u0 km/s, N cm^-2, b km/s)\nfor u in (0.0, 20.0):\n    each = [tau(u, *c) for c in cells]\n    total = sum(each)\n    print(f\"u = {u:4.0f} km/s: tau = \" + \" + \".join(f\"{t:.4f}\" for t in each) + f\" = {total:.4f};  F = exp(-tau) = {np.exp(-total):.5f} = product of exp(-tau_j) = {np.prod(np.exp(-np.array(each))):.5f}\")",
+    "expected": [
+     "u =    0 km/s: tau = 0.4273 + 3.7886 + 0.0249 = 4.2408;  F = exp(-tau) = 0.01440 = product of exp(-tau_j) = 0.01440",
+     "u =   20 km/s: tau = 0.0022 + 1.3943 + 1.5922 = 2.9887;  F = exp(-tau) = 0.05036 = product of exp(-tau_j) = 0.05036"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-FLUX": {
+   "anchor": "comp-transmission",
+   "title": "Transmission — light multiplies",
+   "owner": "lya_app",
+   "displayed": "every transmitted-flux curve, Beat 10's products and the ink's brightness",
+   "beats": [
+    5,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "beer-lambert",
+     "title": "Transmitted flux (Beer–Lambert)",
+     "representation": false
+    },
+    {
+     "anchor": "saturation-curve-of-growth",
+     "title": "Saturation and the curve of growth",
+     "representation": false
+    },
+    {
+     "anchor": "ink-rendering",
+     "title": "Ink is optical depth, and the ink rendering performs Beer–Lambert",
+     "representation": true
+    }
+   ],
+   "equations": [
+    {
+     "tex": "F(u) = e^{-\\tau(u)} = \\prod_j e^{-\\tau_j(u)}",
+     "meaning": "the intrinsic transmission, before any instrument"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "F",
+     "meaning": "transmitted fraction of the continuum (intrinsic)",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [],
+   "conventions": [
+    "intrinsic τ → intrinsic F; the instrument acts afterwards ([[#comp-instrument|The instrument — resolution, pixels and noise]])"
+   ],
+   "assumptions": [
+    "absorption only",
+    "no source term along the beam (resonant scattering removes light from a narrow beam)"
+   ],
+   "approximations": [],
+   "algorithm": "closed form",
+   "domain": "all τ ≥ 0",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "fluxFromTau",
+     "tau0"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-rend-001",
+     "check-py-001"
+    ],
+    "independent": "the drawn ink read back from the canvas equals e^(−τ) ([[#check-rend-001|The drawing performs Beer–Lambert]]), and in Python",
+    "tolerance": "relative 1e-12"
+   },
+   "python": {
+    "script": "reproduce/beat10_transmission.py",
+    "snippet": "import numpy as np\n\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # (pi e^2 / m_e c) f lambda0: cm^2 km/s\n\nfor t in (1.73, 11.9, 0.37):\n    print(f\"tau = {t:5.2f}  ->  F = exp(-tau) = {np.exp(-t):.3e}\")\nN, b = 1e15, 25.0                                        # cm^-2, km/s\ntau0 = N * sigma_v / (np.sqrt(np.pi) * b)                # line-centre optical depth of a Doppler line\nprint(f\"N = 1e15 cm^-2, b = 25 km/s: tau0 = {tau0:.2f}, F at line centre = {np.exp(-tau0):.1e} (saturated)\")",
+    "expected": [
+     "tau =  1.73  ->  F = exp(-tau) = 1.773e-01",
+     "tau = 11.90  ->  F = exp(-tau) = 6.790e-06",
+     "tau =  0.37  ->  F = exp(-tau) = 6.907e-01",
+     "N = 1e15 cm^-2, b = 25 km/s: tau0 = 30.32, F at line centre = 6.8e-14 (saturated)"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-INSTR": {
+   "anchor": "comp-instrument",
+   "title": "The instrument — resolution, pixels and noise",
+   "owner": "lya_app",
+   "displayed": "Beat 11's recorded spectrum and Beat 13's noisy line",
+   "beats": [
+    11,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "instrument-resolution",
+     "title": "Instrument resolution acts on the observed flux",
+     "representation": false
+    },
+    {
+     "anchor": "noise-model",
+     "title": "Noise model and signal-to-noise",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "F_{\\rm obs}(u) = \\bigl(F \\ast G_{\\rm FWHM}\\bigr)(u) + n,\\qquad G(u) \\propto e^{-u^2/2\\sigma^2},\\ \\ \\sigma = \\dfrac{\\rm FWHM}{2\\sqrt{2\\ln 2}},\\qquad n \\sim \\mathcal{N}\\bigl(0,\\,(S/N)^{-2}\\bigr)",
+     "meaning": "the spectrograph convolves the transmitted flux (never τ) with its line-spread function; the detector adds white noise per pixel"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "FWHM",
+     "meaning": "the resolution",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "S/N",
+     "meaning": "signal-to-noise per pixel (continuum-normalised)",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [],
+   "conventions": [
+    "order: intrinsic τ → intrinsic F → line-spread function → pixels → noise; the gas and τ are untouched",
+    "pixels max(2.5 km/s, FWHM/3) wide"
+   ],
+   "assumptions": [
+    "a Gaussian line-spread function; white",
+    "flux-independent noise; no sky",
+    "no continuum error"
+   ],
+   "approximations": [
+    "the kernel is cut at 5σ"
+   ],
+   "algorithm": "discrete convolution with a normalised Gaussian kernel (edges extended; the toy forest is periodic); noise from a seeded generator (Box–Muller), so a given seed draws the same noise",
+   "domain": "FWHM 0–200 km/s and S/N 5, 20, 50 or no noise (Beat 11); S/N 20 (Beat 13)",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "convolveLSF",
+     "addNoise"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-py-001"
+    ],
+    "independent": "an independent Python convolution (the noise draw is not reproduced: it depends on the generator)",
+    "tolerance": "relative 1e-4"
+   },
+   "python": {
+    "script": "reproduce/beat11_instrument.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # cm^2 km/s\ngamma = 6.2649e8 * 1215.6701e-8 / (4 * np.pi) / 1e5      # km/s\ndu = 2.5\nu = np.arange(-300, 300 + du / 2, du)                    # km/s, 2.5 km/s pixels\nN, b, fwhm = 2e14, 25.0, 70.0                            # cm^-2, km/s, the spectrograph's resolution (FWHM, km/s)\n\nF = np.exp(-N * sigma_v * wofz(u / b + 1j * gamma / b).real / (np.sqrt(np.pi) * b))   # intrinsic transmission\ns = fwhm / (2 * np.sqrt(2 * np.log(2)))                  # Gaussian LSF: sigma from FWHM\nh = int(np.ceil(5 * s / du))\nw = np.exp(-0.5 * (np.arange(-h, h + 1) * du / s) ** 2); w /= w.sum()\nF_obs = np.convolve(np.pad(F, h, mode='edge'), w, mode='valid')   # applied to F, never to tau\nEW = lambda f: np.sum(1 - f) * du\nprint(f\"deepest point: intrinsic F = {F.min():.4f}, observed F = {F_obs.min():.4f}\")\nprint(f\"equivalent width: intrinsic {EW(F):.2f} km/s, observed {EW(F_obs):.2f} km/s\")",
+    "expected": [
+     "deepest point: intrinsic F = 0.0023, observed F = 0.2374",
+     "equivalent width: intrinsic 74.34 km/s, observed 74.34 km/s"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-ION": {
+   "anchor": "comp-neutral-fraction",
+   "title": "How much of the hydrogen is neutral",
+   "owner": "lya_app",
+   "displayed": "the mean density (≈ a dozen atoms per m³), x_HI ≈ 1 in 100 000 (Beats 0, 1), the ultraviolet microscope (Beat 6)",
+   "beats": [
+    0,
+    1,
+    6
+   ],
+   "entries": [
+    {
+     "anchor": "mean-hydrogen-density",
+     "title": "Mean hydrogen density of the universe at z = 3",
+     "representation": false
+    },
+    {
+     "anchor": "photoionisation-equilibrium",
+     "title": "Photoionisation equilibrium and the neutral-amount control",
+     "representation": false
+    },
+    {
+     "anchor": "neutral-fraction",
+     "title": "How neutral the IGM is",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "x_{\\rm HI} = \\dfrac{\\alpha_A(T)\\,n_e}{\\Gamma_{\\rm HI}},\\quad \\alpha_A = 4.2\\times10^{-13}\\Bigl(\\dfrac{T}{10^4\\,{\\rm K}}\\Bigr)^{-0.7}\\ {\\rm cm^3\\,s^{-1}},\\quad \\dfrac{n_e}{n_{\\rm H}} = 1 + \\dfrac{2Y}{4(1-Y)}",
+     "meaning": "photoionisation equilibrium in a highly ionised gas (case A), with hydrogen and helium fully ionised"
+    },
+    {
+     "tex": "\\bar n_{\\rm H}(z) = \\dfrac{\\Omega_b h^2\\,\\rho_{{\\rm crit},0}h^{-2}\\,(1 - Y)}{m_{\\rm H}}\\,(1+z)^3,\\qquad n_{\\rm H} = \\bar n_{\\rm H}\\,\\Delta",
+     "meaning": "the mean hydrogen density (proper), and at overdensity Δ"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "Γ_HI",
+     "meaning": "H I photoionisation rate (measured ≈ 0.8×10⁻¹² s⁻¹ at z ≈ 3)",
+     "unit": "s⁻¹"
+    },
+    {
+     "symbol": "Δ",
+     "meaning": "overdensity, n_H / n̄_H",
+     "unit": "dimensionless"
+    },
+    {
+     "symbol": "Y",
+     "meaning": "helium mass fraction",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "Ω_b h², Y_P",
+     "value": "0.02237, 0.2454",
+     "ref": {
+      "anchor": "ref-planck-2018",
+      "short": "Planck Collaboration 2020"
+     }
+    },
+    {
+     "symbol": "G",
+     "value": "6.67430×10⁻⁸ cm³ g⁻¹ s⁻²",
+     "ref": {
+      "anchor": "ref-codata-2022",
+      "short": "CODATA 2022 (Mohr et al. 2025)"
+     }
+    },
+    {
+     "symbol": "m_H",
+     "value": "1.6735328×10⁻²⁴ g",
+     "ref": {
+      "anchor": "ref-nist-isotopes",
+      "short": "NIST isotopic compositions"
+     }
+    }
+   ],
+   "conventions": [
+    "densities proper",
+    "in cm⁻³"
+   ],
+   "assumptions": [
+    "photoionisation equilibrium; the gas highly ionised (x_HI ≪ 1); case-A recombination fit"
+   ],
+   "approximations": [
+    "α_A is a power-law fit to the case-A rate (compared with Hui & Gnedin 1997 and Draine 2011 in the claim it implements)"
+   ],
+   "algorithm": "closed form (the mean density is the toy generator's, science/data/toy/zeldovich3d.py)",
+   "domain": "the app's temperatures and overdensities, where x_HI ≪ 1",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "alphaA",
+     "neOverNH",
+     "neutralFraction",
+     "nHIRelative"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-toy-001",
+     "check-py-001"
+    ],
+    "independent": "x_HI at mean density checked against the literature range ([[#check-toy-001|Toy sightline: line kernels, neutral fraction, and the mean-flux calibration]]), and in Python from the cosmological parameters",
+    "tolerance": "relative 1e-6"
+   },
+   "python": {
+    "script": "reproduce/beat01_neutral_fraction.py",
+    "snippet": "import numpy as np\n\n# Planck 2018 (TT,TE,EE+lowE+lensing): baryon density and helium mass fraction; the redshift of the toy\nObh2, Yp, z = 0.02237, 0.2454, 3.0\nG = 6.67430e-8                     # cm^3 g^-1 s^-2 (CODATA 2022)\nm_H = 1.6735328e-24                # g, the 1H atom\nMpc = 3.0856775814913673e24        # cm\nH100 = 100e5 / Mpc                 # 100 km/s/Mpc in 1/s\n\nrho_crit_h2 = 3 * H100**2 / (8 * np.pi * G)            # critical density today per h^2, g/cm^3\nnH_bar = Obh2 * rho_crit_h2 * (1 - Yp) / m_H * (1 + z)**3   # mean hydrogen density at z, cm^-3 (proper)\nne_over_nH = 1 + 2 * Yp / (4 * (1 - Yp))                # electrons per H nucleus, H and He fully ionised\n\ndef x_HI(T, Gamma12, Delta=1.0):\n    \"\"\"neutral fraction in photoionisation equilibrium (case A): alpha_A(T) n_e / Gamma_HI\"\"\"\n    alpha_A = 4.2e-13 * (T / 1e4) ** -0.7               # cm^3/s\n    return alpha_A * ne_over_nH * nH_bar * Delta / (Gamma12 * 1e-12)\n\nprint(f\"mean hydrogen density at z = 3: {nH_bar:.4e} cm^-3\")\nfor T in (1.0e4, 1.3e4):\n    print(f\"x_HI at mean density, T = {T:.1e} K, Gamma_HI = 0.8e-12 /s: {x_HI(T, 0.8):.3e}\")",
+    "expected": [
+     "mean hydrogen density at z = 3: 1.2126e-05 cm^-3",
+     "x_HI at mean density, T = 1.0e+04 K, Gamma_HI = 0.8e-12 /s: 7.401e-06",
+     "x_HI at mean density, T = 1.3e+04 K, Gamma_HI = 0.8e-12 /s: 6.159e-06"
+    ],
+    "note": null
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-INV": {
+   "anchor": "comp-inverse-trace",
+   "title": "Tracing a colour back to the gas",
+   "owner": "lya_app",
+   "displayed": "Beat 12's ledger — which places contribute to one colour's optical depth",
+   "beats": [
+    12
+   ],
+   "entries": [
+    {
+     "anchor": "optical-depth-accumulation",
+     "title": "Line-of-sight accumulation of optical depth in velocity space",
+     "representation": false
+    },
+    {
+     "anchor": "optical-depths-add",
+     "title": "Why optical depths add",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "\\tau_j(u) = \\tau_0(N_j, b_j)\\,e^{-(u - u_j)^2/b_j^2},\\qquad \\tau(u) = \\sum_j \\tau_j(u),\\qquad F(u) = \\prod_j e^{-\\tau_j(u)}",
+     "meaning": "each cell's own optical depth at the chosen colour (the Gaussian kernels the toy forest is drawn with); the contributions sum to the spectrum's τ"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "τ_j(u)",
+     "meaning": "cell j's contribution at velocity u",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [],
+   "conventions": [
+    "the same kernels and cut as the drawn spectrum; places are grouped by contiguity along the line — a display choice"
+   ],
+   "assumptions": [
+    "the forward-model truth is known: the toy's gas is traced, not inferred"
+   ],
+   "approximations": [
+    "cells under the display cut stay in the ledger's \"rest\" (median 3.2% of a pixel's τ)"
+   ],
+   "algorithm": "direct evaluation per cell within the kernel cut",
+   "domain": "the toy sightline",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "tauContributions"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-inv-001",
+     "check-py-001"
+    ],
+    "independent": "the traced contributions sum to the spectrum's own τ at every pixel ([[#check-inv-001|Tracing a colour back to the gas]]); the same sum in Python (reproduce/beat09_optical_depth.py)",
+    "tolerance": "relative 1e-12 (the sum)"
+   },
+   "python": {
+    "script": "reproduce/beat09_optical_depth.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # (pi e^2 / m_e c) f lambda0: cm^2 km/s\ngamma = 6.2649e8 * 1215.6701e-8 / (4 * np.pi) / 1e5      # natural half width, km/s\n\ndef tau(u, u0, N, b):\n    \"\"\"one contribution: N sigma_v phi(u - u0), phi = H(a, x) / (sqrt(pi) b) with x = (u - u0)/b, a = gamma/b\"\"\"\n    return N * sigma_v * wofz((u - u0) / b + 1j * gamma / b).real / (np.sqrt(np.pi) * b)\n\ncells = [(-20.0, 5e13, 15.0), (0.0, 1e14, 20.0), (25.0, 3e13, 12.0)]   # (u0 km/s, N cm^-2, b km/s)\nfor u in (0.0, 20.0):\n    each = [tau(u, *c) for c in cells]\n    total = sum(each)\n    print(f\"u = {u:4.0f} km/s: tau = \" + \" + \".join(f\"{t:.4f}\" for t in each) + f\" = {total:.4f};  F = exp(-tau) = {np.exp(-total):.5f} = product of exp(-tau_j) = {np.prod(np.exp(-np.array(each))):.5f}\")",
+    "expected": [
+     "u =    0 km/s: tau = 0.4273 + 3.7886 + 0.0249 = 4.2408;  F = exp(-tau) = 0.01440 = product of exp(-tau_j) = 0.01440",
+     "u =   20 km/s: tau = 0.0022 + 1.3943 + 1.5922 = 2.9887;  F = exp(-tau) = 0.05036 = product of exp(-tau_j) = 0.05036"
+    ],
+    "note": "this reproduces the sum the trace relies on — contributions add, and the transmission is their product — on a small example with Voigt kernels; the trace itself uses the Gaussian kernels above, and [[#check-inv-001|Tracing a colour back to the gas]] checks that its contributions sum to τ"
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-DEG": {
+   "anchor": "comp-same-shadow",
+   "title": "The constructed \"same shadow\"",
+   "owner": "lya_app",
+   "displayed": "Beat 13's three gases, their Lyα, Lyβ and Si IV lines, and the Δχ² that separates them",
+   "beats": [
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "same-shadow-degeneracy",
+     "title": "The \"same shadow\" configurations",
+     "representation": false
+    },
+    {
+     "anchor": "breaking-the-degeneracy",
+     "title": "What breaks the degeneracy",
+     "representation": false
+    },
+    {
+     "anchor": "velocity-gradient-broadening",
+     "title": "Velocity-gradient (Hubble) broadening of an extended absorber",
+     "representation": false
+    },
+    {
+     "anchor": "noise-model",
+     "title": "Noise model and signal-to-noise",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "b_{\\rm tot}^2 = \\dfrac{2kT}{m_{\\rm H}} + 2\\sigma_u^2,\\quad \\sigma_u = s_u + \\delta v,\\qquad \\delta v^{\\rm (iii)} = \\sqrt{\\bigl(s_u^{\\rm (i)}\\bigr)^2 + \\tfrac12\\bigl(b_T^{\\rm (i)\\,2} - b_T^{\\rm (iii)\\,2}\\bigr)} - s_u^{\\rm (iii)}",
+     "meaning": "a clump's total Doppler parameter, and the matching condition b_tot(iii) = b_tot(i) that gives (iii) its smooth extra velocity (5.9883 km/s)"
+    },
+    {
+     "tex": "\\Delta\\chi^2 = \\sum_k \\bigl(F^{(n)}_k - F^{(i)}_k\\bigr)^2\\,(S/N)^2,\\qquad \\tau_{\\rm Ly\\beta}(u) = \\dfrac{(f\\lambda)_{\\rm Ly\\beta}}{(f\\lambda)_{\\rm Ly\\alpha}}\\,\\tau_{\\rm Ly\\alpha}(u)",
+     "meaning": "noise-free Δχ² against (i) over 121 pixels of 2.5 km/s; the Lyβ line as the app draws it"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "s_u",
+     "meaning": "Hubble-flow width of a clump (1σ)",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "δv",
+     "meaning": "extra smooth peculiar velocity across 1σ",
+     "unit": "km/s"
+    },
+    {
+     "symbol": "S/N",
+     "meaning": "signal-to-noise per 2.5 km/s pixel",
+     "unit": "dimensionless"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "f, λ (Lyβ)",
+     "value": "0.079142, 1025.72221 Å",
+     "ref": {
+      "anchor": "ref-nist-asd",
+      "short": "NIST ASD (Kramida et al. 2024)"
+     }
+    },
+    {
+     "symbol": "m (Si IV panel)",
+     "value": "28 m_H (²⁸Si: 27.9769 u, 92.2 % of silicon)",
+     "ref": {
+      "anchor": "ref-nist-isotopes-si",
+      "short": "NIST isotopic compositions (silicon)"
+     }
+    },
+    {
+     "symbol": "Si IV λ1394",
+     "value": "1393.76 Å, f = 0.513 — names the line; the panel's column is illustrative",
+     "ref": {
+      "anchor": "ref-nist-asd",
+      "short": "NIST ASD (Kramida et al. 2024)"
+     }
+    }
+   ],
+   "conventions": [
+    "configurations in velocity space (so they do not depend on the cosmology), from their single source science/validation/degeneracy/configs.json"
+   ],
+   "assumptions": [
+    "idealised Gaussian clumps with smooth (linear) velocity fields, one temperature each — a constructed example, not typical absorbers",
+    "perfect resolution; white noise ([[#comp-instrument|The instrument — resolution, pixels and noise]])"
+   ],
+   "approximations": [
+    "clumps cut into 201 sub-cells over ±5σ; Lyβ keeps Lyα's damping constant (its wings are immaterial at these columns)"
+   ],
+   "algorithm": "construction by the matching rule (science/tools/same_shadow_configs.py); lines by parcelToCells → tauFromCells; Δχ² by direct summation",
+   "domain": "S/N 20 to 200",
+   "implementation": {
+    "files": [
+     "science/tools/same_shadow_configs.py",
+     "science/js/lyaphys.js",
+     "app/src/scenes/b13-same-shadow.js"
+    ],
+    "symbols": [
+     "same_shadow_configs",
+     "parcelToCells",
+     "tauFromCells",
+     "b13tau"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-deg-001",
+     "check-py-001"
+    ],
+    "independent": "an exact-Voigt sub-cell oracle ([[#check-deg-001|Same-shadow degeneracy]]) and a Python sub-cell sum with SciPy's Faddeeva function — two implementations, neither the app's",
+    "tolerance": "Δχ²(ii) within 5 % (oracle) and 1e-3 (Python); Δχ²(iii) < 1e-4 on the exact-Voigt paths (the oracle and Python), < 1e-2 as the app draws it with Humlíček's W4"
+   },
+   "python": {
+    "script": "reproduce/beat13_degeneracy.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nk_B, m_H = 1.380649e-16, 1.6735328e-24\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # Lya: (pi e^2 / m_e c) f lambda0, cm^2 km/s\ngamma = 6.2649e8 * 1215.6701e-8 / (4 * np.pi) / 1e5      # km/s\nlyb = 0.079142 * 1025.72221 / (0.4164 * 1215.6701)       # Lyb optical depth relative to Lya: (f lambda) ratio\nb_T = lambda T: np.sqrt(2 * k_B * T / m_H) / 1e5         # thermal Doppler parameter, km/s\n\n# gases in velocity space: centre u, Hubble-flow width su (1 sigma), bulk velocity v, extra smooth velocity dv across 1 sigma\nI = [dict(u=0.0, su=2.23, N=2.5e14, T=45000.0, v=0.0, dv=0.0)]                       # one hot, compact clump\nII = [dict(u=-39.0, su=12.8, N=9.75e13, T=1e4, v=24.9, dv=0.0),                      # two cold clumps, converging\n      dict(u=39.0, su=12.8, N=9.75e13, T=1e4, v=-24.9, dv=0.0)]\ndv = np.sqrt(2.23**2 + (b_T(45000.0)**2 - b_T(1e4)**2) / 2) - 11.15                 # matching: b_T^2 + 2 sigma_u^2 equal\nIII = [dict(u=0.0, su=11.15, N=2.5e14, T=1e4, v=0.0, dv=dv)]                         # one cold clump, expanding\n\nu = np.linspace(-150, 150, 121)                                                      # 2.5 km/s pixels\ns = np.linspace(-5, 5, 401); w = np.exp(-s**2 / 2); w /= w.sum()                    # a clump in sub-cells over +-5 sigma\ndef tau(gas, scale=1.0):                       # no closed form here: every sub-cell is a thermal line at its own velocity\n    t = np.zeros_like(u)\n    for c in gas:\n        b = b_T(c['T']); x = (u[:, None] - c['u'] - c['v'] - (c['su'] + c['dv']) * s) / b\n        t += scale * c['N'] * sigma_v * (w * wofz(x + 1j * gamma / b).real).sum(1) / (np.sqrt(np.pi) * b)\n    return t\n\nsig3 = lambda x: f\"{float(f'{x:.3g}'):g}\"\nprint(f\"(iii)'s smooth extra velocity from the matching condition: dv = {dv:.4f} km/s\")\nfor line, scale in ((\"Lya\", 1.0), (\"Lyb\", lyb)):\n    F = {k: np.exp(-tau(g, scale)) for k, g in ((\"i\", I), (\"ii\", II), (\"iii\", III))}\n    for snr in (20, 50, 100, 200):\n        chi2 = {k: np.sum((F[k] - F[\"i\"]) ** 2) * snr**2 for k in (\"ii\", \"iii\")}          # noise-free, against (i)\n        print(f\"{line} S/N {snr:3d}: dchi2(ii) = {sig3(chi2['ii']):>6}   dchi2(iii) = {chi2['iii']:.2f}\")",
+    "expected": [
+     "(iii)'s smooth extra velocity from the matching condition: dv = 5.9883 km/s",
+     "Lya S/N  20: dchi2(ii) =   2.79   dchi2(iii) = 0.00",
+     "Lya S/N  50: dchi2(ii) =   17.4   dchi2(iii) = 0.00",
+     "Lya S/N 100: dchi2(ii) =   69.6   dchi2(iii) = 0.00",
+     "Lya S/N 200: dchi2(ii) =    279   dchi2(iii) = 0.00",
+     "Lyb S/N  20: dchi2(ii) =    103   dchi2(iii) = 0.00",
+     "Lyb S/N  50: dchi2(ii) =    645   dchi2(iii) = 0.00",
+     "Lyb S/N 100: dchi2(ii) =   2580   dchi2(iii) = 0.00",
+     "Lyb S/N 200: dchi2(ii) =  10300   dchi2(iii) = 0.00"
+    ],
+    "note": "the matching condition is closed form; the lines are summed over each clump's sub-cells, with no closed form, so that (iii) matches (i) is computed, not assumed"
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-SIGHTLINE": {
+   "anchor": "comp-toy-sightline",
+   "title": "The toy sightline's spectrum",
+   "owner": "hybrid",
+   "displayed": "the toy forest (Beats 8–12) — the continuous sightline, its optical depth and transmission",
+   "beats": [
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "entries": [
+    {
+     "anchor": "skewer-interface",
+     "title": "The skewer interface (dataset-independent)",
+     "representation": false
+    },
+    {
+     "anchor": "toy-volume",
+     "title": "The toy Zel'dovich volume (synthetic teaching data)",
+     "representation": false
+    },
+    {
+     "anchor": "optical-depth-accumulation",
+     "title": "Line-of-sight accumulation of optical depth in velocity space",
+     "representation": false
+    },
+    {
+     "anchor": "unresolved-velocity-structure",
+     "title": "One velocity per sampling element (unresolved velocity structure is not represented)",
+     "representation": false
+    }
+   ],
+   "equations": [
+    {
+     "tex": "N_j = n_{{\\rm HI},j}\\,\\Delta x_{\\rm com}\\,\\dfrac{a}{h},\\quad u_j = aH\\,x_j + v_{{\\rm pec},j},\\quad b_j = \\sqrt{2kT_j/m_{\\rm H}},\\qquad \\tau(u) = \\sum_j N_j\\,\\sigma_v\\,\\phi(u - u_j;\\,b_j),\\quad F = e^{-\\tau}",
+     "meaning": "the reduced forward model the app runs on the toy's real-space pixels"
+    }
+   ],
+   "variables": [
+    {
+     "symbol": "n_HI,j, T_j, v_pec,j",
+     "meaning": "the toy skewer's real-space pixels (neutral density, temperature, peculiar velocity)",
+     "unit": "cm⁻³ (proper), K, km/s"
+    }
+   ],
+   "constants": [
+    {
+     "symbol": "Γ_HI (measured)",
+     "value": "0.8×10⁻¹² s⁻¹ at z ≈ 3",
+     "ref": {
+      "anchor": "ref-becker-bolton-2013",
+      "short": "Becker & Bolton 2013"
+     }
+    },
+    {
+     "symbol": "Γ_HI (toy)",
+     "value": "tuned to 3.0× the measured rate so that ⟨F⟩ = 0.68 (the mean-flux target) — a calibration",
+     "ref": {
+      "anchor": "ref-becker-2013",
+      "short": "Becker et al. 2013"
+     }
+    }
+   ],
+   "conventions": [
+    "x comoving Mpc/h; v_pec > 0 away from the observer; periodic 20 Mpc/h box"
+   ],
+   "assumptions": [
+    "one velocity and one temperature per real-space cell (single-stream); Zel'dovich toy density field",
+    "not a hydrodynamic simulation"
+   ],
+   "approximations": [
+    "drawn with Gaussian kernels (max |ΔF| 6e-04 against Voigt kernels)"
+   ],
+   "algorithm": "cellsFromSkewer → tauFromCells (direct summation) → fluxFromTau",
+   "domain": "the toy at its own sampling, inside the declared closure domain (one velocity per sampling element; lines resolved by at least two pixels)",
+   "implementation": {
+    "files": [
+     "science/js/lyaphys.js"
+    ],
+    "symbols": [
+     "cellsFromSkewer",
+     "tauFromCells",
+     "fluxFromTau"
+    ]
+   },
+   "validation": {
+    "checks": [
+     "check-toy-002",
+     "check-closure-fs",
+     "check-py-001"
+    ],
+    "independent": "the toy generator's own exact-Voigt τ ([[#check-toy-002|Toy spectrum against the code that generated it]]); fake_spectra 2.2.4 on synthetic test skewers ([[#check-closure-fs|Closure against fake_spectra]]); the accumulation in Python",
+    "tolerance": "as drawn max |ΔF| < 1e-3 against the generator; declared-domain closure criteria against fake_spectra"
+   },
+   "python": {
+    "script": "reproduce/beat09_optical_depth.py",
+    "snippet": "import numpy as np\nfrom scipy.special import wofz\n\nsigma_v = 2.6540e-2 * 0.4164 * 1215.6701e-8 / 1e5       # (pi e^2 / m_e c) f lambda0: cm^2 km/s\ngamma = 6.2649e8 * 1215.6701e-8 / (4 * np.pi) / 1e5      # natural half width, km/s\n\ndef tau(u, u0, N, b):\n    \"\"\"one contribution: N sigma_v phi(u - u0), phi = H(a, x) / (sqrt(pi) b) with x = (u - u0)/b, a = gamma/b\"\"\"\n    return N * sigma_v * wofz((u - u0) / b + 1j * gamma / b).real / (np.sqrt(np.pi) * b)\n\ncells = [(-20.0, 5e13, 15.0), (0.0, 1e14, 20.0), (25.0, 3e13, 12.0)]   # (u0 km/s, N cm^-2, b km/s)\nfor u in (0.0, 20.0):\n    each = [tau(u, *c) for c in cells]\n    total = sum(each)\n    print(f\"u = {u:4.0f} km/s: tau = \" + \" + \".join(f\"{t:.4f}\" for t in each) + f\" = {total:.4f};  F = exp(-tau) = {np.exp(-total):.5f} = product of exp(-tau_j) = {np.prod(np.exp(-np.array(each))):.5f}\")",
+    "expected": [
+     "u =    0 km/s: tau = 0.4273 + 3.7886 + 0.0249 = 4.2408;  F = exp(-tau) = 0.01440 = product of exp(-tau_j) = 0.01440",
+     "u =   20 km/s: tau = 0.0022 + 1.3943 + 1.5922 = 2.9887;  F = exp(-tau) = 0.05036 = product of exp(-tau_j) = 0.05036"
+    ],
+    "note": "the same accumulation on a small example; the full sightline is checked against the two independent codes"
+   },
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": {
+    "package": "fake_spectra",
+    "version": "2.2.4",
+    "role": "independent reference implementation (validation only: no scene shows a fake_spectra spectrum)",
+    "ref": {
+     "anchor": "ref-fake-spectra",
+     "short": "fake_spectra (Bird)"
+    },
+    "record": "comp-fake-spectra"
+   },
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-FAKESPECTRA": {
+   "anchor": "comp-fake-spectra",
+   "title": "fake_spectra 2.2.4 — the external reference spectra",
+   "owner": "external_package",
+   "displayed": "the closure numbers in the science notes ([[#check-closure-fs|Closure against fake_spectra]]); no scene shows a fake_spectra spectrum",
+   "beats": [
+    8
+   ],
+   "entries": [
+    {
+     "anchor": "fake-spectra-conventions",
+     "title": "fake_spectra conventions (the later validation target)",
+     "representation": false
+    },
+    {
+     "anchor": "fake-spectra-export-pitfalls",
+     "title": "Exporting skewers from fake_spectra 2.2.4 — a velocity-convention compatibility note",
+     "representation": false
+    },
+    {
+     "anchor": "discretisation-limits",
+     "title": "Discretisation limits — pixel size, pixel averaging and the periodic box",
+     "representation": false
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [
+    "thermal width with 1.00794 m_p (b 0.37% small)",
+    "stored τ is the pixel-averaged τ when the pixel is at least b/2 wide, the pixel-centre value otherwise",
+    "damping wings truncated at half a box; τ tail floor 10⁻⁷; 7-node kernel quadrature",
+    "its get_velocity returns √a × the peculiar velocity on the tested path ([[#fake-spectra-export-pitfalls|Exporting skewers from fake_spectra 2.2.4 — a velocity-convention compatibility note]])"
+   ],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": {
+    "checks": [
+     "check-closure-fs"
+    ],
+    "independent": "compared with this project's real-space method and an exact reference on the same cases",
+    "tolerance": "declared-domain criteria (max |ΔF| ≤ 0.01; |Δ⟨F⟩| ≤ 1e-3)"
+   },
+   "python": null,
+   "package": {
+    "name": "fake_spectra",
+    "version": "2.2.4",
+    "licence": "MIT",
+    "ref": {
+     "anchor": "ref-fake-spectra",
+     "short": "fake_spectra (Bird)"
+    }
+   },
+   "interface": "fake_spectra.spectra.Spectra on mock Gadget-format snapshots (science/oracle/fakespectra_mocksnap.py writes them; science/oracle/fakespectra_run_closure.py runs Spectra and reads τ)",
+   "inputs": "particle positions, velocities, temperatures, smoothing lengths and neutral hydrogen of synthetic test cases (science/validation/closure/cases)",
+   "conversions": [
+    "this project writes its synthetic skewers as mock snapshots in Gadget units (comoving kpc/h; velocities with the √a factor) and compares τ and F on the same pixel grid",
+    "skewer velocities are never taken from get_velocity"
+   ],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "COMP-WOFZ": {
+   "anchor": "comp-faddeeva-oracle",
+   "title": "SciPy's Faddeeva function — the Voigt oracle",
+   "owner": "external_package",
+   "displayed": "nothing directly: it is the accuracy reference for the app's Voigt function and for the oracles",
+   "beats": [
+    4
+   ],
+   "entries": [
+    {
+     "anchor": "voigt-numerics",
+     "title": "Numerical Voigt implementation in the app",
+     "representation": false
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [
+    "H(a, x) = Re w(x + i a)"
+   ],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": {
+    "checks": [
+     "check-voigt-001"
+    ],
+    "independent": "the reference itself (Faddeeva package algorithms)",
+    "tolerance": "—"
+   },
+   "python": null,
+   "package": {
+    "name": "SciPy",
+    "version": "1.15.2",
+    "licence": "BSD-3-Clause",
+    "ref": {
+     "anchor": "ref-scipy-wofz",
+     "short": "SciPy scipy.special.wofz"
+    }
+   },
+   "interface": "scipy.special.wofz (science/oracle/voigt_oracle.py, degeneracy_oracle.py, tau_oracle.py; reproduce/*.py)",
+   "inputs": "complex argument x + i a on the test grid",
+   "conversions": [],
+   "reference": null,
+   "what": null,
+   "physics_note": null
+  },
+  "TV-ATOMS": {
+   "anchor": "tv-representative-atoms",
+   "title": "Representative atoms",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    1,
+    2,
+    3,
+    4,
+    6
+   ],
+   "entries": [
+    {
+     "anchor": "representative-atoms",
+     "title": "Representative atoms are a cartoon sample",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "dots that stand for neutral atoms — a cartoon sample, their number proportional to N_HI; not simulation particles and not to scale",
+   "physics_note": "the absorption is computed from N_HI and the profiles above, never from the drawn dots"
+  },
+  "TV-VOLUME": {
+   "anchor": "tv-teaching-volume",
+   "title": "The 3D volume",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    0,
+    1
+   ],
+   "entries": [
+    {
+     "anchor": "teaching-volume",
+     "title": "The 3D slab is a teaching volume; only gas on the beam absorbs",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "the toy's density field drawn as a slab that fades away from the beam; only gas on the beam absorbs",
+   "physics_note": "the sightline's spectrum uses the beam's own pixels ([[#comp-toy-sightline|The toy sightline's spectrum]])"
+  },
+  "TV-PARCELS": {
+   "anchor": "tv-teaching-parcels",
+   "title": "Parcels and clouds",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    6,
+    7,
+    8,
+    13
+   ],
+   "entries": [
+    {
+     "anchor": "teaching-parcels",
+     "title": "Parcels are a teaching decomposition of a continuous sightline",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "three Gaussian parcels summarising peak regions of the continuous sightline, and Beat 13's idealised clumps — a teaching decomposition, not separate clouds",
+   "physics_note": "their lines are computed ([[#comp-parcel-width|One parcel's line — its width and depth]], [[#comp-same-shadow|The constructed \"same shadow\"]]); Beat 8 shows the full sightline the parcels summarise"
+  },
+  "TV-NATWIDTH": {
+   "anchor": "tv-magnified-natural-width",
+   "title": "Magnified natural width",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    2,
+    4
+   ],
+   "entries": [
+    {
+     "anchor": "magnified-natural-width",
+     "title": "Natural width is magnified wherever it is drawn",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "the natural width (≈ 0.006 km/s) magnified wherever it must be seen, and labelled (×500 in Beat 2, ×1200 in Beat 4)",
+   "physics_note": "the computed profiles use the true width ([[#comp-voigt|Natural width and the Voigt profile]])"
+  },
+  "TV-INK": {
+   "anchor": "tv-ink-rendering",
+   "title": "Ink and its brightness",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    5,
+    6,
+    9,
+    10
+   ],
+   "entries": [
+    {
+     "anchor": "ink-rendering",
+     "title": "Ink is optical depth, and the ink rendering performs Beer–Lambert",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "ink stands for optical depth; where it is drawn as light, its brightness is e^(−τ)",
+   "physics_note": "the rendering performs Beer–Lambert, checked from the canvas ([[#check-rend-001|The drawing performs Beer–Lambert]])"
+  },
+  "TV-RIBBON": {
+   "anchor": "tv-stretching-ribbon",
+   "title": "The stretching ribbon",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    5
+   ],
+   "entries": [
+    {
+     "anchor": "stretching-ribbon",
+     "title": "The stretching ribbon and the written shadows (Beat 5 representation)",
+     "representation": true
+    }
+   ],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "Beat 5's schematic field and ribbon — shadows drawn about 60× wider than real forest lines, the low-redshift forest exaggerated, Lyα only",
+   "physics_note": "wavelengths and redshifts on the ribbon are computed ([[#comp-redshift-mapping|Redshift, distance and observed wavelength]])"
+  },
+  "TV-TIMING": {
+   "anchor": "tv-animation-timing",
+   "title": "Animation and timing",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    0,
+    2,
+    3,
+    5,
+    7,
+    9,
+    12,
+    13
+   ],
+   "entries": [],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "reveals, holds and replays; their speed and duration have no physical meaning (atoms' motions are slowed enormously so they can be seen)",
+   "physics_note": "every drawn state is a computed physical state; time is only how it is shown"
+  },
+  "TV-FOCUS": {
+   "anchor": "tv-cinnabar-focus",
+   "title": "The red colour",
+   "owner": "teaching_visual",
+   "displayed": null,
+   "beats": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "entries": [],
+   "equations": [],
+   "variables": [],
+   "constants": [],
+   "conventions": [],
+   "assumptions": [],
+   "approximations": [],
+   "algorithm": null,
+   "domain": null,
+   "implementation": null,
+   "validation": null,
+   "python": null,
+   "package": null,
+   "interface": null,
+   "inputs": null,
+   "conversions": [],
+   "reference": null,
+   "what": "cinnabar red marks the current causal focus — what the reader is acting on and its consequence — never a physical category",
+   "physics_note": "colour carries no physical value"
   }
  }
 }

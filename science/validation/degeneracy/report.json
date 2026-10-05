@@ -1,42 +1,137 @@
 {
+ "snr": [
+  20,
+  50,
+  100,
+  200
+ ],
  "dchi2": {
   "20": {
    "i": 0,
    "ii": 2.7854157927918197,
-   "iii": 0.8706017495239233
+   "iii": 0.000015240182824761904
   },
   "50": {
    "i": 0,
    "ii": 17.408848704948863,
-   "iii": 5.4412609345245215
+   "iii": 0.00009525114265476195
+  },
+  "100": {
+   "i": 0,
+   "ii": 69.63539481979545,
+   "iii": 0.0003810045706190478
+  },
+  "200": {
+   "i": 0,
+   "ii": 278.5415792791818,
+   "iii": 0.0015240182824761911
+  }
+ },
+ "dchi2_lyb": {
+  "20": {
+   "i": 0,
+   "ii": 103.14596572133787,
+   "iii": 8.344654718739688e-7
+  },
+  "50": {
+   "i": 0,
+   "ii": 644.6622857583618,
+   "iii": 0.0000052154091992123055
+  },
+  "100": {
+   "i": 0,
+   "ii": 2578.649143033447,
+   "iii": 0.000020861636796849222
+  },
+  "200": {
+   "i": 0,
+   "ii": 10314.596572133789,
+   "iii": 0.00008344654718739689
   }
  },
  "max_abs_dF_vs_oracle": {
-  "i": 0.0000022234584143021596,
-  "ii": 0.000027122193856699006,
-  "iii": 0.000035802268748552635
+  "lya": 0.00003611714952134193,
+  "lyb": 0.000014233981358913184
+ },
+ "iii_max_abs_dF": {
+  "lya": 0.00003612391667118242,
+  "lyb": 0.000012524426833526725
+ },
+ "construction": {
+  "dv_iii_kms": 5.988250955282366,
+  "dv_rule_kms": 5.988250955282366,
+  "b_tot_i_kms": 27.430592995288688,
+  "b_tot_iii_kms": 27.430592995288688
  },
  "checks": [
   {
-   "name": "Δχ²(ii) at S/N=20: browser 2.79 vs oracle 2.79",
-   "rel": 0.0000959191918133018,
+   "name": "(iii) is constructed, not tuned: dv = 5.988251 km/s equals the matching rule's 5.988251",
    "pass": true
   },
   {
-   "name": "Δχ²(iii) at S/N=20: browser 0.87 vs oracle 0.87",
-   "rel": 0.00025586270055654326,
+   "name": "b_tot(iii) = b_tot(i) = 27.430593 km/s",
    "pass": true
   },
   {
-   "name": "Δχ²(ii) at S/N=50: browser 17.41 vs oracle 17.41",
-   "rel": 0.0000959191918126959,
+   "name": "lya Δχ²(ii) at S/N=20: browser 2.785 vs oracle 2.785",
+   "pass": true,
+   "rel": 0.00009591919179879054
+  },
+  {
+   "name": "lya Δχ²(ii) at S/N=50: browser 17.41 vs oracle 17.41",
+   "pass": true,
+   "rel": 0.00009591919179820377
+  },
+  {
+   "name": "lya Δχ²(ii) at S/N=100: browser 69.64 vs oracle 69.63",
+   "pass": true,
+   "rel": 0.00009591919179820377
+  },
+  {
+   "name": "lya Δχ²(ii) at S/N=200: browser 278.5 vs oracle 278.5",
+   "pass": true,
+   "rel": 0.00009591919179820377
+  },
+  {
+   "name": "lyb Δχ²(ii) at S/N=20: browser 103.1 vs oracle 103.1",
+   "pass": true,
+   "rel": 0.000003868684793384077
+  },
+  {
+   "name": "lyb Δχ²(ii) at S/N=50: browser 644.7 vs oracle 644.7",
+   "pass": true,
+   "rel": 0.0000038686847931801725
+  },
+  {
+   "name": "lyb Δχ²(ii) at S/N=100: browser 2579 vs oracle 2579",
+   "pass": true,
+   "rel": 0.0000038686847931801725
+  },
+  {
+   "name": "lyb Δχ²(ii) at S/N=200: browser 1.031e+4 vs oracle 1.031e+4",
+   "pass": true,
+   "rel": 0.0000038686847931801725
+  },
+  {
+   "name": "exact path: Δχ²(iii) ≤ 8.7e-6 at every S/N ≤ 200 in Lyα and Lyβ (bound 1e-4)",
    "pass": true
   },
   {
-   "name": "Δχ²(iii) at S/N=50: browser 5.44 vs oracle 5.44",
-   "rel": 0.00025586270055679333,
+   "name": "browser: max |F(iii) − F(i)| 3.6e-5 (Voigt-approximation level; 3.5e-6 with Gaussian kernels) < 1e-4; Δχ²(iii) ≤ 1.5e-3 at S/N 200",
+   "pass": true
+  },
+  {
+   "name": "browser vs oracle: max |ΔF| Lyα 3.6e-5, Lyβ 1.4e-5",
    "pass": true
   }
  ],
+ "dchi2_iii_max": 0.0015240182824761911,
+ "dchi2_iii_max_oracle": 0.000008658262736648383,
+ "iii_max_abs_dF_gauss_kernels": 0.00000350819606920183,
+ "iii_max_abs_dF_oracle": {
+  "lya": 0.000003963516363891806,
+  "lyb": 6.35804441984078e-7
+ },
+ "lyb_over_lya_flambda": 0.1603652717586617,
  "pass": true
 }

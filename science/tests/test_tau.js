@@ -35,5 +35,7 @@ for (const N of [1e19, 2e20]) {
 }
 rep.b_1e4_kms = P.dopplerB(1e4);   // the thermal width quoted in Beat 3's equation (read by the manifest, never typed)
 rep.pass = ok;
+// the natural line against the thermal one at 10⁴ K (SCI-NAT-001 quotes it): FWHM_thermal = 2√ln2·b, FWHM_natural = 2γ
+rep.fwhm_thermal_over_natural_1e4K = 2 * Math.sqrt(Math.LN2) * P.dopplerB(1e4) / (2 * P.C.gamma_kms);
 fs.writeFileSync(path.join(__dirname, '../validation/tau/report.json'), JSON.stringify(rep, null, 1));
 process.exit(ok ? 0 : 1);

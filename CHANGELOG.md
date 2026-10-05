@@ -22,6 +22,17 @@ The last scene separates differences hidden by noise from differences hydrogen c
   sums, distance integrals, and the fake_spectra code within a declared domain.
 - No accuracy number is typed by hand.
 
+**Who computes what.** Every scientific quantity has a computation record:
+- who computes it (this app, an external package, both, or a teaching visualization);
+- its equation, variables, constants and their sources, assumptions and numerical method;
+- its implementation and its independent check.
+
+Each calculation the app implements has a short, independent Python reproduction (`reproduce/`, NumPy and SciPy),
+shown under "show the physics" and checked against the app's own values by the release gate.
+
+**Reading straight through.** "← previous" and "next →" never move: one place on the screen turns every page, from the
+first scene to the last and back, with mouse, touch or keyboard.
+
 **Browsers and devices.** Designed for tablets in landscape and larger screens, with mouse, touch or keyboard. See
 `docs/BROWSERS.md` for the tested environments.
 

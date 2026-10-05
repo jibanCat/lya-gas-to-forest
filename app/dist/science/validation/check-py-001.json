@@ -1,0 +1,775 @@
+{
+ "generated_by": "reproduce/check.py",
+ "app_values": "science/validation/computations/app_values.json",
+ "n_scripts": 10,
+ "python": "3.10.6",
+ "numpy": "2.2.6",
+ "scipy": "1.15.2",
+ "scripts": {
+  "beat01_neutral_fraction.py": {
+   "snippet_lines": 21,
+   "snippet_exit": 0,
+   "expected_output": [
+    "mean hydrogen density at z = 3: 1.2126e-05 cm^-3",
+    "x_HI at mean density, T = 1.0e+04 K, Gamma_HI = 0.8e-12 /s: 7.401e-06",
+    "x_HI at mean density, T = 1.3e+04 K, Gamma_HI = 0.8e-12 /s: 6.159e-06"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "mean hydrogen density",
+     "python": 1.2125596472195584e-05,
+     "app": 1.2125586034116095e-05,
+     "deviation": 8.608309289462629e-07,
+     "tolerance": 1e-06,
+     "ok": true
+    },
+    {
+     "name": "n_e / n_H",
+     "python": 1.16260270341903,
+     "app": 1.16260270341903,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "x_HI(10000 K)",
+     "python": 7.40105690054999e-06,
+     "app": 7.401050529496787e-06,
+     "deviation": 8.608309289464276e-07,
+     "tolerance": 1e-06,
+     "ok": true
+    },
+    {
+     "name": "x_HI(13000 K)",
+     "python": 6.159328915261444e-06,
+     "app": 6.159323613125177e-06,
+     "deviation": 8.608309288923928e-07,
+     "tolerance": 1e-06,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat03_thermal_width.py": {
+   "snippet_lines": 11,
+   "snippet_exit": 0,
+   "expected_output": [
+    "T =    4000 K  ->  b = 8.124 km/s",
+    "T =   10000 K  ->  b = 12.845 km/s",
+    "T =   42000 K  ->  b = 26.325 km/s"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "b(4000 K)",
+     "python": 8.123992625814154,
+     "app": 8.123992625814154,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "b(10000 K)",
+     "python": 12.845160195992374,
+     "app": 12.845160195992374,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "b(42000 K)",
+     "python": 26.32474482183956,
+     "app": 26.32474482183956,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat04_natural_voigt.py": {
+   "snippet_lines": 20,
+   "snippet_exit": 0,
+   "expected_output": [
+    "natural half width gamma = 6.0607e-03 km/s",
+    "damping parameter a at 1e4 K = 4.7182e-04",
+    "thermal FWHM / natural FWHM at 1e4 K = 1765",
+    "H(a,   0) = 9.995e-01",
+    "H(a,   1) = 3.679e-01",
+    "H(a,   2) = 1.842e-02",
+    "H(a,   4) = 1.863e-05",
+    "H(a,  10) = 2.703e-06",
+    "H(a, 100) = 2.662e-08"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "gamma",
+     "python": 0.0060606613024665945,
+     "app": 0.0060606613024665945,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "a",
+     "python": 0.0004718245012123314,
+     "app": 0.0004718245012123314,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "FWHM ratio",
+     "python": 1764.542979473272,
+     "app": 1764.542979473272,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "H(a, 0)",
+     "python": 0.9994678256016776,
+     "app": 0.99946779363945,
+     "deviation": 3.197924709003052e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "H(a, 1)",
+     "python": 0.36791990614296377,
+     "app": 0.3679199066274795,
+     "deviation": 1.3169053824129215e-09,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "H(a, 2)",
+     "python": 0.01842494420926755,
+     "app": 0.018424943625215653,
+     "deviation": 3.1698978786784186e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "H(a, 4)",
+     "python": 1.863143439803424e-05,
+     "app": 1.8631326789629277e-05,
+     "deviation": 5.775670523965739e-06,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "H(a, 10)",
+     "python": 2.702949300150955e-06,
+     "app": 2.702948968743978e-06,
+     "deviation": 1.2260940948315899e-07,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "H(a, 100)",
+     "python": 2.66238408596949e-08,
+     "app": 2.6623840970246098e-08,
+     "deviation": 4.152338378126408e-09,
+     "tolerance": 0.0001,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat05_redshift_mapping.py": {
+   "snippet_lines": 19,
+   "snippet_exit": 0,
+   "expected_output": [
+    "Lya absorbed at z = 3 is observed at 4862.68 Angstrom",
+    "comoving distance to z = 3: 4383.8 Mpc/h",
+    "aH/h at z = 3: 114.19 km/s per Mpc/h",
+    "4.4 Mpc/h of Hubble flow: 502.4 km/s = 8.16 Angstrom observed"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "lambda_obs",
+     "python": 4862.6804,
+     "app": 4862.6804,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "chi",
+     "python": 4383.842452734535,
+     "app": 4383.842452704486,
+     "deviation": 6.854442370149053e-12,
+     "tolerance": 1e-07,
+     "ok": true
+    },
+    {
+     "name": "aH/h",
+     "python": 114.19254572869457,
+     "app": 114.19254572869457,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u(4.4 Mpc/h)",
+     "python": 502.4472012062561,
+     "app": 502.4472012062561,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "delta lambda",
+     "python": 8.156605182769905,
+     "app": 8.156605182769454,
+     "deviation": 5.5316473838993295e-14,
+     "tolerance": 1e-09,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat06_parcel_profile.py": {
+   "snippet_lines": 22,
+   "snippet_exit": 0,
+   "expected_output": [
+    "thermal b = 21.40 km/s, size b = 23.77 km/s, together b = 31.98 km/s",
+    "peak optical depth tau0 = 4.41",
+    "with its own gradient: size b = 9.11 km/s, b = 23.26 km/s"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "thermal b",
+     "python": 21.395579938253253,
+     "app": 21.395579938253253,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "size b",
+     "python": 23.774775769268327,
+     "app": 23.774775769268327,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "b",
+     "python": 31.984540074435547,
+     "app": 31.984540074435547,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "tau0",
+     "python": 4.412780527383418,
+     "app": 4.412780527383418,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "size b, own gradient",
+     "python": 9.114492754409685,
+     "app": 9.114492754409685,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "b, own gradient",
+     "python": 23.25607058521219,
+     "app": 23.25607058521219,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat07_velocity_mapping.py": {
+   "snippet_lines": 12,
+   "snippet_exit": 0,
+   "expected_output": [
+    "parcel a: expansion alone 220.4 km/s, with its own motion 282.4 km/s",
+    "parcel b: expansion alone 362.6 km/s, with its own motion 449.6 km/s",
+    "parcel c: expansion alone 437.1 km/s, with its own motion 457.1 km/s"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "u_hubble(a)",
+     "python": 220.42671700878822,
+     "app": 220.42671700878822,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u_hubble(b)",
+     "python": 362.5789562491799,
+     "app": 362.5789562491799,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u_hubble(c)",
+     "python": 437.1103040256698,
+     "app": 437.1103040256698,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u(a)",
+     "python": 282.4267170087882,
+     "app": 282.4267170087882,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u(b)",
+     "python": 449.5789562491799,
+     "app": 449.5789562491799,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "u(c)",
+     "python": 457.1103040256698,
+     "app": 457.1103040256698,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat09_optical_depth.py": {
+   "snippet_lines": 15,
+   "snippet_exit": 0,
+   "expected_output": [
+    "u =    0 km/s: tau = 0.4273 + 3.7886 + 0.0249 = 4.2408;  F = exp(-tau) = 0.01440 = product of exp(-tau_j) = 0.01440",
+    "u =   20 km/s: tau = 0.0022 + 1.3943 + 1.5922 = 2.9887;  F = exp(-tau) = 0.05036 = product of exp(-tau_j) = 0.05036"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "tau_0(0)",
+     "python": 0.4273298394920706,
+     "app": 0.42732983836876876,
+     "deviation": 2.6286529504263973e-09,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau_1(0)",
+     "python": 3.7885581363072562,
+     "app": 3.788558058409278,
+     "deviation": 2.056137904951652e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau_2(0)",
+     "python": 0.02489874713227446,
+     "app": 0.02489874747025157,
+     "deviation": 1.3574060643395754e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau(0)",
+     "python": 4.240786722931602,
+     "app": 4.240786644248298,
+     "deviation": 1.855394058435433e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau_0(20)",
+     "python": 0.002172369778309493,
+     "app": 0.0021723684174104374,
+     "deviation": 6.264586820845926e-07,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau_1(20)",
+     "python": 1.3943078182188116,
+     "app": 1.394307819398153,
+     "deviation": 8.458257903512926e-10,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau_2(20)",
+     "python": 1.592175289013034,
+     "app": 1.592176661817478,
+     "deviation": 8.622186700895384e-07,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "tau(20)",
+     "python": 2.9886554770101554,
+     "app": 2.9886568496330415,
+     "deviation": 4.5927751330453375e-07,
+     "tolerance": 0.0001,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat10_transmission.py": {
+   "snippet_lines": 9,
+   "snippet_exit": 0,
+   "expected_output": [
+    "tau =  1.73  ->  F = exp(-tau) = 1.773e-01",
+    "tau = 11.90  ->  F = exp(-tau) = 6.790e-06",
+    "tau =  0.37  ->  F = exp(-tau) = 6.907e-01",
+    "N = 1e15 cm^-2, b = 25 km/s: tau0 = 30.32, F at line centre = 6.8e-14 (saturated)"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "F(1.73)",
+     "python": 0.17728440996987782,
+     "app": 0.17728440996987782,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "F(11.9)",
+     "python": 6.79040480737947e-06,
+     "app": 6.79040480737947e-06,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "F(0.37)",
+     "python": 0.6907343306373547,
+     "app": 0.6907343306373547,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "tau0",
+     "python": 30.318829412189334,
+     "app": 30.318829412189334,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat11_instrument.py": {
+   "snippet_lines": 17,
+   "snippet_exit": 0,
+   "expected_output": [
+    "deepest point: intrinsic F = 0.0023, observed F = 0.2374",
+    "equivalent width: intrinsic 74.34 km/s, observed 74.34 km/s"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "F_min intrinsic",
+     "python": 0.002329486313768279,
+     "app": 0.0023294865461470334,
+     "deviation": 9.975535366120225e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "F_min observed",
+     "python": 0.23740194873478843,
+     "app": 0.23740184546901627,
+     "deviation": 4.349830219371995e-07,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "EW intrinsic",
+     "python": 74.3400368855315,
+     "app": 74.3400417017618,
+     "deviation": 6.478648910377283e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    },
+    {
+     "name": "EW observed",
+     "python": 74.34001753922544,
+     "app": 74.34002235546158,
+     "deviation": 6.478658453070346e-08,
+     "tolerance": 0.0001,
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  },
+  "beat13_degeneracy.py": {
+   "snippet_lines": 32,
+   "snippet_exit": 0,
+   "expected_output": [
+    "(iii)'s smooth extra velocity from the matching condition: dv = 5.9883 km/s",
+    "Lya S/N  20: dchi2(ii) =   2.79   dchi2(iii) = 0.00",
+    "Lya S/N  50: dchi2(ii) =   17.4   dchi2(iii) = 0.00",
+    "Lya S/N 100: dchi2(ii) =   69.6   dchi2(iii) = 0.00",
+    "Lya S/N 200: dchi2(ii) =    279   dchi2(iii) = 0.00",
+    "Lyb S/N  20: dchi2(ii) =    103   dchi2(iii) = 0.00",
+    "Lyb S/N  50: dchi2(ii) =    645   dchi2(iii) = 0.00",
+    "Lyb S/N 100: dchi2(ii) =   2580   dchi2(iii) = 0.00",
+    "Lyb S/N 200: dchi2(ii) =  10300   dchi2(iii) = 0.00"
+   ],
+   "snippet_output_matches": true,
+   "script_exit": 0,
+   "script_output_is_snippet_output": true,
+   "comparisons": [
+    {
+     "name": "dv(iii)",
+     "python": 5.988250955282366,
+     "app": 5.988250955282366,
+     "deviation": 0.0,
+     "tolerance": 1e-12,
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(ii) S/N 20",
+     "python": 2.7851419064940806,
+     "app": 2.7854157927918197,
+     "deviation": 9.832869421073097e-05,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 20 (absolute, both < 1e-2)",
+     "python": 7.696018790448652e-08,
+     "app": 1.5240182824761904e-05,
+     "deviation": 1.5163222636857418e-05,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 20: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 7.696018790448652e-08,
+     "app": 1.5240182824761904e-05,
+     "deviation": 7.696018790448652e-08,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(ii) S/N 50",
+     "python": 17.407136915588,
+     "app": 17.408848704948863,
+     "deviation": 9.832869421024635e-05,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 50 (absolute, both < 1e-2)",
+     "python": 4.810011744030408e-07,
+     "app": 9.525114265476195e-05,
+     "deviation": 9.47701414803589e-05,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 50: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 4.810011744030408e-07,
+     "app": 9.525114265476195e-05,
+     "deviation": 4.810011744030408e-07,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(ii) S/N 100",
+     "python": 69.628547662352,
+     "app": 69.63539481979545,
+     "deviation": 9.832869421024635e-05,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 100 (absolute, both < 1e-2)",
+     "python": 1.924004697612163e-06,
+     "app": 0.0003810045706190478,
+     "deviation": 0.0003790805659214356,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 100: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 1.924004697612163e-06,
+     "app": 0.0003810045706190478,
+     "deviation": 1.924004697612163e-06,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(ii) S/N 200",
+     "python": 278.514190649408,
+     "app": 278.5415792791818,
+     "deviation": 9.832869421024635e-05,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 200 (absolute, both < 1e-2)",
+     "python": 7.696018790448652e-06,
+     "app": 0.0015240182824761911,
+     "deviation": 0.0015163222636857424,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lya dchi2(iii) S/N 200: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 7.696018790448652e-06,
+     "app": 0.0015240182824761911,
+     "deviation": 7.696018790448652e-06,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(ii) S/N 20",
+     "python": 103.146381531837,
+     "app": 103.14596572133787,
+     "deviation": 4.03128223399357e-06,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 20 (absolute, both < 1e-2)",
+     "python": 2.3278918269758723e-09,
+     "app": 8.344654718739688e-07,
+     "deviation": 8.32137580046993e-07,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 20: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 2.3278918269758723e-09,
+     "app": 8.344654718739688e-07,
+     "deviation": 2.3278918269758723e-09,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(ii) S/N 50",
+     "python": 644.6648845739812,
+     "app": 644.6622857583618,
+     "deviation": 4.031282233866817e-06,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 50 (absolute, both < 1e-2)",
+     "python": 1.4549323918599203e-08,
+     "app": 5.2154091992123055e-06,
+     "deviation": 5.200859875293706e-06,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 50: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 1.4549323918599203e-08,
+     "app": 5.2154091992123055e-06,
+     "deviation": 1.4549323918599203e-08,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(ii) S/N 100",
+     "python": 2578.659538295925,
+     "app": 2578.649143033447,
+     "deviation": 4.031282233866817e-06,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 100 (absolute, both < 1e-2)",
+     "python": 5.819729567439681e-08,
+     "app": 2.0861636796849222e-05,
+     "deviation": 2.0803439501174824e-05,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 100: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 5.819729567439681e-08,
+     "app": 2.0861636796849222e-05,
+     "deviation": 5.819729567439681e-08,
+     "tolerance": "py<1e-4",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(ii) S/N 200",
+     "python": 10314.6381531837,
+     "app": 10314.596572133789,
+     "deviation": 4.031282233866817e-06,
+     "tolerance": 0.001,
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 200 (absolute, both < 1e-2)",
+     "python": 2.3278918269758725e-07,
+     "app": 8.344654718739689e-05,
+     "deviation": 8.32137580046993e-05,
+     "tolerance": "abs<1e-2",
+     "ok": true
+    },
+    {
+     "name": "Lyb dchi2(iii) S/N 200: Python's exact-Voigt sub-cell sum < 1e-4",
+     "python": 2.3278918269758725e-07,
+     "app": 8.344654718739689e-05,
+     "deviation": 2.3278918269758725e-07,
+     "tolerance": "py<1e-4",
+     "ok": true
+    }
+   ],
+   "inputs_agree": true,
+   "ok": true
+  }
+ },
+ "pass": true
+}

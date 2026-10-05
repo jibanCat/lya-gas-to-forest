@@ -17,7 +17,7 @@ Generated (do not edit):
 
 Exit status 1 if any integrity check fails.
 """
-import copy, json, os, re, sys
+import copy, json, math, os, re, sys
 import yaml
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -152,6 +152,19 @@ def load_report(v):
     if not p or not os.path.exists(p): return None
     try: return json.load(open(p))
     except Exception: return None
+BOUND_WORD = r'(?:≤|<|\bup to|\bat most|\bwithin|\bbelow)\s*~?'
+def _up(v, spec):
+    """an upper bound shown at a fixed precision is rounded up, so "≤ x" holds however the measured value falls"""
+    m = re.fullmatch(r'\.(\d+)([efg%])', spec)
+    if not m or not v: return format(v, spec)
+    p, kind = int(m.group(1)), m.group(2)
+    if kind in 'f%':
+        q = 10.0 ** -p / (100 if kind == '%' else 1); r = math.ceil(v / q) * q
+    else:   # e, g: round the mantissa up at its shown digits
+        e = math.floor(math.log10(abs(v))); d = p if kind == 'e' else max(p - 1, 0); q = 10.0 ** (e - d); r = math.ceil(v / q) * q
+    s = format(r, spec); shown = float(s.rstrip('%')) / (100 if s.endswith('%') else 1)
+    if shown < v * (1 - 1e-12): errors.append(f"round-up of {v} with {spec} gave {s}")
+    return s
 def summarise(vid, rep):
     if rep is None: return ('missing', 'report not found')
     if vid == 'VAL-VOIGT-001':
@@ -167,10 +180,13 @@ def summarise(vid, rep):
             pts = [c for c in rep['cases'] if c['mode'] == 'point']
             s += f"; point sampling max rel τ {max(c['max_rel_tau'] for c in pts):.1e}, max |ΔF| {max(c['max_abs_dF'] for c in pts):.1e}"
         if vid == 'VAL-TOY-001':
-            xhi = next((c for c in rep['checks'] if c['name'].startswith('neutral fraction')), None)
-            s += f"; Gauss vs Voigt max |ΔF| {rep['max_abs_dF_gauss_vs_voigt']:.1e}" + (f"; x_HI at mean density with the measured Γ_HI = {float(xhi['detail']):.2e}" if xhi else '') + f"; ⟨F⟩ = {rep['mean_flux']:.3f}, a calibration (Γ_HI tuned to {rep['gamma_ratio']:.1f}× measured to meet it)"
+            s += f"; Gauss vs Voigt max |ΔF| {rep['max_abs_dF_gauss_vs_voigt']:.1e}" + (f"; neutral fraction x_HI = {rep['x_HI_mean_density']:.2e} at mean density and T0 = {rep['T0_K']:.0f} K, for the measured Γ_HI = {rep['gamma12_measured_z3']:g}e-12 s⁻¹" if 'x_HI_mean_density' in rep else '') + f"; ⟨F⟩ = {rep['mean_flux']:.3f}, a calibration (Γ_HI tuned to {rep['gamma_ratio']:.1f}× measured to meet it)"
         if vid == 'VAL-DEG-001':
-            s += f"; Δχ²(S/N=20): ii {rep['dchi2']['20']['ii']:.2f}, iii {rep['dchi2']['20']['iii']:.2f}; max |ΔF| vs an independent calculation {max(rep['max_abs_dF_vs_oracle'].values()):.1e}"
+            d, db = rep['dchi2'], rep['dchi2_lyb']
+            s += (f"; (iii) constructed by the matching rule (dv = {rep['construction']['dv_iii_kms']:.4f} km/s, b_tot = {rep['construction']['b_tot_i_kms']:.4f} km/s for both)"
+                  f"; Lyα Δχ²(ii) at S/N 20 / 50 / 100 / 200: {d['20']['ii']:.2f} / {d['50']['ii']:.1f} / {d['100']['ii']:.0f} / {d['200']['ii']:.0f}, Lyβ {db['20']['ii']:.0f} at S/N 20"
+                  f"; Δχ²(iii) ≤ {_up(rep['dchi2_iii_max_oracle'], '.0e')} exact-Voigt, ≤ {_up(rep['dchi2_iii_max'], '.0e')} as the app draws it (S/N ≤ 200, Lyα and Lyβ)"
+                  f"; max |ΔF| vs an independent calculation {max(rep['max_abs_dF_vs_oracle'].values()):.1e}")
         return ('pass' if rep.get('pass') else 'FAIL', s)
     if vid == 'VAL-CLOSURE-FS':
         C = rep.get('cases') if isinstance(rep, dict) else None
@@ -178,7 +194,7 @@ def summarise(vid, rep):
         st, txt = closure_domain(rep, C)
         return (st, txt)
     if vid == 'VAL-RED-001':
-        return ('pass' if rep.get('pass') else 'FAIL', f"{sum(c['ok'] for c in rep['checks'])}/{len(rep['checks'])} checks; χ(z) vs scipy max rel {rep['max_rel_chi']:.0e}; z(χ) inverse {rep['max_dz_inverse']:.0e}; frame conversions exact to {max(rep['max_rel_lambda'], 1e-16):.0e}; Lyα at z = 3 → {rep['lambda_obs_lya_z3']:.2f} Å")
+        return ('pass' if rep.get('pass') else 'FAIL', f"{sum(c['ok'] for c in rep['checks'])}/{len(rep['checks'])} checks; χ(z) vs scipy max rel {rep['max_rel_chi']:.0e}; z(χ) inverse {rep['max_dz_inverse']:.0e}; frame conversions exact to {_up(max(rep['max_rel_lambda'], 1e-16), '.0e')}; Lyα at z = 3 → {rep['lambda_obs_lya_z3']:.2f} Å")
     if vid == 'VAL-INV-001':
         return ('pass' if rep.get('pass') else 'FAIL', f"Σ of traced contributions vs the spectrum's τ over {rep['pixels']} pixels: max relative difference {rep['max_rel_closure']:.0e}; τ in cells under the {rep['thresholds']['cell_min_fraction']:.0%} display cut (kept in the ledger's “rest”): median {rep['omitted_fraction']['median']:.1%}, max {rep['omitted_fraction']['max']:.1%} of a pixel's τ")
     if vid == 'VAL-ORTH-001':
@@ -187,6 +203,10 @@ def summarise(vid, rep):
     if vid == 'VAL-REND-001':
         c = rep['checks'][0]
         return ('pass' if rep.get('pass') else 'FAIL', f"Beat 10 ribbon read back from the canvas: max |T − e^(−τ)| {c['max_abs_dT']:.1e} over {c['columns']} columns (8-bit bound {c['quantisation_bound']:.1e}); mean {c['mean_abs_dT']:.1e}")
+    if vid == 'VAL-PY-001':
+        S = rep.get('scripts') or {}; comps = [c for r in S.values() for c in r.get('comparisons', [])]
+        worst = max((c['deviation'] for c in comps if isinstance(c['tolerance'], (int, float))), default=0)
+        return ('pass' if rep.get('pass') else 'FAIL', f"{sum(r['ok'] for r in S.values())}/{len(S)} reproductions: each snippet, run alone, prints its expected output (formatted from the app's own values); {sum(c['ok'] for c in comps)}/{len(comps)} full-precision values agree with the app within their stated tolerances (largest relative deviation {worst:.0e})")
     if vid == 'VAL-TOY-002':
         return ('pass' if rep.get('pass') else 'FAIL', f"the app (Gaussian kernels, as drawn) vs the generating code's exact-Voigt τ: max |ΔF| {rep['max_abs_dF_gauss']:.1e}; the app with Voigt kernels {rep['max_abs_dF_voigt']:.1e}; ⟨F⟩ {rep['mean_F_browser']:.4f} vs {rep['mean_F_reference']:.4f}")
     return ('?', '')
@@ -237,6 +257,18 @@ def closure_derived():
             'b_mass_rel': m['b_1e4K_browser'] / m['b_1e4K_fs'] - 1, 'forest_mass_dF': max(C[k]['one_at_a_time_from_port'][mass]['max_abs_dF'] for k in C if k.startswith('C9')),
             'gamma_only_dF': max(C[k]['one_at_a_time_from_port']['  constants: Gamma only (6.265e8 vs 6.2649e8)']['max_abs_dF'] for k in C),
             'fs_quad_isolated_dF': max(C[k]['fs_internal']['FS_vs_REF']['max_abs_dF'] for k in iso), 'fs_quad_broad_cold_dF': C['C8b']['fs_internal']['FS_vs_REF']['max_abs_dF'],
+            'fs_kernel_quad_isolated_dF': max(C[k]['fs_internal']['kernel_quadrature_NGRID8_vs_256']['max_abs_dF'] for k in iso),   # its kernel quadrature alone
+            'fs_pixel_quad_isolated_dF': max(C[k]['fs_internal']['pixel_quadrature_fs_vs_exact']['max_abs_dF'] for k in iso),       # its pixel quadrature alone
+            'fs_kernel_quad_broad_cold_dF': C['C8b']['fs_internal']['kernel_quadrature_NGRID8_vs_256']['max_abs_dF'],
+            # outside the declared domain (SCI-TAU-004/005), read from the same cases RESULTS.md describes
+            'narrow_native_max_dF': max(C[k]['configurations_vs_FS']['K1 native skewer, point (current default)']['max_abs_dF'] for k in C if k.startswith('C6')),
+            'narrow_native_max_relEW': max(C[k]['headline_port_vs_FS']['rel_d_EW'] for k in C if k.startswith('C6')),
+            'narrow_oversampled_max_dF': max(next(v for kk, v in C[k]['configurations_vs_FS'].items() if kk.startswith('K8'))['max_abs_dF'] for k in C if k.startswith('C6')),
+            'pixavg_min_dF': min(C[k]['pixel_flux_average_vs_exp_mean_tau']['metrics']['max_abs_dF'] for k in C if 'pixel_flux_average_vs_exp_mean_tau' in C[k]),
+            'pixavg_max_dF': max(C[k]['pixel_flux_average_vs_exp_mean_tau']['metrics']['max_abs_dF'] for k in C if 'pixel_flux_average_vs_exp_mean_tau' in C[k]),
+            'pixavg_du_kms': max(C[k]['du_kms'] for k in C if 'pixel_flux_average_vs_exp_mean_tau' in C[k]),
+            'unresolved_max_dF': max(C[k]['headline_port_vs_FS']['max_abs_dF'] for k in C if k in ('C3c', 'C4c') or k.startswith('C10')),
+            'lls_dla_tau_dropped': max(C[k]['tau_ref_all_images_max_minus_ref'] for k in ('C2a', 'C2b', 'C2c')),
             'forest_dF': max(C[k]['headline_port_vs_FS']['max_abs_dF'] for k in C if k.startswith('C9')), 'c10_max_dF': max(C[k]['headline_port_vs_FS']['max_abs_dF'] for k in C if k.startswith('C10')),
             **_mock_velocity()}
 if REPORTS.get('VAL-CLOSURE-FS'): REPORTS['VAL-CLOSURE-FS']['derived'] = closure_derived()
@@ -248,14 +280,29 @@ for eid, field, phrase, measure, bound in BOUNDS:
     elif not measure() < bound: errors.append(f"{eid}: '{phrase}' no longer holds (measured {measure():.2e})")
 _acc = re.compile(r'(?:≤|<|within|to|max\s*\|ΔF\|)\s*~?\d[\d.,]*\s*(?:×\s*10[⁻⁰-⁹¹²³⁴⁵⁶⁷⁸⁹]+|e-?\d+|%)', re.I)
 _used = {sid for b in beats['beats'] for sid in (b.get('science') or [])}
-for eid, e in _raw.items():   # no new typed accuracy numbers in public fields: they come from reports ({{…}}) or are asserted above
-    if eid not in _used: continue
-    for field in ('claim', 'validity', 'convention', 'assumptions', 'simplifications'):
-        txt = re.sub(r'\{\{[^}]*\}\}', '', str(e.get(field) or ''))
-        for mt in _acc.finditer(txt):
-            ctx = txt[max(0, mt.start() - 60):mt.end() + 20]
-            if re.search(r'match|error|accura|ΔF|differ|deviat|agree|reproduc|same as|in F\b', ctx, re.I) and not any(eid == b[0] and b[2] in txt for b in BOUNDS):
-                errors.append(f"{eid} {field}: a typed accuracy number ('{mt.group(0)}') must come from a validation report or be asserted")
+# a small number in scientific notation within reach of a word about accuracy is an accuracy number: it must be generated
+_sci_small = re.compile(r'~?\d[\d.,]*\s*(?:×\s*10⁻[⁰-⁹¹²³⁴⁵⁶⁷⁸⁹]+|[eE]-0*\d+)')
+_dec_acc = re.compile(r'(?:up to|by|to|within|≤|<|≥|EW)\s*~?[+−-]?\d*\.?\d+\s*%?(?=\s*(?:in F\b|in EW|\(EW|in the flux|%))')
+_acc_word = re.compile(r'match|error|accura|ΔF|differ|deviat|agree|reproduc|same as|in F\b|residual|precision|toleran', re.I)
+def _typed_accuracy(owner, field, raw):
+    txt = re.sub(r'\{\{[^}]*\}\}', '', str(raw or ''))
+    hits = [mt for mt in _acc.finditer(txt) if _acc_word.search(txt[max(0, mt.start() - 60):mt.end() + 20])]
+    hits += [mt for mt in _sci_small.finditer(txt) if _acc_word.search(txt[max(0, mt.start() - 80):mt.end() + 40])]
+    hits += [mt for mt in _dec_acc.finditer(txt) if _acc_word.search(txt[max(0, mt.start() - 80):mt.end() + 40])]   # "up to 0.46 in F", "EW +93 %"
+    for mt in hits:
+        if not any(owner == b[0] and b[2] in txt for b in BOUNDS):
+            errors.append(f"{owner} {field}: a typed accuracy number ('{mt.group(0).strip()}') must come from a validation report or be asserted")
+for eid, e in _raw.items():   # no typed accuracy numbers in any public field: they come from reports ({{…}}) or are asserted above
+    for field in ('claim', 'validity', 'convention', 'assumptions', 'simplifications'): _typed_accuracy(eid, field, e.get(field))
+    orc = e.get('oracle'); _typed_accuracy(eid, 'oracle', orc.get('detail') if isinstance(orc, dict) else orc)
+    for q in e.get('equations') or []: _typed_accuracy(eid, 'equation', q.get('meaning'))
+for f in ('science/SCIENCE_LEDGER.yaml', 'design/canonical/BEATS.yaml', 'science/COMPUTATION_INVENTORY.yaml'):   # a report value shown as a bound is rounded up ({{…:^fmt}})
+    for mt in re.finditer(BOUND_WORD + r'\{\{(VAL-[A-Z0-9-]+:[\w.]+)(?::([^}]+))?\}\}', open(P(f)).read()):
+        if not (mt.group(2) or '').startswith('^'): errors.append(f"{f}: '{mt.group(0)}' is shown as a bound, so it must round up (format '^…')")
+for b in beats['beats']:   # and the scenes' own public text
+    for field in ('statement', 'objective', 'consequence'): _typed_accuracy(f"beat {b['n']}", field, b.get(field))
+    for x in b.get('simplifications') or []: _typed_accuracy(f"beat {b['n']}", 'simplification', x)
+    for q in b.get('equations') or []: _typed_accuracy(f"beat {b['n']}", 'equation', q.get('note'))
 def _get(o, path):
     for k in path.split('.'): o = o[k] if isinstance(o, dict) else o[int(k)]
     return o
@@ -263,7 +310,7 @@ def fill(x):
     if isinstance(x, str):
         def sub(m):
             vid, path, fmt = m.group(1), m.group(2), m.group(3) or 'g'
-            try: return format(_get(REPORTS[vid], path), fmt)
+            try: return _up(_get(REPORTS[vid], path), fmt[1:]) if fmt.startswith('^') else format(_get(REPORTS[vid], path), fmt)
             except Exception: errors.append(f"placeholder {m.group(0)} could not be resolved"); return m.group(0)
         return re.sub(r'\{\{(VAL-[A-Z0-9-]+):([\w.]+)(?::([^}]+))?\}\}', sub, x)
     if isinstance(x, list): return [fill(v) for v in x]
@@ -506,7 +553,122 @@ for d in SITE['domains_order']:
     if _dom_ch.count(d) != 1: perrs.append(f"science notes: ledger domain {d!r} must belong to exactly one chapter in PUBLIC_SCIENCE.yaml (found {_dom_ch.count(d)})")
 for t in [json.dumps(SITE)] + [json.dumps(x) for x in (EPUB, BPUB, VPUB)]:
     if re.search(r'\{\{(?:VAL|SCI)-', t): perrs.append('an unresolved {{…}} placeholder reached public text')
-public = {'site': SITE, 'beats': BPUB, 'entries': EPUB, 'references': RPUB, 'validations': VPUB}
+# ------------------------------------------------------------------ computation provenance (science/COMPUTATION_INVENTORY.yaml)
+# For every computed public result: who computed it (lya_app, an external package, both, or a teaching visual only),
+# from which relation, inputs, constants, conventions and assumptions, by which numerical method, where the code is, how
+# it was independently validated, and how to reproduce it in Python. A record that does not say fails the build.
+INV_RAW = yaml.safe_load(open(P('science/COMPUTATION_INVENTORY.yaml')))
+for c in INV_RAW['computations']:   # no typed accuracy numbers here either (tolerances are acceptance criteria, not results)
+    for f in ('displayed', 'algorithm', 'domain', 'what', 'physics_note'): _typed_accuracy(c.get('id'), f, c.get(f))
+    for f in ('conventions', 'assumptions', 'approximations'): _typed_accuracy(c.get('id'), f, c.get(f))
+INV = fill(copy.deepcopy(INV_RAW))
+OWNERS = ['lya_app', 'hybrid', 'external_package', 'teaching_visual']
+PYREP = REPORTS.get('VAL-PY-001') or {}
+CREC = {c['id']: c for c in INV['computations']}
+CLINK = {cid: (c.get('anchor'), c.get('title')) for cid, c in CREC.items()}
+def _snippet(path):
+    t = open(P(path)).read(); a, b = t.index('# --- snippet ---\n'), t.index('# --- end snippet ---')
+    return t[a + len('# --- snippet ---\n'):b].rstrip('\n')
+def cpub(x, where):   # computation prose → public: COMP-/TV- ids become links, then the usual publicize
+    if x is None: return None
+    if isinstance(x, list): return [cpub(v, where) for v in x]
+    x = re.sub(r'\b(?:COMP|TV)-[A-Z]+\b', lambda m: f"[[#{CLINK[m.group(0)][0]}|{CLINK[m.group(0)][1]}]]" if m.group(0) in CLINK else (perrs.append(f"{where}: unknown computation {m.group(0)}") or m.group(0)), str(x))
+    return publicize(x, where)
+def refpub(rid, where):
+    if rid not in R: perrs.append(f"{where}: unknown reference {rid}"); return None
+    r = RPUB[rid]
+    if not (r['links'] and any(l['href'] for l in r['links'])) and r['kind'] not in ('book', 'report'): perrs.append(f"{rid}: cited by {where} but has no verified link")
+    return {'anchor': r['anchor'], 'short': r['short']}
+CPUB, seen_c = {}, set()
+for c in INV['computations']:
+    cid, own = c.get('id'), c.get('compute_owner'); where = f"computation {cid}"
+    if cid in seen_c: perrs.append(f"{where}: duplicate id")
+    seen_c.add(cid); anchor_ok(c.get('anchor'), cid)
+    if own not in OWNERS: perrs.append(f"{where}: compute_owner {own!r} is not one of {OWNERS}"); continue
+    if not c.get('title') or not c.get('beats') or not all(isinstance(b, int) and 0 <= b <= 13 for b in c['beats']): perrs.append(f"{where}: needs a title and its beats (0–13)")
+    for i in c.get('entries') or []:
+        if i not in EPUB: perrs.append(f"{where}: unknown ledger entry {i}")
+    app_side = own in ('lya_app', 'hybrid')
+    need = (['displayed', 'equations', 'variables', 'conventions', 'assumptions', 'algorithm', 'domain', 'implementation', 'validation', 'python'] if app_side else []) + \
+           (['displayed', 'package', 'interface', 'inputs', 'conventions', 'validation'] if own == 'external_package' else []) + (['reference'] if own == 'hybrid' else []) + \
+           (['what', 'physics_note'] if own == 'teaching_visual' else [])
+    for f in need:
+        if not c.get(f): perrs.append(f"{where}: a {own} computation needs '{f}'")
+    if app_side and 'constants' not in c: perrs.append(f"{where}: a {own} computation lists its constants (an empty list if it has none)")
+    if app_side and 'approximations' not in c: perrs.append(f"{where}: a {own} computation lists its approximations (an empty list if none)")
+    for q in c.get('equations') or []:
+        if not q.get('tex') or not q.get('meaning'): perrs.append(f"{where}: every equation needs its TeX and its meaning")
+    for v in c.get('variables') or []:
+        if not (v.get('symbol') and v.get('meaning') and v.get('unit')): perrs.append(f"{where}: every variable needs a symbol, a meaning and a unit")
+    impl, files = c.get('implementation') or {}, []
+    if impl:
+        files = impl['file'] if isinstance(impl.get('file'), list) else [impl.get('file')]
+        src = ''
+        for f in files:
+            if not f or not os.path.exists(P(f)): perrs.append(f"{where}: implementation file {f} not found")
+            else: src += open(P(f)).read()
+        for s in impl.get('symbols') or []:
+            if s != os.path.splitext(os.path.basename(files[0]))[0] and not re.search(r'\b' + re.escape(s) + r'\b', src): perrs.append(f"{where}: implementation symbol {s} not found in {files}")
+    val = c.get('validation') or {}
+    for v in val.get('ids') or []:
+        if v not in VPUB: perrs.append(f"{where}: unknown validation {v}")
+        elif VSUM[v][0] in ('FAIL', 'missing', '?'): perrs.append(f"{where}: its validation {v} is {VSUM[v][0]}")
+    if app_side and not (val.get('independent') and val.get('tolerance')): perrs.append(f"{where}: its validation needs 'independent' and 'tolerance'")
+    py, pyp = c.get('python') or {}, None
+    if app_side and py:
+        s = py.get('script'); r = (PYREP.get('scripts') or {}).get(os.path.basename(s or ''))
+        if 'VAL-PY-001' not in (val.get('ids') or []): perrs.append(f"{where}: its validation must include VAL-PY-001 (the Python reproduction)")
+        if not s or not os.path.exists(P(s)): perrs.append(f"{where}: Python reproduction {s} not found")
+        elif '# --- snippet ---' not in open(P(s)).read(): perrs.append(f"{where}: {s} has no '# --- snippet ---' region")
+        elif not r: perrs.append(f"{where}: {s} was not run by reproduce/check.py (VAL-PY-001)")
+        elif not r.get('ok'): perrs.append(f"{where}: {s} fails reproduce/check.py")
+        else: pyp = {'script': s, 'snippet': _snippet(s), 'expected': r['expected_output'], 'note': cpub(py.get('note'), where)}
+    pk = c.get('package') or {}
+    if own == 'external_package':
+        for f in ('name', 'version', 'ref'):
+            if not pk.get(f): perrs.append(f"{where}: package needs '{f}'")
+    rf = c.get('reference') or {}
+    if own == 'hybrid':
+        for f in ('package', 'version', 'ref', 'role', 'record'):
+            if not rf.get(f): perrs.append(f"{where}: a hybrid computation's reference needs '{f}'")
+        if rf.get('record') and rf['record'] not in CREC: perrs.append(f"{where}: reference record {rf['record']} not in the inventory")
+    CPUB[cid] = {'anchor': c['anchor'], 'title': c['title'], 'owner': own, 'displayed': cpub(c.get('displayed'), where), 'beats': c.get('beats') or [],
+        'entries': [{'anchor': EPUB[i]['anchor'], 'title': EPUB[i]['title'], 'representation': EPUB[i]['representation']} for i in (c.get('entries') or []) if i in EPUB],
+        'equations': [{'tex': q['tex'], 'meaning': cpub(q.get('meaning'), where)} for q in (c.get('equations') or [])],
+        'variables': [{'symbol': v.get('symbol'), 'meaning': cpub(v.get('meaning'), where), 'unit': v.get('unit')} for v in (c.get('variables') or [])],
+        'constants': [{'symbol': k.get('symbol'), 'value': k.get('value'), 'ref': refpub(k.get('source'), where)} for k in (c.get('constants') or [])],
+        'conventions': cpub(c.get('conventions') or [], where), 'assumptions': cpub(c.get('assumptions') or [], where), 'approximations': cpub(c.get('approximations') or [], where),
+        'algorithm': cpub(c.get('algorithm'), where), 'domain': cpub(c.get('domain'), where),
+        'implementation': {'files': [f for f in files if f], 'symbols': impl.get('symbols') or []} if impl else None,
+        'validation': {'checks': [VPUB[v]['anchor'] for v in (val.get('ids') or []) if v in VPUB], 'independent': cpub(val.get('independent'), where), 'tolerance': cpub(val.get('tolerance'), where)} if val else None,
+        'python': pyp,
+        'package': ({'name': pk.get('name'), 'version': str(pk.get('version')), 'licence': pk.get('licence'), 'ref': refpub(pk.get('ref'), where)} if pk else None),
+        'interface': cpub(c.get('interface'), where), 'inputs': cpub(c.get('inputs'), where), 'conversions': cpub(c.get('conversions') or [], where),
+        'reference': ({'package': rf.get('package'), 'version': str(rf.get('version')), 'role': cpub(rf.get('role'), where), 'ref': refpub(rf.get('ref'), where), 'record': CREC[rf['record']]['anchor'] if rf.get('record') in CREC else None} if rf else None),
+        'what': cpub(c.get('what'), where), 'physics_note': cpub(c.get('physics_note'), where)}
+for b in BPUB.values():   # every scene lists what it computes, app-owned first
+    b['computations'] = [CPUB[cid]['anchor'] for own in OWNERS for cid, cp in CPUB.items() if cp['owner'] == own and b['n'] in cp['beats']]
+VPUB_PY = 'VAL-PY-001'
+if VPUB_PY not in VPUB: perrs.append('VAL-PY-001 (the Python reproductions) is missing from the ledger')
+# the readable matrix (science/COMPUTATION_MATRIX.md), generated
+_vert = lambda s: str(s).replace('|', r'\vert ')
+OWN_LABEL = {'lya_app': 'lya_app', 'hybrid': 'hybrid: lya_app, with an external reference', 'external_package': 'external package', 'teaching_visual': 'teaching visual'}
+M = ['# Computation matrix', '', '*GENERATED by `science/tools/build_provenance.py` from `science/COMPUTATION_INVENTORY.yaml`, the ledger and the validation reports. Do not edit by hand.*', '',
+     'Who computes each scientific quantity the app shows, from which relation, where the code is, how it is checked independently, and how to reproduce it in Python. The science notes (`/science/`, "How each quantity is computed") give each record in full.', '',
+     '| Computation | Owner | Equation | Implementation | Independent check | Python reproduction | Beats |', '|---|---|---|---|---|---|---|']
+for own in OWNERS:
+    for cid, c in CREC.items():
+        if c.get('compute_owner') != own: continue
+        eq = (c.get('equations') or [{}])[0].get('tex')
+        impl = c.get('implementation') or {}
+        files = impl.get('file') if isinstance(impl.get('file'), list) else ([impl.get('file')] if impl.get('file') else [])
+        impl_s = ' · '.join(f"`{f}`" for f in files) + (f" ({', '.join(impl.get('symbols') or [])})" if impl.get('symbols') else '') if files else (f"{c['package'].get('name', '?')} {c['package'].get('version', '?')}" if c.get('package') else '—')
+        chk = ', '.join(c.get('validation', {}).get('ids') or []) if c.get('validation') else '—'
+        pyr = f"`{c['python']['script']}`" if c.get('python') else '—'
+        M.append(f"| {c['title']} | {OWN_LABEL[own]} | {'$' + _vert(eq) + '$' if eq else '—'} | {impl_s} | {chk} | {pyr} | {', '.join(str(b) for b in c.get('beats') or [])} |")
+M += ['', 'Counts: ' + ' · '.join(f"{OWN_LABEL[o]} {sum(1 for c in CREC.values() if c.get('compute_owner') == o)}" for o in OWNERS) + '.']
+open(P('science/COMPUTATION_MATRIX.md'), 'w').write('\n'.join(M) + '\n')
+public = {'site': SITE, 'beats': BPUB, 'entries': EPUB, 'references': RPUB, 'validations': VPUB, 'computations': CPUB}
 json.dump(public, open(P('design/canonical/public_provenance.json'), 'w'), ensure_ascii=False, indent=1)
 errors += [f"public provenance: {x}" for x in perrs]
 

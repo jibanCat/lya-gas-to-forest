@@ -16,7 +16,7 @@ INCLUDE = [   # files or directories (directories: every tracked file under them
     'docs/',
     # the app: sources, build, vendored assets, the generated site, and its checks and capture tools
     'app/README.md', 'app/index.html', 'app/build.mjs', 'app/science_page.mjs', 'app/src/', 'app/vendor/', 'app/dist/',
-    'app/smoke.mjs', 'app/audit.mjs', 'app/study.mjs', 'app/touch.mjs', 'app/a11y.mjs', 'app/pages_check.mjs', 'app/safari_check.mjs', 'app/perf.mjs', 'app/release_check.mjs',
+    'app/smoke.mjs', 'app/audit.mjs', 'app/study.mjs', 'app/touch.mjs', 'app/a11y.mjs', 'app/continuous_navigation.mjs', 'app/pages_check.mjs', 'app/safari_check.mjs', 'app/perf.mjs', 'app/release_check.mjs',
     'app/shoot.mjs', 'app/shots.txt', 'app/record.mjs', 'app/sequence.mjs', 'app/audit_bundle.mjs', 'app/browsers.mjs', 'app/firefox_bidi.mjs', 'app/load_perf.mjs',
     # the science: ledger, references, physics, toy data, oracles, tests, validation reports, notes cited by the ledger
     'science/README.md', 'science/SCIENCE_LEDGER.yaml', 'science/REFERENCES.yaml', 'science/PUBLIC_SCIENCE.yaml',
@@ -27,6 +27,8 @@ INCLUDE = [   # files or directories (directories: every tracked file under them
     'design/canonical/CANONICAL_PATH.md', 'design/canonical/INTERACTION_PROVENANCE.md', 'design/canonical/VISUAL_PROVENANCE.md',
     'design/VISUAL_LANGUAGE.md',
     'tools/',
+    # computation provenance: who computes each quantity, and independent Python reproductions of the equations
+    'science/COMPUTATION_INVENTORY.yaml', 'science/COMPUTATION_MATRIX.md', 'reproduce/',
 ]
 OPTIONAL = {'LICENSE', 'app/browsers.mjs', 'docs/'}   # may not exist yet (the licence files are written at release)
 
@@ -52,7 +54,8 @@ def main():
             chosen += got
         elif p in pool: chosen.append(p)
         elif p not in OPTIONAL: errs.append(f'allowlisted file {p} does not exist')
-    chosen = sorted(set(f for f in chosen if os.path.isfile(os.path.join(ROOT, f)) and '/.DS_Store' not in f and not f.endswith('.DS_Store')))
+    chosen = sorted(set(f for f in chosen if os.path.isfile(os.path.join(ROOT, f)) and '/.DS_Store' not in f and not f.endswith('.DS_Store')
+                        and '__pycache__/' not in f and not f.endswith('.pyc')))   # compiled Python embeds local paths: never exported
     for f in chosen:
         os.makedirs(os.path.dirname(os.path.join(out, f)) or out, exist_ok=True)
         shutil.copy2(os.path.join(ROOT, f), os.path.join(out, f))

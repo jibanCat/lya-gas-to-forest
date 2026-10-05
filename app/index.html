@@ -19,11 +19,13 @@
   #topnav .bn::after, #topnav .bnav::after, #advtoggle::after { content: ''; position: absolute; left: 0; right: 0; top: -12px; bottom: -14px; }   /* small marks, large targets: the invisible hit area is taller than the glyph (adjacent numerals never overlap) */
   #topnav .bn.past { color: var(--graphite); } #topnav .bn.on { color: var(--ink); border-bottom: 1px solid var(--ink); }
   #topnav .bnav { position: relative; margin-left: 24px; color: var(--graphite); font: italic 300 14px 'Fraunces', serif; letter-spacing: 0; white-space: nowrap; }   /* marginal book navigation: the whole label is the target */
-  #topnav .bnav::after { left: -9px; right: -9px; } #topnav .bnav:hover { color: var(--ink); } #topnav .bnav.none { visibility: hidden; }
+  #topnav .bnav::after { left: -10px; right: -10px; top: -18px; bottom: -19px; }   /* the page-turn targets: ≥ 44 px on a tablet's scaled stage */ #topnav .bnav:hover { color: var(--ink); } #topnav .bnav.none { visibility: hidden; }
+  #topnav button { touch-action: manipulation; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }   /* repeated taps turn pages: no double-tap zoom, no selection, no callout */
+  #topnav #nexttitle { display: inline-block; vertical-align: -3px; line-height: 1.2; max-width: 330px; margin-left: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: italic 300 13px 'Fraunces', serif; letter-spacing: 0; color: var(--muted); pointer-events: none; }   /* the next beat's title: a preview, not the target */
   #advtoggle::after { left: -10px; right: -10px; }
   #advtoggle { position: absolute; right: 32px; top: 20px; font: italic 300 15px 'Fraunces', serif; color: var(--graphite); user-select: none; }
   #advtoggle .on { color: var(--accent); }
-  #margin { position: absolute; left: 40px; top: 60px; width: 270px; height: 812px; overflow: hidden; display: flex; flex-direction: column; }
+  #margin { position: absolute; left: 40px; top: 60px; width: 270px; height: 812px; overflow: hidden auto; scrollbar-width: thin; display: flex; flex-direction: column; }   /* scrolls only when a scene's controls and its physics panel exceed the column (Beat 6) */
   #mtag { font: 400 11px 'IBM Plex Mono', monospace; color: var(--muted); letter-spacing: .04em; }
   #mtitle { font: 300 26px/1.15 'Fraunces', serif; margin: 8px 0 14px; }
   #mtext p { font: 300 15.5px/1.42 'Fraunces', serif; margin: 0 0 10px; color: var(--ink); }
@@ -55,7 +57,7 @@
   .btn { color: var(--ink); border-bottom: 1px dotted var(--graphite); }
   #why { margin-top: 6px; }
   .whylink { font: italic 300 15px 'Fraunces', serif; color: var(--graphite); margin: 0 0 12px; border-bottom: 1px dotted var(--graphite); display: inline-block; }
-  #eqs { margin-top: 14px; border-top: 1px solid var(--hair); padding-top: 8px; display: none; flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+  #eqs { margin-top: 14px; border-top: 1px solid var(--hair); padding-top: 8px; display: none; flex: 1 1 auto; min-height: 150px; overflow-y: auto; scrollbar-width: thin; }   /* never squeezed away: the margin scrolls instead */
   .eq { margin: 8px 0 12px; } .eqm { font-size: 14px; overflow: hidden; } .eqm .katex-display { margin: 2px 0; text-align: left; } .eqm .katex-display > .katex { text-align: left; }
   .eqn { font: 300 11.5px/1.35 'Inter', sans-serif; color: var(--muted); }
   .eqid { font: 400 9.5px 'IBM Plex Mono', monospace; color: var(--muted); margin-top: 2px; letter-spacing: .03em; }
@@ -78,6 +80,17 @@
   #meqs .eq { margin: 0; }
   .srclink { font: italic 300 13.5px 'Fraunces', serif; color: var(--muted); margin: 10px 0 0; border-bottom: 1px dotted var(--pencil); display: inline-block; }   /* quiet: the provenance is there when wanted */
   #srcp { position: absolute; inset: 0; background: var(--paper); z-index: 21; overflow-y: auto; } #srcp.hidden { display: none; }
+  #pyp { position: absolute; inset: 0; background: var(--paper); z-index: 22; overflow-y: auto; } #pyp.hidden { display: none; }
+  #pyback { position: absolute; left: 40px; top: 22px; font: italic 300 15px 'Fraunces', serif; color: var(--accent); }
+  #pybody { max-width: 820px; padding: 70px 56px 48px 40px; }
+  #pybody .stag { font: 400 11px 'IBM Plex Mono', monospace; color: var(--muted); letter-spacing: .04em; } #pybody h2 { font: 300 26px/1.15 'Fraunces', serif; margin: 8px 0 10px; }
+  #pybody .pintro { font: 300 14.5px/1.45 'Inter', sans-serif; color: var(--graphite); margin: 0 0 22px; max-width: 640px; }
+  #pybody .pyblock { margin: 0 0 28px; } #pybody h3 { font: 300 19px/1.25 'Fraunces', serif; margin: 0 0 2px; } #pybody h3 a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: 2px; }
+  #pybody .powner, #pybody .plabel { font: 400 10.5px 'IBM Plex Mono', monospace; color: var(--muted); margin: 0 0 6px; } #pybody .pnote { font: italic 300 13.5px 'Fraunces', serif; color: var(--graphite); margin: 0 0 6px; }
+  #pybody .pcode { position: relative; } #pybody pre { margin: 0 0 8px; padding: 10px 12px; background: var(--light); border: 1px solid var(--hair); overflow-x: auto; white-space: pre; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: var(--ink); tab-size: 4; }
+  #pybody .pout { background: none; color: var(--graphite); } #pybody .plinks { font: italic 300 14px 'Fraunces', serif; margin: 4px 0 0; } #pybody .plinks a { color: var(--ink); }
+  #pybody .pcopy { position: absolute; right: 6px; top: 6px; font: 400 10.5px 'IBM Plex Mono', monospace; color: var(--graphite); background: var(--paper); border: 1px solid var(--hair); padding: 2px 8px; cursor: pointer; }
+  .pylink { display: block; width: fit-content; margin: 0 0 6px auto; font: italic 300 13px 'Fraunces', serif; color: var(--muted); border-bottom: 1px dotted var(--pencil); position: relative; } .pylink::after { content: ''; position: absolute; inset: -9px -6px; }   /* quiet: the code is there when asked for */
   #srcback { position: absolute; left: 40px; top: 22px; font: italic 300 15px 'Fraunces', serif; color: var(--accent); }
   #srcbody { display: grid; grid-template-columns: 300px 1fr 1fr; gap: 40px; padding: 70px 56px 48px 40px; }
   #srcbody .stag { font: 400 11px 'IBM Plex Mono', monospace; color: var(--muted); letter-spacing: .04em; } #srcbody h2 { font: 300 26px/1.15 'Fraunces', serif; margin: 8px 0 14px; }

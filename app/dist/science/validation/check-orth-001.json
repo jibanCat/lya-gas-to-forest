@@ -8,6 +8,9 @@
   "b_thermal_kms": 21.395579938253253,
   "b_size_kms": 23.774775769268327,
   "b_drawn_kms": 31.988486786853052,
+  "own_dvdx_kms_per_mpch": -70.41475616076316,
+  "b_size_with_own_gradient_kms": 9.114492754409685,
+  "b_with_own_gradient_kms": 23.25607058521219,
   "peak_tau_drawn": 4.411850517900293,
   "hub_kms_per_mpch": 114.19254572869457
  },

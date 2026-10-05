@@ -12,6 +12,7 @@ const rep = { max_abs_dF_gauss_vs_voigt: maxDF, mean_flux: meanF, gamma12_tuned:
 let ok = true; const check = (n, p, d) => { rep.checks.push({ name: n, pass: p, detail: d }); if (!p) ok = false; console.log((p ? 'ok   ' : 'FAIL ') + n + (d ? '  ' + d : '')); };
 check('Gaussian kernels are adequate for the toy forest (max |ΔF| < 1e-3)', maxDF < 1e-3, maxDF.toExponential(2));
 const xMean = P.neutralFraction(1, sk.T0, sk.nH_bar, P.C.gamma12_measured_z3);
+Object.assign(rep, { x_HI_mean_density: xMean, T0_K: sk.T0 });   // two quantities, kept apart: x_HI (dimensionless) for the measured Γ_HI (gamma12_measured_z3, 10⁻¹² s⁻¹)
 check('neutral fraction at mean density, T0, measured Γ_HI is ~10⁻⁵ (SCI-ION-002: 0.74×10⁻⁵ at T0 = 10⁴ K, 0.62×10⁻⁵ at 1.3×10⁴ K)', xMean > 5e-6 && xMean < 8e-6, xMean.toExponential(2));
 check('mean flux = 0.68 ± 0.01 (a calibration: the normalisation target Γ_HI is tuned to, SCI-CTX-003)', Math.abs(meanF - 0.68) < 0.01, meanF.toFixed(4));
 console.log(`      tuned Γ_HI = ${sk.Gamma12.toFixed(2)}e-12 s^-1 = ${(sk.Gamma12 / 0.8).toFixed(1)}× the measured 0.8e-12 (declared toy limitation)`);

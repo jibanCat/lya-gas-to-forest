@@ -57,13 +57,14 @@ export const sceneSameShadow = {
       Fs.forEach((F, k) => Ink.curve(g, ug, F, mv, mf, { w: k ? 1.1 : 1.6, c: k ? TK.pencil : TK.accent, dash: k === 2 ? [5, 3] : null }));
       const chi = Fs.map(F => F.reduce((s, f, i) => s + ((f - Fs[0][i]) / sig) ** 2, 0));
       // two kinds of "same shadow" (SCI-DEG-001): (ii) is hidden by the noise (Δχ² grows as (S/N)², computed from the same lines);
-      // (iii) by hydrogen itself — heat and smooth motion give one Gaussian in every hydrogen line
+      // (iii) by what H I records — its smooth motion is computed so that its total Doppler parameter equals (i)'s, which makes
+      // every H I Lyman-series line the same (science/tools/same_shadow_configs.py)
       Ink.note(g, 'it was (i) — we built it that way. Two others fit, for different reasons:', X0, 574, { size: 15, c: TK.ink });
       Ink.note(g, `(ii) hides in the noise: its extra misfit Δχ² is ${chi[1].toFixed(1)} here, but ${(chi[1] * (50 / snr) ** 2).toFixed(0)} at signal-to-noise 50.`, X0, 596, { size: 15, c: TK.ink });
-      Ink.note(g, '(iii) hides in hydrogen itself: heat and smooth motion widen every hydrogen line alike —', X0, 618, { size: 15, c: TK.ink });
-      Ink.note(g, 'so no hydrogen line, at any signal-to-noise, can tell them apart.', X0, 640, { size: 15, c: TK.ink });
+      Ink.note(g, '(iii) hides in what H I records: here heat and smooth motion widen every H I line alike —', X0, 618, { size: 15, c: TK.ink });
+      Ink.note(g, 'so H I absorption alone cannot distinguish (i) and (iii) in this constructed model.', X0, 640, { size: 15, c: TK.ink });
       if (S.pick === 'ii') Ink.note(g, 'your (ii) is not ruled out at this noise', X0, 666, { size: 14, c: TK.accent });
-      if (S.pick === 'iii') Ink.note(g, 'your (iii) is not wrong — in hydrogen, heat and smooth motion look alike', X0, 666, { size: 14, c: TK.accent });
+      if (S.pick === 'iii') Ink.note(g, 'your (iii) is not wrong — in H I, this heat and this smooth motion look alike', X0, 666, { size: 14, c: TK.accent });
       if (S.pick === 'i') Ink.note(g, 'right — but only by luck: the shadow alone could not have told you', X0, 666, { size: 14, c: TK.accent });
     }
     Ink.ruler(g, X0, X1, f0 + 6, { map: mv, ticks: [-100, -50, 0, 50, 100].map(v => ({ v, s: String(v) })), label: 'Δv [km/s]' });
@@ -78,7 +79,7 @@ export const sceneSameShadow = {
         pn.taus.forEach((tt, k) => Ink.curve(g, ug, Array.from(tt, v => Math.exp(-v)), mvb, mfb, { w: k ? 1.1 : 1.6, c: k ? TK.pencil : TK.accent, dash: k === 2 ? [5, 3] : null }));
         Ink.seg(g, 760, mfb(1), 1050, mfb(1), { w: 0.6, c: TK.faint, dash: [2, 4] });
       });
-      if (!panels.length) Ink.note(g, '← switch on a second line, in the margin, to break the tie', 760, 300, { size: 15 });
+      if (!panels.length) { Ink.note(g, '← switch on a second line, in the margin,', 760, 300, { size: 15 }); Ink.note(g, 'to break the tie', 760, 321, { size: 15 }); }   // two lines: one ran past the figure's edge
       Ink.mono(g, 'red (i) hot · grey (ii) blend', 760, 200, { size: 10 }); Ink.mono(g, 'dashed (iii) expanding', 760, 214, { size: 10 });
       if (panels.length) ['The spectrum is a record of the neutral hydrogen along the beam, written in', 'velocity. Reading it back is inference, not decoding: more than one gas can', 'fit; more lines, and many sightlines read with a model, narrow the choice.'].forEach((l, i) => Ink.text(g, l, X0, 700 + 22 * i, { f: 'serif', size: 16.5, c: TK.ink }));   // the ending: Beat 0's question, answered at a higher level
     }
@@ -92,9 +93,9 @@ export const sceneSameShadow = {
   describe(S) {
     if (S.phase === 'predict') return `One recorded line, measured at signal-to-noise 20, and three gases that could have made it: (i) one unusually hot, compact clump at rest; (ii) two cold clouds approaching each other; (iii) one cold cloud expanding along the line. Predict which made it${S.pick ? `; you chose (${S.pick})` : ''}.`;
     const Fs = b13F(), chi = Fs.map(F => F.reduce((s, f, i) => s + ((f - Fs[0][i]) * 20) ** 2, 0));
-    const why = `Two others fit, for different reasons. (ii), the blend, hides in the noise: its extra misfit is ${chi[1].toFixed(1)} over ${Fs[0].length} pixels here, but ${(chi[1] * (50 / 20) ** 2).toFixed(0)} at signal-to-noise 50, so better data would show it. (iii) hides in hydrogen itself: heat and smooth motion widen every hydrogen line alike, so no hydrogen line can tell them apart`;
+    const why = `Two others fit, for different reasons. (ii), the blend, hides in the noise: its extra misfit is ${chi[1].toFixed(1)} over ${Fs[0].length} pixels here, but ${(chi[1] * (50 / 20) ** 2).toFixed(0)} at signal-to-noise 50, so better data would show it. (iii) hides in what H I records: in this constructed model its smooth motion widens every H I line exactly as (i)'s heat does, so H I absorption alone cannot distinguish (i) and (iii), at any signal-to-noise`;
     if (S.phase === 'reveal') return `It was (i) — we built it that way. ${why}.`;
     return `Breaking the tie${S.metal ? '. In Si IV, a heavier ion, heat broadens the line less while bulk motion broadens it as much, so the hot gas (i) has the narrowest line' : ''}${S.lyb ? `. In Lyman-beta, which absorbs more weakly, the blend (ii) stands apart (shallower), while (i) and (iii) stay alike` : ''}${!S.metal && !S.lyb ? ': add a heavier ion’s line or Lyman-beta' : ''}. ${S.metal || S.lyb ? 'The spectrum is a record of the neutral hydrogen along the beam, written in velocity; reading it back is inference, not decoding — more than one gas can fit; more lines, and many sightlines read with a model, narrow the choice.' : ''}`;
   },
-  foot: 'the blend (ii) stays hidden at signal-to-noise 20 per 2.5 km/s pixel or worse (here at perfect resolution) — better data reveal it; heat against smooth motion, (i) against (iii), in any hydrogen line (SCI-DEG-001)',
+  foot: 'the blend (ii) stays hidden at signal-to-noise 20 per 2.5 km/s pixel or worse (here at perfect resolution) — better data reveal it; (i) against (iii), heat against smooth motion, stays hidden in H I absorption alone in this constructed model (SCI-DEG-001)',
 };

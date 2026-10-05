@@ -151,7 +151,7 @@ export const sceneStretched = {
     const has = (e, id) => (e.ids || []).includes(id), fm = S.stage >= 6 && S.frame;
     const base = (META(5).equations || []).filter(e => (!has(e, 'SCI-RED-002') || fm === 'quasar') && (!has(e, 'SCI-RED-003') || S.logr));
     const p = b5peaks()[S.sel], lo = P.lambdaObsOfRest(LYA(), p.z);
-    return [...base, { note: `selected structure, z = ${p.z.toFixed(2)}: written where the light was 1215.67 Å locally; we receive it at ${lo.toFixed(1)} Å = 1215.67 × (1 + ${p.z.toFixed(2)}); in the quasar’s frame (z_q = ${R5.zq}) it is at ${(lo / (1 + R5.zq)).toFixed(1)} Å`, ids: ['SCI-RED-005'] }];
+    return [...base, { note: `selected structure, z ≈ ${p.z.toFixed(2)}: written where the light was 1215.67 Å locally; we receive it at λ_obs = 1215.67 Å × (1 + z) ≈ ${lo.toFixed(1)} Å; in the quasar’s frame (z_q = ${R5.zq}) it is at ≈ ${(lo / (1 + R5.zq)).toFixed(1)} Å`, ids: ['SCI-RED-005'] }];
   },
   persist: ['stage', 'sel', 'frame', 'logr'],
   get controls() {
@@ -186,7 +186,7 @@ export const sceneStretched = {
     const bracket = (p, col, a) => { const x0 = Xc(p.cNear), x1 = Xc(p.cFar); Ink.line(g, [[x0, pth.y - pth.hh - 3], [x0, pth.y - pth.hh - 6], [x1, pth.y - pth.hh - 6], [x1, pth.y - pth.hh - 3]], { w: 1.1, c: col, a }); Ink.line(g, [[x0, pth.y + pth.hh + 1], [x1, pth.y + pth.hh + 1]], { w: 1.1, c: col, a }); };
     bracket(sel, TK.accent, 1);
     const xs = Xc(sel.c);
-    Ink.note(g, `selected · z = ${sel.z.toFixed(2)}`, xs, pth.y - pth.hh - 14, { align: xs > 760 ? 'right' : 'center', size: 13, c: TK.accent });
+    Ink.note(g, `selected · z ≈ ${sel.z.toFixed(2)}`, xs, pth.y - pth.hh - 14, { align: xs > 760 ? 'right' : 'center', size: 13, c: TK.accent });
     if (writing >= 0 && writing !== S.sel && !zoom) bracket(Pk[writing], TK.accent, 0.75);
     Ink.mono(g, 'gas along the line of sight (schematic) · comoving distance, Planck 2018 · z: redshift — light from there reaches us stretched 1 + z times', pth.x0, pth.y + pth.hh + 36, { size: 9.5, c: TK.muted, a: dim });
     const xl = Xc(cL), showLight = !arrived || S.jt != null;
@@ -218,7 +218,7 @@ export const sceneStretched = {
     if (showEm) { const Xq = at(LYA()); if (Xq > r.x0 && Xq < r.x1) Ink.mono(g, 'the quasar’s own Lyα', Xq, myF(2.3) - 4, { align: 'center', size: 9.5, c: TK.graphite, a: dim }); }
     // the ruler and Lyα on it
     const ry = R5.ruler, ticks = S.logr ? [300, 500, 1000, 1500, 2000, 3000, 5000, 7000].map(v => ({ v, s: fmtA(v) })) : [0, 1000, 2000, 3000, 4000, 5000].map(v => ({ v, s: fmtA(v) }));
-    const zf = (1 + R5.zq) / D - 1, where = squeezing ? (App.probe ? `after undoing a stretch of ×${((1 + R5.zq) / D).toFixed(2)}` : `in the rest frame of gas at z = ${zf.toFixed(2)}: λ_obs / ${(1 + zf).toFixed(2)}`) : frameMode ? (S.frame === 'absorber' ? `in the selected structure’s rest frame: λ_obs / (1 + ${sel.z.toFixed(2)})` : S.frame === 'quasar' ? `in the quasar’s rest frame: λ_obs / (1 + ${R5.zq.toFixed(2)})` : 'observed, at our telescope') : arrived ? 'measured at our telescope' : `measured where the light is now (z = ${zL.toFixed(2)})`;
+    const zf = (1 + R5.zq) / D - 1, where = squeezing ? (App.probe ? `after undoing a stretch of ×${((1 + R5.zq) / D).toFixed(2)}` : `in the rest frame of gas at z ≈ ${zf.toFixed(2)}: λ_obs / (1 + z)`) : frameMode ? (S.frame === 'absorber' ? `in the selected structure’s rest frame (z ≈ ${sel.z.toFixed(2)}): λ_obs / (1 + z)` : S.frame === 'quasar' ? `in the quasar’s rest frame: λ_obs / (1 + ${R5.zq.toFixed(2)})` : 'observed, at our telescope') : arrived ? 'measured at our telescope' : `measured where the light is now (z ≈ ${zL.toFixed(2)})`;
     Ink.ruler(g, r.x0, r.x1, ry, { map, ticks, label: `wavelength ${where} [Å]` + (S.logr ? ' · logarithmic' : '') });
     if (!S.logr) for (let l = 200; l < 5600; l += 200) if (l % 1000) Ink.seg(g, map(l), ry, map(l), ry + 2.5, { w: 0.6, c: TK.pencil });
     const XL = map(LYA()), penOn = writing >= 0;
@@ -249,10 +249,10 @@ export const sceneStretched = {
     // after arrival: read two shadows (formulas only with "show the physics")
     if (arrived && !zoom) {
       const Xs = at(sel.lamE), lo = sel.lamE * D, ly = ry + 80, fg = Pk.reduce((a, p) => Math.abs(p.z - 1.2) < Math.abs(a.z - 1.2) ? p : a, Pk[0]), Xf = at(fg.lamE);
-      const lab = squeezing && !App.probe ? `selected: ${fmtA2(lo)} Å` : frameMode && S.frame === 'absorber' ? `selected: ${fmtA2(lo)} Å — back at Lyα` : frameMode && S.frame === 'quasar' ? `selected: ${fmtA2(lo)} Å — blueward of the quasar’s Lyα` : `selected: ${fmtA(lo)} Å (z = ${sel.z.toFixed(2)})` + (App.adv ? ` = 1215.67 × (1 + ${sel.z.toFixed(2)})` : '');
+      const lab = squeezing && !App.probe ? `selected: ${fmtA2(lo)} Å` : frameMode && S.frame === 'absorber' ? `selected: ${fmtA2(lo)} Å — back at Lyα` : frameMode && S.frame === 'quasar' ? `selected: ${fmtA2(lo)} Å — blueward of the quasar’s Lyα` : `selected: ${fmtA(lo)} Å (z ≈ ${sel.z.toFixed(2)})` + (App.adv ? ` = 1215.67 × (1 + ${sel.z.toFixed(2)})` : '');
       Ink.seg(g, Xs, R5.flux.bot + 2, Xs, ly + 4, { w: 0.7, c: TK.accent, dash: [2, 3] });
       if (!(S.conceal && frameMode)) Ink.mono(g, lab, Xs, ly + 16, { align: Xs > 700 ? 'right' : 'left', size: 10.5, c: TK.accent });
-      if (!frameMode || S.frame === 'obs') { Ink.seg(g, Xf, R5.flux.bot + 2, Xf, ly - 12, { w: 0.7, c: TK.graphite, dash: [2, 3] }); Ink.mono(g, `a nearer structure: ${fmtA(fg.lamE * D)} Å (z = ${fg.z.toFixed(2)})` + (App.adv ? ` = 1215.67 × (1 + ${fg.z.toFixed(2)})` : ''), Xf, ly, { align: 'center', size: 10.5, c: TK.graphite }); }
+      if (!frameMode || S.frame === 'obs') { Ink.seg(g, Xf, R5.flux.bot + 2, Xf, ly - 12, { w: 0.7, c: TK.graphite, dash: [2, 3] }); Ink.mono(g, `a nearer structure: ${fmtA(fg.lamE * D)} Å (z ≈ ${fg.z.toFixed(2)})` + (App.adv ? ` = 1215.67 Å × (1 + z)` : ''), Xf, ly, { align: 'center', size: 10.5, c: TK.graphite }); }
     }
     // one short line; the precise frame language lives in "show the physics"
     let l1 = ''; const nWritten = Pk.filter(p => cL <= p.cNear + 1).length;
@@ -337,7 +337,7 @@ export const sceneStretched = {
   },
   describe(S) {
     const Pk = b5peaks(), sel = Pk[S.sel], zL = S._zL ?? R5.zq, n = Pk.filter(p => b5chiAt(S._tauNow ?? 0) <= p.cNear + 1).length;
-    if (S._arrived) return `At our telescope: ${Pk.length} drawn structures — denser parts of the continuous gas, far fewer than a real path crosses — have written their Lyα shadows; the selected one (z = ${sel.z.toFixed(2)}) is at ${fmtA(LYA() * (1 + sel.z))} Å.`;
+    if (S._arrived) return `At our telescope: ${Pk.length} drawn structures — denser parts of the continuous gas, far fewer than a real path crosses — have written their Lyα shadows; the selected one (z ≈ ${sel.z.toFixed(2)}) is at ${fmtA(LYA() * (1 + sel.z))} Å.`;
     return `The light is at z = ${zL.toFixed(2)}, stretched ${((1 + R5.zq) / (1 + zL)).toFixed(2)} times since it left the quasar; ${n} drawn structure${n === 1 ? ' has' : 's have'} written a shadow at Lyα, 1215.67 Å in their own frame (a structure is a denser part of the continuous gas).`;
   },
   foot: 'schematic continuous gas and redshift evolution — the low-redshift forest is exaggerated; shadows drawn ~60× wider than real forest lines (SCI-REP-007) · only Lyα drawn · Planck 2018 distances (SCI-RED-004)',

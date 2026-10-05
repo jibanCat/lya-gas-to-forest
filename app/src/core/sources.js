@@ -19,13 +19,17 @@ export function sourcesHTML(n) {
   const list = xs => xs.length ? `<ul>${xs.join('')}</ul>` : '';
   const eqs = b.equations.filter(q => q.tex).map(q => `<div class="seq">${srcTex(q.tex)}${q.note ? `<p class="snote">${srcRich(q.note)}</p>` : ''}</div>`).join('');
   const srcs = b.sources.map(s => { const r = refBy[s.ref], locs = [...new Set(s.locations.map(l => l.location).filter(Boolean))];
-    return `<li><a ${noteHref(r.anchor)}>${srcEsc(r.short)}</a>${locs.length ? `<span class="sloc">${locs.map(srcEsc).join(' · ')}</span>` : ''}${r.links.filter(l => l.href).length ? `<span class="slinks">${r.links.filter(l => l.href).map(l => `<a href="${srcEsc(l.href)}" target="_blank" rel="noopener">${srcEsc(l.label)}</a>`).join(' · ')}</span>` : ''}</li>`; });
+    return `<li><a ${noteHref(r.anchor)}>${srcEsc(r.short)}</a>${locs.length ? `<span class="sloc">${locs.map(srcRich).join(' · ')}</span>` : ''}${r.links.filter(l => l.href).length ? `<span class="slinks">${r.links.filter(l => l.href).map(l => `<a href="${srcEsc(l.href)}" target="_blank" rel="noopener">${srcEsc(l.label)}</a>`).join(' · ')}</span>` : ''}</li>`; });
   const checks = b.validations.map(a => { const v = valBy[a]; return `<li><a ${noteHref(a)}>${srcEsc(v.name)}</a> <span class="sstat">${srcEsc(v.status)}</span><span class="smeas">${srcRich(v.measured)}</span></li>`; });
+  const compBy = Object.fromEntries(Object.values(P.computations || {}).map(c => [c.anchor, c]));
+  const who = c => c.owner === 'lya_app' ? 'computed by this app (lya_app)' : c.owner === 'hybrid' ? `computed by this app; independent reference: ${srcEsc(c.reference.package)} ${srcEsc(c.reference.version)}`
+    : c.owner === 'external_package' ? `an external package (${srcEsc(c.package.name)} ${srcEsc(c.package.version)}), a validation reference only — nothing on this screen is computed by it` : 'a teaching visualization, not a computation';
+  const comps = (b.computations || []).map(a => compBy[a]).filter(Boolean).map(c => `<li><a ${noteHref(c.anchor)}>${srcEsc(c.title)}</a><span class="sass">${who(c)}</span></li>`);
   return `<div class="scol"><div class="stag">sources &amp; assumptions</div><h2 id="srct">${srcEsc(b.title)}</h2>
 <p class="sclaim">${srcRich(b.claim)}</p>
 <p class="smore"><a ${noteHref('scenes')}>all science notes, by scene →</a></p><p class="sver">science notes v${srcEsc(P.site.version)}</p></div>
-<div class="scol">${sec('Key equations', eqs)}${sec('Teaching simplifications', list(b.simplifications.map(x => `<li>${srcRich(x)}</li>`)))}${sec('How the numbers are checked', list(checks))}</div>
-<div class="scol">${sec('Sources', list(srcs))}${sec('Claims, their assumptions and validity', list(b.entries.map(e => `<li><a ${noteHref(e.anchor)}>${srcEsc(e.title)}</a>${e.representation ? '<span class="srep">a teaching representation, not physics</span>' : ''}${e.assumptions.length || e.validity ? `<span class="sass">${[...e.assumptions.map(srcRich), ...(e.validity ? [`valid for: ${srcRich(e.validity)}`] : [])].join('; ')}</span>` : ''}</li>`)))}</div>`;
+<div class="scol">${sec('Key equations', eqs)}${sec('How it is computed', list(comps))}${sec('How the numbers are checked', list(checks))}${sec('Teaching simplifications', list(b.simplifications.map(x => `<li>${srcRich(x)}</li>`)))}</div>
+<div class="scol">${sec('Sources — the literature', list(srcs))}${sec('Claims, their assumptions and validity', list(b.entries.map(e => `<li><a ${noteHref(e.anchor)}>${srcEsc(e.title)}</a>${e.representation ? '<span class="srep">a teaching representation, not physics</span>' : ''}${e.assumptions.length || e.validity ? `<span class="sass">${[...e.assumptions.map(srcRich), ...(e.validity ? [`valid for: ${srcRich(e.validity)}`] : [])].join('; ')}</span>` : ''}</li>`)))}</div>`;
 }
 let back = null;
 export function openSources() {

@@ -71,7 +71,7 @@ export const sceneLifetime = {
     Ink.text(g, st.text || '', 60, 728, { f: 'serif', size: 17, c: TK.graphite, italic: true });
   },
   onKey(k, S) { if (k === 'ArrowRight' || k === 'ArrowLeft') { S.stage = clamp(S.stage + (k === 'ArrowRight' ? 1 : -1), 1, 4); return true; } return false; },
-  describe(S) { const st = (META(4).stages || [])[S.stage - 1] || {}; return `One atom's absorption line, at Lyα in its own frame: a thermal core from motion and faint wings from the excited state's short life. Step ${st.label}: ${st.text}.`; },
+  describe(S) { const st = (META(4).stages || [])[S.stage - 1] || {}; return `${S.stage <= 2 ? "One atom's absorption line, at Lyα in its own frame: a very narrow natural (Lorentzian) line, set by the excited state's finite lifetime." : "A parcel's absorption line, at Lyα in its own frame: a thermal core from the atoms' distribution of motions, while each atom's finite lifetime contributes faint natural wings."} Step ${st.label}: ${st.text}.`; },   // steps 1–2 show one atom; steps 3–4 the gas
   micro: {
     lifetime: {
       ask: 'why does a short life spread the colour?', title: 'A short life means a spread of colours',

@@ -110,7 +110,7 @@ entries:
     - A few hundred representative atoms stand in for ~10⁶⁶ (SCI-REP-001).
   sources:
     primary: [{ref: REF-RL79, location: "§10.6 Line Broadening Mechanisms — Doppler broadening, p. 287", verified: true}]
-    secondary: [{ref: REF-DRAINE11, location: "ch. 6, §6.3–6.4 (Doppler broadening; Lyα f = 0.4164 as corrected)", verified: true}]
+    secondary: [{ref: REF-DRAINE11, location: "ch. 6, §6.5 'Doppler Broadening: The Voigt Line Profile' (p. 58); Lyα f = 0.4164 per the author's errata to p. 58", verified: true}]
   oracle: {kind: sampling, detail: "the micro view samples N atoms from the Maxwellian and overlays the analytic curve"}
   implementation: {file: [app/src/data/scene-data.js], symbols: [sigmaLOS, makeAtoms]}
   validations: []
@@ -135,7 +135,7 @@ entries:
     - 'Beat 3 isolates the intrinsic thermal Doppler width. A real absorber''s line is also widened by velocity variation across the extended gas — the Hubble flow and its own motions across its size (SCI-REP-003, shown in Beat 6) — and the recorded line by the instrument (SCI-OBS-001, Beat 11). A line width alone is therefore not a thermometer (SCI-DEG-001).'
   sources:
     primary: [{ref: REF-RL79, location: "§10.6 Line Broadening Mechanisms — Doppler broadening, p. 287", verified: true}]
-    secondary: [{ref: REF-DRAINE11, location: "ch. 6, §6.3–6.4", verified: true}, {ref: REF-MEIKSIN09, location: "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature", verified: true}]
+    secondary: [{ref: REF-DRAINE11, location: "ch. 6, §6.5 (p. 58)", verified: true}, {ref: REF-MEIKSIN09, location: "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature", verified: true}]
   oracle: {kind: analytic, detail: "VAL-TAU-001 checks τ0 and ∫τ du, which fix the normalisation"}
   implementation: {file: science/js/lyaphys.js, symbols: [dopplerB, tau0]}
   validations: [VAL-TAU-001]
@@ -147,7 +147,7 @@ entries:
   domain: atomic / radiation
   claim: >
     Because the 2p state has a finite lifetime (1/A21 ≈ 1.6 ns), even a stationary atom's response is a Lorentzian with
-    half-width γ = Γλ0/4π ≈ 0.0061 km/s, Γ = A21 (2p decays only to 1s). This is ~2000× narrower (FWHM) than the
+    half-width γ = Γλ0/4π ≈ 0.0061 km/s, Γ = A21 (2p decays only to 1s). This is {{VAL-TAU-001:fwhm_thermal_over_natural_1e4K:.0f}}× narrower (FWHM) than the
     thermal width at 10⁴ K, but falls off only as 1/Δv².
   equations: [{tex: '\gamma = \frac{\Gamma\lambda_0}{4\pi} = 6.06\times10^{-3}\ {\rm km\,s^{-1}},\qquad a = \gamma/b'}]
   convention: Γ is the total decay rate out of the upper level (the lower level is the ground state, width 0)
@@ -199,7 +199,6 @@ entries:
   claim: >
     The app evaluates H(a,x) with Humlicek's (1982) W4 rational approximation at all (a, x). Against the Faddeeva
     function (SciPy's wofz) it is accurate to < 10⁻⁴ (relative) over a ∈ [10⁻⁶, 1], |x| ≤ 2×10⁴ (measured values in VAL-VOIGT-001).
-    The Tepper-García (2006) approximation was tested and rejected: 2–6 % errors for 2 < |x| < 6.
   equations: []
   convention: null
   teaching_representation: none (infrastructure)
@@ -207,13 +206,15 @@ entries:
   validity: a ∈ [1e-6, 1], |x| ≤ 2e4
   simplifications: []
   sources:
-    primary: [{ref: REF-HUMLICEK82, location: "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which VAL-VOIGT-001 tests every region, including the tiny-a regime Zaghloul (2015) flags", verified: secondary}]
+    primary: [{ref: REF-HUMLICEK82, location: "algorithm W4 (regions I–IV): all 29 coefficients and 4 border constants are identical, digit by digit, in five independent open-source transcriptions that cite Humlicek 1982 (RFM, ExoCross, SKIRT 9, SOCRATES, monoRTM). The original paper was not consulted; the accuracy authority is SciPy's Faddeeva function (wofz), against which VAL-VOIGT-001 tests every region down to a = 10⁻⁶; the regime where Zaghloul (2015) reports W4 failing (a < 10⁻⁷) lies below every damping parameter used here", verified: secondary}]
     secondary: [{ref: REF-ZAGHLOUL15, location: "Table 1 (original borders of the regions), p. 3, arXiv:1505.05596v1 — matches the app's region borders", verified: true}]
   oracle: {kind: numerical, ref: ORC-SCIPY-WOFZ}
   implementation: {file: science/js/lyaphys.js, symbols: [humlicekW4]}
   validations: [VAL-VOIGT-001]
   status: verified-numeric
   notes: >
+    Development history (not public): the Tepper-García (2006) approximation was tried before W4 and not adopted; an early,
+    unreported comparison with wofz found percent-level errors near the core–wing transition (2 < |x| < 6).
     Early exploratory prototypes used a Tepper-García/W4 hybrid; their images carry ≤6 % local errors in
     the 2 < |x| < 6 shoulder, invisible at figure resolution. Not re-rendered; recorded here.
 
@@ -317,7 +318,7 @@ entries:
   sources:
     primary:
       - {ref: REF-HOGG99, location: "§2 Eq. (4) (D_H = c/H0); §4 Eqs. (14)–(15) (E(z); D_C = D_H ∫ dz′/E)", verified: true}
-      - {ref: REF-PLANCK18, location: "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 15)", verified: true}
+      - {ref: REF-PLANCK18, location: "Table 2, column TT,TE,EE+lowE+lensing (arXiv v4 p. 16)", verified: true}
   oracle: {kind: numerical, ref: ORC-DIST-REDSHIFT, detail: "scipy quad + brentq (science/oracle/redshift_oracle.py)"}
   implementation: {file: science/js/lyaphys.js, symbols: [comovingDistance, zOfComoving]}
   validations: [VAL-RED-001]
@@ -430,7 +431,7 @@ entries:
   domain: conventions
   claim: >
     The velocity ruler is converted to observed wavelength with λ_obs = λ0(1+z0)e^(u/c) (the log-λ convention);
-    to first order this equals λ0(1+z0)(1+u/c). Over 20 Mpc/h at z = 3 the two differ by 2.8×10⁻⁵ in 1+z.
+    to first order this equals λ0(1+z0)(1+u/c). Over 20 Mpc/h at z = 3 the two differ by {{VAL-MAP-001:exp_vs_linear_20mpch_z3:.1e}} in 1+z.
   equations: [{tex: '\lambda_{\rm obs} = \lambda_0\,(1+z_0)\,e^{u/c}'}]
   convention: z0 is the redshift of the u = 0 point (the near end of the sightline)
   teaching_representation: wavelength ruler under the forest (Beats 11–12)
@@ -450,8 +451,9 @@ entries:
   title: Validity of the constant-H (linear) map
   domain: numerics / cosmology
   claim: >
-    Treating aH as constant across the box deviates from the exact distance–redshift relation by ~10⁻⁴ per Mpc/h
-    (0.2 % over 20 Mpc/h, ≈ 4 km/s at z = 3; ≤ 1 % up to 100 Mpc/h).
+    Treating aH as constant across the box deviates from the exact distance–redshift relation by
+    {{VAL-MAP-001:linear_map_rel_dev_per_mpch:.0e}} per Mpc/h ({{VAL-MAP-001:linear_map_max_rel_dev_by_dx.20:.1%}} over 20 Mpc/h, {{VAL-MAP-001:abs_dev_kms_20mpch_z3:.1f}} km/s at z = 3;
+    {{VAL-MAP-001:linear_map_max_rel_dev_by_dx.100:.1%}} at 100 Mpc/h).
   equations: []
   convention: null
   teaching_representation: none
@@ -465,6 +467,31 @@ entries:
   status: verified-numeric
 
 # ------------------------------------------------------------------------------------------------ optical depth and flux
+- id: SCI-MAP-006
+  anchor: velocity-gradient-broadening
+  title: Velocity-gradient (Hubble) broadening of an extended absorber
+  domain: cosmology / kinematics
+  claim: >
+    Gas that is extended along the line of sight spreads its absorption in velocity: the Hubble flow across its depth,
+    and any internal peculiar-velocity gradient, give its parts different line-of-sight velocities, and this bulk spread
+    adds to the thermal motion of its atoms. For a Gaussian clump of width σ_x with a linear velocity field, the spread is
+    a Gaussian of dispersion |aH + dv/dx|·σ_x, i.e. a Doppler parameter b_size = √2·|aH + dv/dx|·σ_x, which adds in
+    quadrature to the thermal b; this expression is the resource's own algebra (a Gaussian velocity spread convolved with
+    the thermal Gaussian), checked analytically and by VAL-ORTH-001 — the sources give the physics, not the formula. In
+    CDM collapse models the low-column-density forest clouds are cool but large, so this term can dominate their widths.
+  equations:
+    - tex: 'b^2 = b_{\rm thermal}^2 + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,\left|aH + \tfrac{dv}{dx}\right|\sigma_x'
+  convention: x comoving in Mpc/h, aH in km/s per Mpc/h (SCI-MAP-001); σ_x the clump's 1σ width along the beam
+  teaching_representation: the parcel's width in Beats 6–8; the clouds of Beat 13
+  assumptions: [Gaussian density profile along the beam; a linear velocity field across it; one temperature]
+  validity: smooth, single-stream flow across the clump (SCI-TAU-004); a real absorber's flow need not be linear
+  simplifications: []
+  sources: {primary: [{ref: REF-RAUCH98, location: "§3.3 (arXiv v1 p. 14): in CDM collapse models, low-column clouds are cool but large, 'so that the Hubble expansion dominates the line broadening'", verified: true}, {ref: REF-MEIKSIN09, location: "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature", verified: true}]}
+  oracle: {kind: analytic, detail: "a Gaussian velocity spread convolved with a Gaussian thermal profile is a Gaussian whose b² is the sum; VAL-ORTH-001 checks the drawn width against it"}
+  implementation: {file: science/js/lyaphys.js, symbols: [parcelToCells, parcelWidths]}
+  validations: [VAL-ORTH-001]
+  status: verified
+
 - id: SCI-TAU-001
   anchor: optical-depth-one-absorber
   title: Optical depth of one absorber
@@ -502,7 +529,7 @@ entries:
     Bounded by VAL-CLOSURE-FS. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to
     {{VAL-CLOSURE-FS:derived.colB_max_dF:.1e}} in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF|
     {{VAL-CLOSURE-FS:derived.domain_max_dF:.1e}} (dominated by fake_spectra's H-mass convention, SCI-SIM-002); forest P1D within
-    {{VAL-CLOSURE-FS:derived.p1d_k01:.1%}} (k ≤ 0.1 s/km). Outside this domain see SCI-TAU-004 (multi-stream) and SCI-TAU-005 (resolution, box).
+    {{VAL-CLOSURE-FS:derived.p1d_k01:^.2%}} (k ≤ 0.1 s/km). Outside this domain see SCI-TAU-004 (multi-stream) and SCI-TAU-005 (resolution, box).
   simplifications:
     - The app works on real-space cells; fake_spectra deposits particle kernels in velocity space (SCI-SIM-002).
   sources:
@@ -535,7 +562,7 @@ entries:
     {{VAL-CLOSURE-FS:derived.forest_dF:.1e}} (inside the tolerance); two velocity components at one position (C3c)
     {{VAL-CLOSURE-FS:cases.C3c.headline_port_vs_FS.max_abs_dF:.2g}}; a velocity fold (C4c)
     {{VAL-CLOSURE-FS:cases.C4c.headline_port_vs_FS.max_abs_dF:.2g}}; a 1D Zel'dovich field evolved past shell crossing
-    (C10, a deliberately exaggerated stress test, not a claim about the IGM) up to {{VAL-CLOSURE-FS:derived.c10_max_dF:.1g}}.
+    (C10, a deliberately exaggerated stress test, not a claim about the IGM) up to {{VAL-CLOSURE-FS:derived.c10_max_dF:^.1g}}.
     Any reduced sightline representation of this kind loses the velocity and density structure inside one sampling
     element.
   simplifications:
@@ -562,10 +589,12 @@ entries:
   teaching_representation: none (implementation requirement)
   assumptions: []
   validity: >
-    VAL-CLOSURE-FS: lines narrower than a coarse pixel are wrong by up to 0.46 in F (EW +93 %); oversampling to
-    aH·Δx ≤ b/2 with exact pixel averaging brings this to 0.019. Mean τ vs mean F per pixel differ by ≥ 7×10⁻³ at
-    10 km/s pixels, and by up to 0.3 for narrow saturated lines. Both codes truncate wings at half a box: for an LLS/DLA,
-    F changes by up to 0.28 and EW by 10 % against a true periodic sum. None of these occur in the toy at its sampling.
+    VAL-CLOSURE-FS: lines narrower than a coarse pixel are wrong by up to {{VAL-CLOSURE-FS:derived.narrow_native_max_dF:^.2f}} in F (EW up to
+    {{VAL-CLOSURE-FS:derived.narrow_native_max_relEW:^+.0%}}); oversampling to aH·Δx ≤ b/2 with exact pixel averaging brings this to
+    {{VAL-CLOSURE-FS:derived.narrow_oversampled_max_dF:.3f}}. The pixel-mean flux and the flux of the pixel-mean τ differ by
+    {{VAL-CLOSURE-FS:derived.pixavg_min_dF:.0e}} to {{VAL-CLOSURE-FS:derived.pixavg_max_dF:.2f}} at {{VAL-CLOSURE-FS:derived.pixavg_du_kms:.0f}} km/s pixels (the larger for narrow saturated lines).
+    Both codes truncate wings at half a box: for an LLS/DLA in a 5 Mpc/h box the optical depth dropped against a true
+    periodic sum reaches {{VAL-CLOSURE-FS:derived.lls_dla_tau_dropped:.1f}}. None of these occur in the toy at its sampling.
   simplifications: []
   sources: {primary: [{ref: REF-FAKESPECTRA, location: "singleabs.h:104-126 (centre vs trapezoid τ); absorption.cpp:250-278 (nearest image, ±½ box)", verified: true}]}
   oracle: {kind: numerical, ref: ORC-FAKE-SPECTRA, detail: "cases C6 (narrow lines), C2 (LLS/DLA wings) in science/validation/closure/"}
@@ -775,37 +804,44 @@ entries:
     gas clump (T = 4.5×10⁴ K, Hubble width 2.23 km/s — about 7 kpc proper, far more compact than typical forest gas —
     N = 2.5×10¹⁴, at rest); (ii) two cold clouds
     (T = 10⁴ K, Hubble width 12.8 km/s each, 78 km/s apart in Hubble flow, 9.75×10¹³ each, approaching at ±24.9 km/s);
-    (iii) one cold cloud stretched along the line (T = 10⁴ K, Hubble width 11.15 km/s, N = 2.5×10¹⁴, +6.2 km/s extra
-    across 1σ) give Lyα lines indistinguishable at
-    S/N = 20 per 2.5 km/s pixel with perfect resolution (Δχ² ≈ {{VAL-DEG-001:dchi2.20.ii:.1f}} and {{VAL-DEG-001:dchi2.20.iii:.1f}} over 121 pixels; {{VAL-DEG-001:dchi2.50.ii:.0f}} and {{VAL-DEG-001:dchi2.50.iii:.1f}} at S/N = 50,
-    where the blend begins to show). (i) and (iii) are exactly degenerate in any H I line in the limit of a Gaussian
-    velocity structure.
+    (iii) one cold cloud stretched along the line (T = 10⁴ K, Hubble width 11.15 km/s, N = 2.5×10¹⁴) whose smooth extra
+    velocity across 1σ ({{VAL-DEG-001:construction.dv_iii_kms:.3f}} km/s) is computed from (i), not tuned: it is the value that gives
+    (iii) the same total Doppler parameter as (i), b_tot² = 2kT/m_H + 2σ_u² = ({{VAL-DEG-001:construction.b_tot_i_kms:.3f}} km/s)², with
+    the same column. At S/N = 20 per 2.5 km/s pixel with perfect resolution the three Lyα lines are not significantly
+    distinguishable (Δχ² ≈ {{VAL-DEG-001:dchi2.20.ii:.1f}} for the blend over 121 pixels); the blend shows by S/N = 50
+    (Δχ² ≈ {{VAL-DEG-001:dchi2.50.ii:.0f}}) and grows as (S/N)², while (iii) stays at Δχ² ≤ {{VAL-DEG-001:dchi2_iii_max:^.3f}} at every S/N up to 200, in
+    Lyα and in Lyβ. In this constructed model (i) and (iii) are degenerate in every H I Lyman-series line: for a Gaussian
+    clump with a smooth (linear) velocity field the H I profile is a Voigt profile fixed by b_tot and N alone.
     These are two different kinds of degeneracy. The blend (ii) is measurement-limited: higher S/N, resolution or
     wavelength coverage can break it. Heat against smooth motion, (i) against (iii), is information-limited for
     hydrogen: every H I line depends only on the line-of-sight distribution of velocity and optical depth, in which
     thermal and smooth bulk broadening of one species are the same Gaussian, so another H I line gives no independent
     distinction — a line of a different mass does (SCI-DEG-002). The blend hides because its two components overlap
     inside the saturated Lyα core, where the transmitted flux is near zero however the optical depth is split (SCI-SAT-001);
-    Lyβ, with a smaller f λ, is not saturated there and separates it (SCI-DEG-002). The toy's residual for (iii) (Δχ² ≈
-    {{VAL-DEG-001:dchi2.20.iii:.1f}} at S/N = 20) comes from hand-tuning, not physics.
-  equations: [{tex: '\Delta\chi^2 = \sum_k \bigl(F^{(n)}_k - F^{(i)}_k\bigr)^2/\sigma_F^2'}]
-  convention: noise-free Δχ² against configuration (i); configurations defined in velocity space (science/validation/degeneracy/configs.json, single source), so they do not depend on the cosmology
+    Lyβ, with a smaller f λ, is not saturated there and separates it (SCI-DEG-002). What remains of (iii)'s difference is
+    numerical: the clumps are cut at ±5σ (exact-Voigt path, max |ΔF| {{VAL-DEG-001:iii_max_abs_dF_oracle.lya:.0e}}), and the app adds
+    its Voigt approximation's own error (max |ΔF| {{VAL-DEG-001:iii_max_abs_dF.lya:.0e}}; SCI-VOIGT-002).
+  equations: [{tex: '\Delta\chi^2 = \sum_k \bigl(F^{(n)}_k - F^{(i)}_k\bigr)^2/\sigma_F^2'}, {tex: 'b_{\rm tot}^2 = \frac{2kT}{m_{\rm H}} + 2\sigma_u^2,\quad \sigma_u = s_u + \delta v,\qquad \delta v^{\rm (iii)} = \sqrt{\bigl(s_u^{\rm (i)}\bigr)^2 + \tfrac12\bigl(b_T^{\rm (i)\,2} - b_T^{\rm (iii)\,2}\bigr)} - s_u^{\rm (iii)}'}]
+  convention: noise-free Δχ² against configuration (i), σ_F = 1/(S/N) per 2.5 km/s pixel; configurations defined in velocity space (single source science/validation/degeneracy/configs.json, written by science/tools/same_shadow_configs.py), so they do not depend on the cosmology
   teaching_representation: predict → reveal → break the tie (Beat 13)
   assumptions: [white noise as in SCI-OBS-002; perfect resolution]
-  validity: (ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in any line of one species, for Gaussian velocity structure
-  simplifications: [parameters tuned by hand-search to match]
-  sources: {primary: []}
+  validity: (ii) against (i) — only at the stated S/N and resolution; (i) against (iii) — any S/N and resolution, in H I absorption alone (every Lyman-series line), for this constructed model's Gaussian clumps with smooth (linear) velocity fields
+  simplifications: ['(i) and (ii) are chosen by hand; (iii) is computed from (i) by the matching condition', 'idealised Gaussian clumps, not typical forest absorbers']
+  sources: {primary: [{ref: REF-RAUCH96, location: "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — a bulk width common to all species and a thermal width scaling as m^(−½); the paper separates temperature from bulk motion with ions of different mass — with lines of one mass, Eq. (1) cannot separate T from b_b (our inference)", verified: true}, {ref: REF-MEIKSIN09, location: "§II.A, Eqs. (10)–(11): b = (2kT/m_a)^½; a kinematic component adds in quadrature", verified: true}]}
   oracle: {kind: numerical, detail: "independent recomputation with wofz (science/oracle/degeneracy_oracle.py)"}
-  implementation: {file: [science/js/lyaphys.js, science/validation/degeneracy/configs.json, app/src/scenes/b13-same-shadow.js], symbols: [parcelToCells, configs, b13tau]}
+  implementation: {file: [science/tools/same_shadow_configs.py, science/js/lyaphys.js, app/src/scenes/b13-same-shadow.js], symbols: [same_shadow_configs, parcelToCells, b13tau]}
   validations: [VAL-DEG-001]
-  status: verified-numeric
+  status: verified
   notes: >
     Correction found by VAL-DEG-001 (2026-10-03): an early exploratory figure and the first draft of Beat 13
     quoted Δχ² ≈ 3.4–3.5 and 0.8, computed with parcels truncated at ±3σ (an early prototype). For the stated Gaussian
     parcels the values are 2.9 and 0.9; the app now integrates parcels to ±5σ and agrees with the independent calculation to |ΔF| < 4e-5.
     That exploratory image is not part of the app; its caption numbers are superseded by this entry. Later (2026-10-03) the
     configurations were re-expressed in velocity space with rounded values (single source configs.json); Δχ² moved from
-    2.93/0.89 to the values above. Numbers in prose are now filled from the report by the build.
+    2.93/0.89 to the values above. Numbers in prose are now filled from the report by the build. 2026-10-05: (iii)'s extra
+    velocity, previously set by hand (6.2 km/s, which left it measurably different from (i): Δχ² 0.87 at S/N 20, 5.4 at
+    50, growing as (S/N)²), is now computed by science/tools/same_shadow_configs.py from the matching condition
+    b_tot(iii) = b_tot(i); VAL-DEG-001 checks the rule, Lyα and Lyβ, and S/N 20–200.
 
 - id: SCI-DEG-002
   anchor: breaking-the-degeneracy
@@ -813,8 +849,8 @@ entries:
   domain: inference
   claim: >
     Thermal width scales as m^(−½) while bulk motion broadens all species alike, so a heavier ion's line in the same gas
-    separates heat from motion (Si IV: m ≈ 28 m_H). Lyβ (f λ 6.24× smaller) saturates differently and exposes columns
-    hidden in saturated Lyα.
+    separates heat from motion (Si IV: m ≈ 28 m_H). Lyβ (f λ 6.24× smaller) saturates differently and can, in some cases,
+    expose columns hidden in saturated Lyα.
   equations: [{tex: 'b^2 = \frac{2kT}{m} + b^2_{\rm bulk},\qquad \frac{(f\lambda)_{\rm Ly\beta}}{(f\lambda)_{\rm Ly\alpha}} = \frac{0.079142\times1025.722}{0.4164\times1215.67} = 0.160'}]
   convention: null
   teaching_representation: Si IV and Lyβ toggles (Beat 13)
@@ -827,9 +863,9 @@ entries:
     Illustrative. Si IV separates heat from motion only where silicon is present in the same gas. Lyβ helps only in some
     cases: in real spectra it lies inside the Lyα forest of lower-redshift gas, so blending and contamination must be
     modelled; its smaller f λ makes it useful mainly where Lyα saturates; and it needs wavelength coverage down to
-    1026 Å in the absorber's frame. Like every hydrogen line, Lyβ cannot separate heat from smooth motion (SCI-DEG-001).
+    1026 Å in the absorber's frame. Like every H I line, Lyβ cannot separate heat from smooth motion (SCI-DEG-001).
   simplifications: [the Si IV column is chosen for visibility, 'Lyβ is drawn as a clean line, without the lower-redshift Lyα forest it lies in']
-  sources: {primary: [{ref: REF-RAUCH96, location: "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — two ions of different mass (C IV and Si IV) separate temperature from bulk motion", verified: true}, {ref: REF-NIST-ASD, location: "Si IV lines output 1390–1405 Å (ASD v5.12, accessed 2026-10-04): 3s–3p ²P°3/2 at 1393.76 Å (vacuum), f = 0.513", verified: true}, {ref: REF-NIST-ISOTOPES, location: "Silicon entry: ²⁸Si 27.9769 u, 92.2 % of silicon", verified: true}, {ref: REF-NIST-ASD, location: "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (sum 0.079142; f-weighted centre 1025.72221 Å)", verified: true}, {ref: REF-WF09, location: "Table 6, entry No. 2 (1s–3p), p. 578: f = 0.079142", verified: true}], secondary: [{ref: REF-GK00, location: "Table 1 'Resonance transitions' (arXiv p. 5): Si IV 3s ²S1/2 – 3p ²P3/2 at 1393.76018 Å (vacuum, laboratory Fourier-transform spectroscopy)", verified: true}]}
+  sources: {primary: [{ref: REF-RAUCH96, location: "§3, Eq. (1) (arXiv p. 5): b_i² = b_b² + 2kT/m_i — two ions of different mass (C IV and Si IV) separate temperature from bulk motion", verified: true}, {ref: REF-NIST-ASD, location: "Si IV lines output 1390–1405 Å (ASD v5.12, accessed 2026-10-04): 3s–3p ²P°3/2 at 1393.76 Å (vacuum), f = 0.513", verified: true}, {ref: REF-NIST-ISOTOPES-SI, location: "Silicon entry: ²⁸Si 27.9769 u, 92.2 % of silicon", verified: true}, {ref: REF-NIST-ASD, location: "H I lines output 1025–1026 Å (ASD v5.12, accessed 2026-10-03): 1s–3p 2P°3/2 and 2P°1/2, Ritz λ 1025.72182505 / 1025.72296565 Å, f 0.052761 / 0.026380 (multiplet value 0.079142; f-weighted centre 1025.72221 Å)", verified: true}, {ref: REF-WF09, location: "Table 6, entry No. 2 (1s–3p), p. 578: f = 0.079142", verified: true}, {ref: REF-RAUCH98, location: "§2.4 (arXiv v1 p. 7): 'For stronger Lyα lines the higher order Lyman lines can provide additional constraints when fitted simultaneously'; §3.4 (p. 15): for saturated, blended lines 'simultaneous fits to the higher order Lyman lines (which are less saturated owing to their lower oscillator strengths) can only help to some degree'", verified: true}], secondary: [{ref: REF-GK00, location: "Table 1 'Resonance transitions' (arXiv p. 5): Si IV 3s ²S1/2 – 3p ²P3/2 at 1393.76018 Å (vacuum, laboratory Fourier-transform spectroscopy)", verified: true}]}
   oracle: null
   implementation: {file: app/src/scenes/b13-same-shadow.js, symbols: [b13tau]}
   validations: []
@@ -877,10 +913,10 @@ entries:
   assumptions: []
   validity: fake_spectra 2.2.4 (PyPI sdist sha256 4cc80e6c…eb84), MIT licence
   simplifications:
-    - "Differences that matter for closure: thermal width uses 1.00794 m_p (b {{VAL-CLOSURE-FS:derived.b_mass_rel:.2%}} small; up to |ΔF| {{VAL-CLOSURE-FS:derived.forest_mass_dF:.1e}} in a forest); stored τ is pixel-averaged τ (SCI-TAU-005); wings truncated at half a box; tail floor τ < 10⁻⁷; 7-node kernel quadrature (its own error up to {{VAL-CLOSURE-FS:derived.fs_quad_isolated_dF:.1e}} in F for isolated lines, {{VAL-CLOSURE-FS:derived.fs_quad_broad_cold_dF:.1e}} for broad cold kernels)."
-    - "Lyα data in atom.dat: 1215.6701 Å, f 0.4164, Γ 6.265×10⁸ s⁻¹ — same as SCI-ATOM-001 to within {{VAL-CLOSURE-FS:derived.gamma_only_dF:.0e}} in F."
+    - "Differences that matter for closure: thermal width uses 1.00794 m_p (b {{VAL-CLOSURE-FS:derived.b_mass_rel:.2%}} small; up to |ΔF| {{VAL-CLOSURE-FS:derived.forest_mass_dF:.1e}} in a forest); stored τ is the pixel-averaged τ when the pixel is at least b/2 wide, the pixel-centre value otherwise (SCI-TAU-005); wings truncated at half a box; tail floor τ < 10⁻⁷. Its total difference from an exact calculation is up to {{VAL-CLOSURE-FS:derived.fs_quad_isolated_dF:^.1e}} in F for isolated lines, almost all from its pixel quadrature ({{VAL-CLOSURE-FS:derived.fs_pixel_quad_isolated_dF:.1e}}); its 7-node kernel quadrature alone contributes up to {{VAL-CLOSURE-FS:derived.fs_kernel_quad_isolated_dF:^.1e}} there, and dominates for broad cold kernels ({{VAL-CLOSURE-FS:derived.fs_kernel_quad_broad_cold_dF:.1e}} in F)."
+    - "Lyα data in atom.dat: 1215.6701 Å, f 0.4164, Γ 6.265×10⁸ s⁻¹ — same as SCI-ATOM-001 to within {{VAL-CLOSURE-FS:derived.gamma_only_dF:^.0e}} in F."
 
-  sources: {primary: [{ref: REF-FAKESPECTRA, location: "v2.2.4 sdist (PyPI 2025-08-11); conventions documented in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)", verified: true}, {ref: REF-BIRD15, location: "§2.6, Eqs. (6)–(7)", verified: true}]}
+  sources: {primary: [{ref: REF-FAKESPECTRA, location: "v2.2.4 sdist (PyPI 2025-08-11): H mass 1.00794 m_p, line_data.py:21 and absorption.h:4; pixel-centre value or pixel average (the b/2 rule), singleabs.h:104-126; wings stopped at half a box, absorption.cpp:248-278; tail floor τ < 10⁻⁷, spectra.py:135 and absorption.cpp:250-278; 7-node kernel quadrature, singleabs.h:8, 143-167; Lyα data, atom.dat:7. Full notes in the source repository (science/notes/FAKE_SPECTRA_CONVENTIONS.md)", verified: true}, {ref: REF-BIRD15, location: "§2.6, Eqs. (6)–(7)", verified: true}]}
   oracle: {kind: numerical, ref: ORC-FAKE-SPECTRA}
   implementation: null
   validations: [VAL-CLOSURE-FS]
@@ -895,19 +931,20 @@ entries:
     Spectra.get_velocity() on a Gadget-format snapshot — differed from the convention this resource requires (the proper
     peculiar velocity in km/s, SCI-MAP-002). On a mock snapshot at a = {{VAL-CLOSURE-FS:derived.mock_a:.4g}} with known
     particle velocities, the returned value was {{VAL-CLOSURE-FS:derived.mock_v_ratio:.4g}} of the true peculiar velocity
-    for every moving particle, equal to √a — consistent with the √a unit conversion being applied once more than this
+    in the pixel of every moving particle, equal to √a — consistent with the √a unit conversion being applied once more than this
     convention needs. The resource therefore never takes skewer velocities from that path: it constructs the
-    line-of-sight velocity independently from the stored quantities (the toy from its displacement field). Two other
-    observations on the same version, for anyone exporting skewers: turn_off_selfshield also set Γ_HI to zero, and
-    get_velocity and HDF5Snapshot.get_npart needed a float32 workaround under NumPy 2.
+    line-of-sight velocity independently from the stored quantities (the toy from its displacement field). One other
+    observation on the same version (2.2.4), for anyone exporting skewers under NumPy 2: get_velocity fails unless its
+    arrays, promoted to float64, are cast back to float32, and HDF5Snapshot.get_npart overflows (2³² × uint32) on
+    headers that store particle counts as uint32, as Gadget does — the mock snapshots store them as int64.
   equations: [{tex: 'v_{\rm returned}/v_{\rm pec} = \sqrt{a}\ \text{on the tested path (mock snapshot)};\quad\text{used here: } v_{\rm pec}\ \text{computed independently}'}]
   convention: v_pec in km/s, proper peculiar velocity (SCI-MAP-002)
   teaching_representation: none (pipeline guard)
   assumptions: []
-  validity: fake_spectra 2.2.4 (PyPI sdist) and the upstream master branch as inspected on 2026-10-02; the tested path only. If an upstream issue is filed, this note will link it.
+  validity: fake_spectra 2.2.4 (PyPI sdist), the tested path only; the √a observation also holds on the upstream master branch as inspected on 2026-10-02. If an upstream issue is filed, this note will link it.
   simplifications: []
-  sources: {primary: [{ref: REF-FAKESPECTRA, location: "spectra.py:954 (second √a); abstractsnapshot.py:114-119 (first √a); spectra.py:669-672 (self-shield/Γ)", verified: true}]}
-  oracle: {kind: numerical, ref: ORC-FAKE-SPECTRA, detail: "mock snapshot: returned/true = 0.5000 at a = 0.25 (science/validation/closure/mocksnap.json)"}
+  sources: {primary: [{ref: REF-FAKESPECTRA, location: "spectra.py:954 (second √a); abstractsnapshot.py:114-119 (first √a); under NumPy 2: spectra.py:952-955 (float64 promotion), abstractsnapshot.py:226-228 (get_npart)", verified: true}]}
+  oracle: {kind: numerical, ref: ORC-FAKE-SPECTRA, detail: "mock snapshot: returned/true = {{VAL-CLOSURE-FS:derived.mock_v_ratio:.4f}} at a = {{VAL-CLOSURE-FS:derived.mock_a:.4g}} (science/validation/closure/mocksnap.json)"}
   implementation: null
   validations: [VAL-CLOSURE-FS]
   status: verified
@@ -972,7 +1009,7 @@ entries:
   assumptions: []
   validity: z ≈ 2–4
   simplifications: []
-  sources: {primary: [{ref: REF-BECKER11, location: "Table 3: T0 = 11640 K (z = 2.79), 10980 K (z = 3.16), fiducial γ; 1.1–1.6×10⁴ K across assumed γ", verified: true}, {ref: REF-MCQUINN16, location: "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; Eq. (3)", verified: true}]}
+  sources: {primary: [{ref: REF-BECKER11, location: "Table 3: T0 = 11640 K (z = 2.79), 10980 K (z = 3.16), fiducial γ; 1.1–1.6×10⁴ K across assumed γ", verified: true}, {ref: REF-MCQUINN16, location: "§2.3: T0 = (10–20)×10³ K over 2 < z < 4; §2.1, Eq. (3): T = T0 Δ^(γ−1)", verified: true}]}
   oracle: null
   implementation: null
   validations: []
@@ -1117,11 +1154,13 @@ entries:
   claim: >
     The three parcels a, b, c summarise three n_HI peak regions of the real toy sightline (HI-weighted position, width,
     column, temperature, velocity and gradient). They are not discrete clouds; Beat 8 dissolves them back into cells.
-    A parcel has a size along the beam, so the velocity spread across it widens its line too: for a Gaussian clump of
-    width σ_x, b_size = √2·|aH + dv/dx|·σ_x adds in quadrature to the thermal b. Beat 6's parcel carries no internal
-    gradient (dv/dx = 0 there), so its size term is the Hubble flow alone, b_size = √2·aH·σ_x; for the parcel it starts from, b_size =
+    A parcel has a size along the beam, so the velocity spread across it widens its line too (the physics is SCI-MAP-006).
+    Beat 6 isolates the declared terms by setting the parcel's own peculiar-velocity gradient to zero (dv/dx = 0 there),
+    so its size term is the Hubble flow alone, b_size = √2·aH·σ_x; for the parcel it starts from, b_size =
     {{VAL-ORTH-001:base.b_size_kms:.1f}} km/s against a thermal {{VAL-ORTH-001:base.b_thermal_kms:.1f}} km/s, so the drawn line is
     {{VAL-ORTH-001:base.b_drawn_kms:.1f}} km/s wide (b) — Beat 6's figure names both parts, and "show the physics" prints each and the drawn line's own width.
+    The same toy parcel with its own gradient ({{VAL-ORTH-001:base.own_dvdx_kms_per_mpch:.0f}} km/s per Mpc/h: infall, partly cancelling the Hubble flow), as
+    Beats 7–8 use it, has b_size = {{VAL-ORTH-001:base.b_size_with_own_gradient_kms:.1f}} km/s and b = {{VAL-ORTH-001:base.b_with_own_gradient_kms:.1f}} km/s.
   equations:
     - tex: 'b^2 \simeq b_{\rm thermal}^2 + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,\left|aH + \tfrac{dv}{dx}\right|\sigma_x'
   convention: computed once in science/data/toy/zeldovich3d.py (decompose)
@@ -1247,7 +1286,8 @@ validations:
   - {id: VAL-MAP-001, anchor: check-map-001, name: "Real space to velocity space", public: "The map u = aH(z)·x + v_pec is checked against an independent formula, for independence of h, for its sign convention, and against the exact distance–redshift relation (how well a constant H holds across the box); the velocity-to-wavelength convention is checked too.", what: "map u(x): independent formula, h-independence, sign, constant-H validity vs exact distance–redshift, λ_obs convention", test: science/tests/test_mapping.js, oracle: science/oracle/mapping_oracle.py, report: science/validation/mapping/report.json, criterion: "exact identities to 1e-12; linear map within 1 % over ≤ 20 Mpc/h"}
   - {id: VAL-TAU-001, anchor: check-tau-001, name: "Optical depth", public: "Optical depth of single, blended, saturated, damped, under-resolved and periodic lines is compared with an independent exact-Voigt calculation; the line-centre optical depth τ₀ and the integral ∫τ du are checked against their analytic values.", what: "τ of single, blended, saturated, damped, under-resolved and periodic lines vs exact-Voigt oracle; ∫τ du; τ0; wing τ=1 width", test: science/tests/test_tau.js, oracle: science/oracle/tau_oracle.py, report: science/validation/tau/report.json, criterion: "point sampling: rel τ < 1e-3 and |ΔF| < 1e-4"}
   - {id: VAL-TOY-001, anchor: check-toy-001, name: "Toy sightline: line kernels, neutral fraction, and the mean-flux calibration", public: "On the toy sightline, the spectrum as drawn (Gaussian thermal kernels) is compared with the same sum using full Voigt kernels. The neutral fraction at mean density is computed from the measured ultraviolet background and checked to be about one in 10⁵. The mean transmitted flux is a calibration, not a test: the toy's ultraviolet background is tuned so that its mean flux matches the observed value, which is why the toy's ultraviolet is about three times the measured one.", what: "toy skewer: browser τ (Gaussian kernels) vs Voigt kernels; x_HI at mean density, T0 and the measured Γ_HI (arithmetic, SCI-ION-002); mean flux (the normalisation target the toy's Γ_HI is tuned to)", test: science/tests/test_toy.js, oracle: null, report: science/validation/toy/report.json, criterion: "max |ΔF| < 1e-3 between Gaussian and Voigt kernels; x_HI at mean density between 5×10⁻⁶ and 8×10⁻⁶; ⟨F⟩ = 0.68 ± 0.01 (a calibration: the toy's Γ_HI is tuned to meet it)"}
-  - {id: VAL-DEG-001, anchor: check-deg-001, name: "Same-shadow degeneracy", public: "The Δχ² separating the three “same shadow” gas configurations is recomputed independently with exact Voigt profiles.", what: "same-shadow Δχ² recomputed independently with exact Voigt", test: science/tests/test_degeneracy.js, oracle: science/oracle/degeneracy_oracle.py, report: science/validation/degeneracy/report.json, criterion: "browser and oracle Δχ² agree to 5 %"}
+  - {id: VAL-PY-001, anchor: check-py-001, name: "Python reproductions", public: "Each calculation this resource implements has a short, independent Python reproduction (NumPy and SciPy only) of the equation it publishes. Every reproduction is run on its own: its printed output must equal the expected output formatted from the app's own values at the same inputs, and every full-precision value must agree with the app's within the tolerance it states.", what: "reproduce/beat*.py: each snippet run alone (output = expected, formatted from science/validation/computations/app_values.json, written by science/tests/test_computations.js); each script exits 0; full-precision values within stated tolerances", test: reproduce/check.py, oracle: "independent Python implementations of the published equations (NumPy, SciPy)", report: science/validation/reproduce/report.json, criterion: "every snippet's output equals its expected output; every script exits 0; every value within its stated tolerance"}
+  - {id: VAL-DEG-001, anchor: check-deg-001, name: "Same-shadow degeneracy", public: "The third “same shadow” configuration is checked to follow from its matching condition (the same total Doppler parameter and column as the first); the Δχ² separating the configurations is recomputed independently with exact Voigt profiles, in Lyα and Lyβ, at signal-to-noise 20, 50, 100 and 200.", what: "(iii) from the matching rule; same-shadow Δχ² in Lyα and Lyβ at S/N 20–200, browser vs exact-Voigt oracle", test: science/tests/test_degeneracy.js, oracle: science/oracle/degeneracy_oracle.py, report: science/validation/degeneracy/report.json, criterion: "(iii) equals the matching rule to 1e-9 km/s and b_tot(iii) = b_tot(i) to 1e-12; Δχ²(ii) browser vs oracle within 5 % at every S/N in Lyα and Lyβ; Δχ²(iii) < 1e-4 on the exact-Voigt path; the app's max |F(iii) − F(i)| < 1e-4 (its Voigt approximation)"}
   - {id: VAL-RED-001, anchor: check-red-001, name: "Redshift and frames", public: "Comoving distance χ(z) and its inverse are compared with SciPy integration (Planck 2018 parameters); the frame conversions λ_obs = λ_rest(1 + z) and their reverses, the quasar frame, and the correspondence of log-wavelength and velocity are checked.", what: "frames and redshift: χ(z) and z(χ) vs scipy (Planck 2018 and old toy cosmology), λ_obs = λ_rest(1+z) and its reverse, quasar frame blueward, log-λ stretch = velocity on the SCI-MAP-004 axis, the forest written along the way (λ_emit, λ_here = 1215.67 Å at z_abs, λ_obs, ordering)", test: science/tests/test_redshift.js, oracle: science/oracle/redshift_oracle.py, report: science/validation/redshift/report.json, criterion: "χ rel < 1e-7; |Δz| < 1e-8; identities to 1e-14"}
   - {id: VAL-TOY-002, anchor: check-toy-002, name: "Toy spectrum against the code that generated it", public: "The app's toy spectrum, as drawn, is compared with the exact-Voigt optical depth computed by the independent code that produced the toy data.", what: "reference view: the app's toy spectrum as drawn (and with Voigt kernels) vs the producer's own exact-Voigt τ", test: science/tests/test_toy_reference.js, oracle: science/data/toy/zeldovich3d.py, report: science/validation/toy_reference/report.json, criterion: "as drawn max |ΔF| < 1e-3; Voigt kernels < 1e-4; ⟨F⟩ to 1e-3"}
   - {id: VAL-INV-001, anchor: check-inv-001, name: "Tracing a colour back to the gas", public: "In “Who ate this colour?”, the per-cell contributions traced back from a colour are checked to sum to the spectrum's own optical depth at every pixel; the share the display leaves untraced is recorded.", what: "inverse lookup (Beat 12): the per-cell contributions it traces sum to the spectrum's own τ at every pixel of the toy sightline; how much τ the display cut leaves untraced (it stays in the ledger's 'rest')", test: science/tests/test_inverse.js, oracle: "tauFromCells, the spectrum as drawn (Gaussian kernels, cut 6 b)", report: science/validation/inverse/report.json, criterion: "max relative |Σ τ_j − τ| < 1e-12 at every pixel; thresholds read from the beat manifest"}
