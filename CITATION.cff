@@ -1,0 +1,24 @@
+# Citation metadata (https://citation-file-format.github.io). The repository, site, licence and release date are written
+# by tools/finalize_release.py once approved. No DOI exists: add `doi:` only if one is minted (e.g. a Zenodo release).
+cff-version: 1.2.0
+message: "If you use or adapt this teaching resource, please cite it as below."
+type: software
+title: "Lyα: from gas to forest — an interactive, provenance-traced teaching resource on the Lyman-α forest"
+version: "0.1.0"
+repository-code: "https://github.com/Jibancat/lya-gas-to-forest"
+url: "https://jibancat.github.io/lya-gas-to-forest/"
+license: ["MIT", "CC-BY-4.0", "CC0-1.0"]
+authors:
+  - family-names: "Ho"
+    given-names: "Ming-Feng"
+abstract: >-
+  An interactive browser resource that follows neutral hydrogen between a quasar and us into the Lyman-α forest:
+  resonant scattering, thermal and natural broadening, cosmological redshift, the map from real space to velocity
+  space, optical depth, transmitted flux, instrument effects and the inverse problem. Every scientific claim is linked
+  to its sources, assumptions and numerical validation, generated from a machine-readable science ledger.
+keywords:
+  - Lyman-alpha forest
+  - intergalactic medium
+  - spectroscopy
+  - cosmology education
+  - interactive visualization

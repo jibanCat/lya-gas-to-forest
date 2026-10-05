@@ -1,0 +1,16 @@
+{
+ "generated_by": "app/smoke.mjs (window.__lyaChecks)",
+ "checks": [
+  {
+   "beat": 10,
+   "name": "beerLambert",
+   "claim": "SCI-REP-005",
+   "columns": 1000,
+   "max_abs_dT": 0.002056895789203539,
+   "mean_abs_dT": 0.0008981201101345875,
+   "quantisation_bound": 0.00205761316872428,
+   "pass": true
+  }
+ ],
+ "pass": true
+}

@@ -1,0 +1,1164 @@
+# REFERENCE_AUDIT.yaml — claim-level citation and constants audit for the Lyα teaching resource
+# Audited: 2026-10-02 (web access). Companion narrative: REFERENCE_AUDIT_NOTES.md
+#
+# Conventions
+#   location_verified: true  -> I saw the stated section/equation/table/page in the source itself
+#                               (arXiv full text, publisher/NIST PDF, scanned ADS page, or official ToC/errata).
+#   location_verified: false -> NOT seen in the source; whatever is written is a pointer, not a citation.
+#   "arXiv vN" in how_verified: equation numbers were read in that arXiv version; journal pagination not
+#                               checked (publisher PDFs were paywalled). Equation numbering normally matches.
+#   Bibliographic data (journal/vol/page/DOI) were checked against Crossref (api.crossref.org) unless noted.
+#   ADS bibcodes are given ONLY where an ADS record with that bibcode was returned by a search restricted to
+#   ui.adsabs.harvard.edu (the ADS UI itself blocks automated access). Otherwise `ads: unverified`.
+#   Book equation numbers are unverified unless explicitly stated (only R&L ch.1 could be read).
+
+references:
+
+  # ------------------------------------------------------------------ atomic data
+  - id: REF-NIST-ASD
+    anchor: ref-nist-asd
+    short: "NIST ASD (Kramida et al. 2024)"
+    kind: database
+    citation: "Kramida, A., Ralchenko, Yu., Reader, J., and NIST ASD Team (2024). NIST Atomic Spectra Database (ver. 5.12), https://physics.nist.gov/asd [accessed 2026-10-02]. National Institute of Standards and Technology, Gaithersburg, MD."
+    identifiers:
+      url: "https://physics.nist.gov/asd"
+      query_used: "https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=H+I&limits_type=0&low_w=1215&upp_w=1216&unit=0&format=3&show_obs_wl=1&show_calc_wl=1&unc_out=1&A_out=0&f_out=on&S_out=on&loggf_out=on&intens_out=on&allowed_out=1&forbid_out=1&conf_out=on&term_out=on&enrg_out=on&J_out=on&g_out=on&bibrefs=1"
+    supports:
+      - claim: "Lyα 1s 2S1/2 – 2p 2P°3/2 and – 2p 2P°1/2 vacuum (Ritz) wavelengths, Aki, fik, gi, gk; unresolved 1s–2 multiplet λ = 1215.6701 Å, f = 0.41641"
+        location: "H I lines output, 1215–1216 Å (4 lines: 2p3/2, 2p1/2, unresolved '1s–2', 2s M1)"
+        location_verified: true
+        how_verified: "Downloaded the tab-separated ASD output (format=3) and the HTML output with bibliographic references on 2026-10-02; values transcribed in constants: CONST-LYA-*."
+      - claim: "Source attribution of the ASD values"
+        location: "ASD header: energy levels & lines = Kramida 2010; transition probabilities = Wiese & Fuhr 2009, Jitrik & Bunge 2004 (the latter rescaled to CODATA-2018 constants by A. Kramida for ASD v5.10, Oct 2022). Per-line refs: TP T7771 = Jitrik & Bunge 2004 (2p3/2, 2p1/2); TP T8637 = Baker 2008 NIST TN 1612 (unresolved 1s–2); line ref L12020 = Sansonetti et al. 2004 ApJS 153, 555 (observed λ)."
+        location_verified: true
+        how_verified: "Read the ASD bibliography pop-ups (get_ASBib_ref.cgi) for refs 7771, 8637, 8610, 12020, 15291."
+      - claim: "Lyβ (H I 1s–3p): 3p 2P°3/2 Ritz λvac 1025.72182505 ± 0.00000007 Å, A 1.6725e8 s^-1, f 5.2761e-2; 3p 2P°1/2 Ritz 1025.72296565 ± 0.00000007 Å, A 1.6725e8, f 2.6380e-2; unresolved '1s–3' line (upper level '3' = centroid of all n = 3 levels 3s, 3p, 3d; gk = 18): observed 1025.728 ± 0.003 Å, Ritz 1025.7220 ± 0.0003 Å, f 7.9142e-2, S 0.53450, log gf −0.80056, A 5.5751e7 (g-averaged over 18 substates; NOT a 3p decay rate)"
+        location: "H I lines output, 1025–1026 Å (6 lines: 1s–3d5/2 E2, 1s–3d3/2 E2, 1s–3s M1, 1s–3p3/2, unresolved 1s–3, 1s–3p1/2); TP refs T7771 (3p components), T8637 (unresolved line); line ref L3545 (observed λ)"
+        location_verified: true
+        how_verified: "2026-10-03: read the ASD v5.12 HTML lines output (format=0, bibrefs=1) for 1025–1026 Å via WebFetch. Transcription cross-checked: every Ritz λ equals 1e8/Ek[cm^-1] to the printed digits and every log gf = log10(2f). The tab-separated (format=3) query returned HTTP 500 this time. The ASBib entry for L3545 could not be retrieved (bibliographic identity of the observed-λ source not checked)."
+      - claim: "Si IV 3s ²S1/2 – 3p ²P°3/2 (the stronger resonance line): vacuum λ 1393.76 Å observed (Ritz 1393.7546 Å), f = 0.513, accuracy A+ (≤ 2 %); partner 3s ²S1/2 – 3p ²P°1/2 at 1402.77 Å, f = 0.255"
+        location: "Si IV lines output, 1390–1405 Å (ASD v5.12, accessed 2026-10-04); query https://physics.nist.gov/cgi-bin/ASD/lines1.pl?spectra=Si+IV&limits_type=0&low_w=1390&upp_w=1405&unit=0&format=3&show_obs_wl=1&show_calc_wl=1&f_out=on"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: >-
+      The unresolved '1s–2' line has upper level '2' = centroid of ALL n=2 levels incl. 2s (gk = 8); ASD notes these
+      combined lines are 'pertinent to observations of the solar corona'. Its Aki = 4.6986e8 s^-1 is averaged over
+      8 substates (6/8 × A_2p) and must NOT be used as the 2p decay rate / damping constant. Its f = 0.41641 is
+      fine to use (2s contributes no E1 absorption).
+
+  - id: REF-WF09
+    anchor: ref-wiese-fuhr-2009
+    short: "Wiese & Fuhr 2009"
+    kind: article
+    citation: "Wiese, W. L. & Fuhr, J. R. 2009, J. Phys. Chem. Ref. Data 38, 565–720, 'Accurate Atomic Transition Probabilities for Hydrogen, Helium, and Lithium'; Publisher's Note: J. Phys. Chem. Ref. Data 38, 1129 (2009)"
+    identifiers:
+      doi: "10.1063/1.3077727"
+      doi_publishers_note: "10.1063/1.3254213"
+      ads: "2009JPCRD..38..565W"
+      ads_publishers_note: "2009JPCRD..38.1129W"
+      url_free_pdf: "https://srd.nist.gov/jpcrdreprint/1.3077727.pdf"
+    supports:
+      - claim: "Lyα 1s–2p multiplet: λvac 1215.67 Å, gi–gk 2–6, A = 6.2649e8 s^-1, f = 0.41641, S = 3.3331 a.u., log gf = −0.07945; components 2p3/2: 1215.668 Å, A 6.2648e8, f 0.27760; 2p1/2: 1215.674 Å, A 6.2649e8, f 0.13881"
+        location: "Table 6 ('H I: Allowed transitions, fine structure lines'), entry No. 1, p. 578; source code 4 = Baker (2008)"
+        location_verified: true
+        how_verified: "Read in the NIST-hosted reprint PDF (pdftotext), p. 578."
+      - claim: "Relativistic vs non-relativistic A for 1s–2p (6.2649 vs 6.265 ×10^8 s^-1) agree among Baker, Jitrik & Bunge, Pal'chikov"
+        location: "Table 2 (comparison of relativistic and nonrelativistic H I A values); page not recorded"
+        location_verified: true
+        how_verified: "Read Table 2 in the reprint PDF (table verified; its page number was not checked — cite the table, not a page)."
+      - claim: "Lyβ 1s–3p multiplet: λvac 1025.72 Å, Ei–Ek 0.000–97 492.28 cm^-1, gi–gk 2–6, A = 1.6725e8 s^-1, f = 7.9142e-2, S = 5.3450e-1 a.u., log gf = −0.80056, Acc. AAA, source 4 (Baker 2008); components 2–4: 1025.722 Å (Ek 97 492.320), f 5.2761e-2, S 3.5633e-1; 2–2: 1025.723 Å (Ek 97 492.211), f 2.6381e-2, S 1.7817e-1"
+        location: "Table 6 ('H I: Allowed transitions, fine structure lines'), entry No. 2, p. 578"
+        location_verified: true
+        how_verified: "2026-10-03: read p. 578 of the NIST-hosted reprint PDF (pdftotext -layout). The tabulated Ek implies 1e8/97492.28 = 1025.72224 Å for the multiplet."
+    status: verified
+    notes: >-
+      Crossref gives pages 565–720; NIST's bibliography lists 565–726 (difference is the end page only).
+      NIST ASD v5.12 now shows A = 6.2648e8 (2p1/2) and 6.2647e8 (2p3/2) after CODATA-2018 rescaling (Oct 2022);
+      W&F 2009 is the source of the commonly quoted 6.2649e8.
+
+  - id: REF-JB04
+    anchor: ref-jitrik-bunge-2004
+    short: "Jitrik & Bunge 2004"
+    kind: article
+    citation: "Jitrik, O. & Bunge, C. F. 2004, J. Phys. Chem. Ref. Data 33, 1059–1070, 'Transition probabilities for hydrogen-like atoms'"
+    identifiers: {doi: "10.1063/1.1796671", ads: unverified}
+    supports:
+      - claim: "Source of the fine-structure A, f values for Lyα in NIST ASD (as rescaled to CODATA 2018)"
+        location: "NIST ASD TP reference T7771"
+        location_verified: true
+        how_verified: "NIST ASBib entry 7771 (bibliographic data and DOI shown there); paper itself not read."
+    status: partially_verified
+    notes: "Bibliographic data from the NIST bibliography page only (not cross-checked in Crossref)."
+
+  - id: REF-BAKER08
+    anchor: ref-baker-2008
+    short: "Baker 2008 (NIST TN 1612)"
+    kind: report
+    citation: "Baker, J. 2008, 'Transition probabilities for one electron atoms', NIST Technical Note 1612 (Washington, DC), 8 pp."
+    identifiers: {doi: unverified, ads: unverified}
+    supports:
+      - claim: "Source of the multiplet A/f values (W&F 2009 source code 4; NIST ASD TP ref T8637 for the unresolved 1s–2 line)"
+        location: "NIST ASD TP reference T8637; W&F 2009 Table 6 'Source' column = 4"
+        location_verified: true
+        how_verified: "NIST ASBib entry 8637; W&F 2009 table. Technical Note itself not read."
+    status: partially_verified
+    notes: ""
+
+  - id: REF-SANSONETTI04
+    anchor: ref-sansonetti-2004
+    short: "Sansonetti et al. 2004"
+    kind: article
+    citation: "Sansonetti, C. J., Kerber, F., Reader, J. & Rosa, M. R. 2004, ApJS 153, 555–579"
+    identifiers: {doi: "10.1086/421874", ads: unverified}
+    supports:
+      - claim: "Observed vacuum wavelength of Lyα used in NIST ASD (1215.6699 ± 0.0020 Å for the components; 1215.6701 ± 0.0021 Å for the unresolved line)"
+        location: "NIST ASD line reference L12020"
+        location_verified: true
+        how_verified: "NIST ASBib entry 12020 + Crossref; paper not read."
+    status: partially_verified
+    notes: "Only the attribution is verified; I did not read where in the paper the H I value appears."
+
+  - id: REF-KRAMIDA10
+    anchor: ref-kramida-2010
+    short: "Kramida 2010"
+    kind: article
+    citation: "Kramida, A. E. 2010, At. Data Nucl. Data Tables 96, 586–644; Erratum: 126, 295–298 (2019)"
+    identifiers: {doi: "10.1016/j.adt.2010.05.001", doi_erratum: "10.1016/j.adt.2018.11.003", ads: unverified}
+    supports:
+      - claim: "Energy levels (2p1/2 82258.9191133 cm^-1, 2p3/2 82259.2850014 cm^-1, 2s 82258.9543993 cm^-1) and Ritz wavelengths in NIST ASD"
+        location: "NIST ASD energy-level/line reference E/L 15291"
+        location_verified: true
+        how_verified: "NIST ASBib entry 15291 + Crossref (paper and erratum)."
+    status: partially_verified
+    notes: ""
+
+  # ------------------------------------------------------------------ constants
+  - id: REF-CODATA2022
+    anchor: ref-codata-2022
+    short: "CODATA 2022 (Mohr et al. 2025)"
+    kind: article
+    citation: "Mohr, P. J., Newell, D. B., Taylor, B. N. & Tiesinga, E. 2025, Rev. Mod. Phys. 97, 025002, 'CODATA recommended values of the fundamental physical constants: 2022' (also J. Phys. Chem. Ref. Data 54, 033105); values as served by NIST CUU"
+    identifiers:
+      doi: "10.1103/RevModPhys.97.025002"
+      doi_jpcrd: "10.1063/5.0279860"
+      url: "https://physics.nist.gov/cuu/Constants/Table/allascii.txt"
+    supports:
+      - claim: "c, k_B, e, h exact (SI 2019); m_e, u (atomic mass constant), r_e, α, m_p, A_r(p), A_r(e)"
+        location: "NIST CUU 'Fundamental Physical Constants — Complete Listing, 2022 CODATA adjustment' (allascii.txt)"
+        location_verified: true
+        how_verified: "Downloaded allascii.txt on 2026-10-02; header reads '2022 CODATA adjustment'."
+    status: verified
+    notes: "CODATA 2018 values (allascii_2018.txt) also downloaded for comparison; see constants."
+
+  - id: REF-CODATA2018
+    anchor: ref-codata-2018
+    short: "CODATA 2018 (Tiesinga et al. 2021)"
+    kind: article
+    citation: "Tiesinga, E., Mohr, P. J., Newell, D. B. & Taylor, B. N. 2021, Rev. Mod. Phys. 93, 025010, 'CODATA recommended values of the fundamental physical constants: 2018' (also J. Phys. Chem. Ref. Data 50, 033105)"
+    identifiers: {doi: "10.1103/RevModPhys.93.025010", doi_jpcrd: "10.1063/5.0064853", url: "https://physics.nist.gov/cuu/Constants/ArchiveASCII/allascii_2018.txt"}
+    supports:
+      - claim: "Previous-adjustment values (m_e 9.1093837015e-31 kg, u 1.66053906660e-27 kg, r_e 2.8179403262e-15 m)"
+        location: "NIST CUU archive allascii_2018.txt"
+        location_verified: true
+        how_verified: "Downloaded 2026-10-02."
+    status: verified
+    notes: "Use only if the ledger deliberately pins CODATA 2018 (e.g. to match NIST ASD's 2022 rescaling)."
+
+  - id: REF-NIST-ISOTOPES
+    anchor: ref-nist-isotopes
+    short: "NIST isotopic compositions"
+    kind: database
+    citation: "NIST Atomic Weights and Isotopic Compositions with Relative Atomic Masses, https://physics.nist.gov/comp — relative atomic masses from 'The AME2012 Atomic Mass Evaluation' (Wang, M. et al. 2012, Chinese Physics C 36(12); DOI 10.1088/1674-1137/36/12/003 as given on the NIST page)"
+    identifiers:
+      url: "https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=H&ascii=ascii2&isotype=some"
+      url_source_note: "https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses"
+    supports:
+      - claim: "A_r(1H) = 1.00782503223(9); standard atomic weight of H = [1.00784, 1.00811]"
+        location: "Hydrogen entry"
+        location_verified: true
+        how_verified: "Fetched the stand_alone.pl output on 2026-10-02."
+      - claim: "silicon: A_r(28Si) = 27.97692653465(44), isotopic composition 0.92223(19); standard atomic weight [28.084, 28.086] — so m_Si ≈ 28 u ≈ 28 m_H (27.8–27.9 m_H)"
+        location: "Silicon entry, https://physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=Si&ascii=ascii2&isotype=some"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: partially_verified
+    notes: >-
+      Database authors/SRD number and the AME2012 page number were NOT verified (the AME2012 citation and DOI are as
+      shown on the NIST source page; not cross-checked in Crossref). A CODATA-2022-consistent
+      value computed as A_r(p) + A_r(e) − E_I/(m_u c^2) is 1.0078250319 (differs by 3e-10; irrelevant).
+
+  # ------------------------------------------------------------------ textbooks
+  - id: REF-RL79
+    anchor: ref-rybicki-lightman-1979
+    short: "Rybicki & Lightman 1979"
+    kind: book
+    citation: "Rybicki, G. B. & Lightman, A. P. 1979, Radiative Processes in Astrophysics (New York: Wiley); Wiley-VCH reprint 2004"
+    identifiers: {isbn: "978-0-471-82759-7", doi: unverified, ads: unverified}
+    supports:
+      - claim: "absorption coefficient dI = −α I ds; α = nσ"
+        location: "§1.4 'Radiative Transfer', Eqs. (1.20)–(1.21), pp. 9–10"
+        location_verified: true
+        how_verified: "Read chapter 1 scan (course-hosted PDF, crossfield.ku.edu A794) with pdftotext."
+      - claim: "transfer equation dI/ds = −αI + j"
+        location: "§1.4, Eq. (1.23), p. 11"
+        location_verified: true
+        how_verified: "same (equation body garbled by OCR; equation number and surrounding text legible)"
+      - claim: "pure absorption (j = 0): I(s) = I(s0) exp(−∫α ds′) (Beer–Lambert form)"
+        location: "§1.4, 'Absorption Only', Eq. (1.25), p. 12"
+        location_verified: true
+        how_verified: "same (text 'The brightness decreases along the ray by the exponential of the absorption coefficient integrated along the line of sight')"
+      - claim: "optical depth dτ = α ds; transfer eq. in τ; source function; formal solution; constant-S solution"
+        location: "§1.4 'Optical Depth and Source Function', Eqs. (1.26)–(1.30), pp. 12–14"
+        location_verified: true
+        how_verified: "same"
+      - claim: "scattering removes photons from a beam; extinction coefficient = α + σ (combined scattering and absorption)"
+        location: "§1.7 'Scattering Effects; Random Walks', subsections 'Pure Scattering' (p. 33, Eqs. 1.84–1.86) and 'Combined Scattering and Absorption' (p. 36, Eqs. 1.91–1.92)"
+        location_verified: true
+        how_verified: "same"
+      - claim: "Einstein coefficients and oscillator strengths"
+        location: "§10.3 'Einstein Coefficients and Oscillator Strengths', p. 274"
+        location_verified: true
+        how_verified: "Table of contents in the same scan (section/page only; equations not seen)."
+      - claim: "Doppler (thermal) broadening; natural broadening (Lorentzian); combined Doppler+Lorentz (Voigt) profile"
+        location: "§10.6 'Line Broadening Mechanisms', p. 287: subsections Doppler Broadening (p. 287), Natural Broadening (p. 289), Collisional Broadening (p. 290), Combined Doppler and Lorentz Profiles (p. 291)"
+        location_verified: true
+        how_verified: "Table of contents in the scan; also matches the Prometeus library ToC (prometeus.nsc.ru). Equation numbers in §10.6 NOT seen -> do not cite eq. numbers."
+      - claim: "hydrogen bound-free (photoionisation) cross-section"
+        location: "§10.5 'Transition Rates', subsection 'Bound-Free Transitions (Continuous Absorption) for Hydrogen', p. 282"
+        location_verified: true
+        how_verified: "ToC only."
+    status: partially_verified
+    notes: "Ch.1 equation numbers verified; ch.10 verified to section/subsection/page only."
+
+  - id: REF-DRAINE11
+    anchor: ref-draine-2011
+    short: "Draine 2011"
+    kind: book
+    citation: "Draine, B. T. 2011, Physics of the Interstellar and Intergalactic Medium (Princeton University Press)"
+    identifiers: {isbn: unverified, url_toc: "http://press.princeton.edu/chapters/c9499.pdf", url_errata: "https://www.astro.princeton.edu/~draine/book/", ads: unverified}
+    supports:
+      - claim: "absorption cross section; oscillator strength; intrinsic (natural) line profile; Doppler broadening and the Voigt profile; Doppler core → damping wings"
+        location: "Ch. 6 'Spontaneous Emission, Stimulated Emission, and Absorption': §6.2 Absorption Cross Section (p. 55), §6.3 Oscillator Strength (p. 56), §6.4 Intrinsic Line Profile (p. 57), §6.5 Doppler Broadening: The Voigt Line Profile (p. 58), §6.6 Transition from Doppler Core to Damping Wings (p. 59)"
+        location_verified: true
+        how_verified: "Publisher ToC PDF (c9499.pdf, pre-press 2010-10-26 build). Equation numbers not seen."
+      - claim: "Lyα f = 0.4164 at λ = 1215.67 Å (as corrected)"
+        location: "§6.4, p. 58 — first printing had f = 0.4162 and λ = 1215 Å; corrected in errata"
+        location_verified: true
+        how_verified: "Official errata for the first printing (errata_p1.pdf, version 2026-05-15)."
+      - claim: "equation of radiative transfer"
+        location: "Ch. 7 'Radiative Transfer', §7.2 Equation of Radiative Transfer (p. 65), §7.4 Integration (p. 66)"
+        location_verified: true
+        how_verified: "ToC."
+      - claim: "curve of growth: optically thin (linear), flat (logarithmic), damped (square-root) regimes; Lyman series; Lyman limit"
+        location: "Ch. 9 'Absorption Lines: The Curve of Growth' (p. 75): §9.1 (p. 75), §9.2 Optically Thin Absorption τ0 ≲ 1 (p. 77), §9.3 Flat Portion 10 ≲ τ0 ≲ τdamp (p. 77), §9.4 Damped Portion τ0 ≳ τdamp (p. 79), §9.5 Approximation Formulae for W (p. 81), §9.7 Lyman Series (p. 83), §9.8 Lyman Limit (p. 84)"
+        location_verified: true
+        how_verified: "ToC; errata confirm Eq. (9.21) is in §9.4 p. 79 and Eq. (9.35) in §9.8 p. 84."
+      - claim: "photoionisation cross-section of H"
+        location: "§13.1 Photoionization, p. 128 (errata refer to Eqs. 13.1, 13.3, 13.4 there)"
+        location_verified: false
+        how_verified: "Section/page from ToC + errata; which equation gives σ_pi(H) at threshold was NOT seen."
+      - claim: "case A/B recombination coefficient fits: α_A ≈ 4.13e-13 T4^(−0.7131−0.0115 ln T4) cm^3 s^-1; α_B ≈ 2.54e-13 T4^(−0.8163−0.0208 ln T4) (Z = 1)"
+        location: "§14.2 'Radiative Recombination of Hydrogen', p. 139, Eqs. (14.3) and (14.4); Table 14.1 p. 138 (revised in errata: α_A(10^4 K) = 4.17e-13, α_B = 2.59e-13; αnl from Burgess 1965)"
+        location_verified: true
+        how_verified: "Equations quoted in full in the official errata (first printing), which corrects only the Z-power (irrelevant for H). Table 14.1 values from the errata's revised table."
+    status: partially_verified
+    notes: >-
+      Draine's ToC is the pre-press PDF hosted by Princeton UP; page numbers agree with errata page references.
+      Errata exist for several printings — cite 'Draine (2011), with errata' and state the printing if equations are quoted.
+
+  - id: REF-OF06
+    anchor: ref-osterbrock-ferland-2006
+    short: "Osterbrock & Ferland 2006"
+    kind: book
+    citation: "Osterbrock, D. E. & Ferland, G. J. 2006, Astrophysics of Gaseous Nebulae and Active Galactic Nuclei, 2nd ed. (Sausalito: University Science Books)"
+    identifiers: {isbn: unverified, ads: unverified}
+    supports:
+      - claim: "α_A(10^4 K) = 4.18e-13 cm^3 s^-1 (Table 2.1)"
+        location: "Ch. 2, Table 2.1 (claimed)"
+        location_verified: false
+        how_verified: "Not available online. A web-search summary attributes 4.18e-13 at 10^4 K to Osterbrock (p. 22) but I could not see it in the lecture notes it came from. UNVERIFIED."
+      - claim: "H photoionisation threshold cross-section 6.30e-18 cm^2"
+        location: "Ch. 2 (claimed)"
+        location_verified: false
+        how_verified: "not seen"
+    status: unverified
+    notes: "Prefer Draine (2011) §14.2 or Hui & Gnedin (1997) for α_A, both verified."
+
+  # ------------------------------------------------------------------ Voigt computation
+  - id: REF-HUMLICEK82
+    anchor: ref-humlicek-1982
+    short: "Humlíček 1982"
+    kind: article
+    citation: "Humlíček, J. 1982, J. Quant. Spectrosc. Radiat. Transfer 27, 437–444, 'Optimized computation of the Voigt and complex probability functions'"
+    identifiers: {doi: "10.1016/0022-4073(82)90078-4", ads: "1982JQSRT..27..437H"}
+    supports:
+      - claim: "rational (W4, four-region) approximation of the complex probability function w(z); H(a,x) = Re w"
+        location: "whole paper (algorithm W4) — region boundaries and coefficients not checked against the paper"
+        location_verified: false
+        how_verified: "Bibliographic data (Crossref, ADS search). Paper is paywalled; coefficients in lyaphys.js not compared with the original."
+      - claim: "W4 region boundaries, s = |x| + y: I s ≥ 15; II 5.5 ≤ s < 15; III s < 5.5 and y ≥ 0.195|x| − 0.176; IV otherwise"
+        location: "original paper NOT read; secondary: Zaghloul 2015 (arXiv:1505.05596v1) Table 1, column 'Original borders of the region', p. 3"
+        location_verified: false
+        how_verified: "2026-10-03: lyaphys.js humlicekW4 boundaries (s >= 15, s >= 5.5, y >= 0.195|x| − 0.176) equal Zaghloul's Table 1 (read from the page image) and the five code transcriptions in the next item."
+      - claim: "W4 coefficients, t = y − ix, u = t²: I w = 0.5641896 t/(0.5 + u); II w = t(1.410474 + 0.5641896 u)/(0.75 + u(3 + u)); III w = (16.4955 + 20.20933 t + 11.96482 t² + 3.778987 t³ + 0.5642236 t⁴)/(16.4955 + 38.82363 t + 39.27121 t² + 21.69274 t³ + 6.699398 t⁴ + t⁵); IV w = e^u − t P(u)/Q(u), P = 36183.31 − 3321.9905 u + 1540.787 u² − 219.0313 u³ + 35.76683 u⁴ − 1.320522 u⁵ + 0.56419 u⁶, Q = 32066.6 − 24322.84 u + 9022.228 u² − 2186.181 u³ + 364.2191 u⁴ − 61.57037 u⁵ + 1.841439 u⁶ − u⁷"
+        location: "original paper not consulted (paywalled); coefficients checked against public transcriptions that cite Humlicek 1982 (see how_verified); accuracy established against SciPy wofz (VAL-VOIGT-001)"
+        location_verified: false
+        how_verified: "2026-10-03: all 29 coefficients and the 4 boundary constants in lyaphys.js humlicekW4 compared as decimal strings (script) with five separate open-source code bases, each citing Humlicek (1982): RFM humlck_sub.f90:53–87 (github.com/eodg-oxford/srfm, src/srfm/RFM/source/, last commit c5439c578993); ExoCross VoigtKampff.f90:385–435, function humlic (github.com/Trovemaster/exocross, b5433b1570cb); SKIRT 9 SKIRT/material/VoigtProfile.cpp:13–55 (github.com/SKIRT/SKIRT9, e18df5e713ef); Met Office SOCRATES src/correlated_k/voigt_profile.f90:62–144 (github.com/MetOffice/socrates, a8b089eaa27f); AER monoRTM src/modm.f90:1100–1130, FUNCTION W4 (github.com/AER-RC/monoRTM, 6b6662b57211). Zero mismatches against each; signs and nesting checked by eye. Common ancestry of these codes is unknown. Two further transcriptions print fewer digits in region IV and agree with lyaphys.js to their precision: RH humlicek_.f90:55–58 (github.com/ITA-Solar/rh: numerator 3321.99, 219.031, 35.7668) and F. Schreier's lbl4IR humlicek.py, function humlicek4 (atmos.eoc.dlr.de/tools/lbl4IR/sdv/humlicek.py: numerator and denominator rounded to 6 figures; exact 1/√π and 1.4104739589 = 2.5/√π in regions I–II), reproduced in PyExoCross (Zhang, Tennyson & Yurchenko 2024, arXiv:2406.03977v1, §3.5.3, Eq. 28). The rounded region-IV forms change Re w by ≤ 1.1e-6 relative (computed). This is agreement with the majority of transcriptions, not a check against the 1982 paper."
+    status: partially_verified
+    notes: >-
+      Zaghloul (2015, arXiv:1505.05596) documents a loss of accuracy of W4 near the real axis (small y = a).
+      Independent numeric check (this audit): current lyaphys.js voigtH (W4 everywhere) vs scipy.special.wofz on
+      a ∈ {1e-5 … 5e-3}, x ∈ [0, 30]: max relative error 5.4e-5 (worst at the region-I boundary x ≈ 15).
+
+  - id: REF-TG06
+    anchor: ref-tepper-garcia-2006
+    short: "Tepper-García 2006"
+    kind: article
+    citation: "Tepper-García, T. 2006, MNRAS 369, 2025–2035, 'Voigt profile fitting to quasar absorption lines: an analytic approximation to the Voigt–Hjerting function'; Erratum: MNRAS 382, 1375 (2007)"
+    identifiers:
+      doi: "10.1111/j.1365-2966.2006.10450.x"
+      doi_erratum: "10.1111/j.1365-2966.2007.12186.x"
+      ads: "2006MNRAS.369.2025T"
+      ads_erratum: "2007MNRAS.382.1375T"
+      arxiv: "astro-ph/0602124 (v2 read)"
+    supports:
+      - claim: "Voigt–Hjerting function definition H(a,x) = (a/π)∫ e^{-y²}/((x−y)²+a²) dy; a = λ²Γ/(4πcΔλ_D)"
+        location: "§2.1, Eq. (2) and following definitions"
+        location_verified: true
+        how_verified: "arXiv v2 text"
+      - claim: "first-order (Harris) approximation H ≈ e^{-x²}[1 − a(2/√π)K(x)], K(x) given"
+        location: "§4.1, Eqs. (23)–(25); code-form rearrangement in footnote 4 (§5)"
+        location_verified: true
+        how_verified: "arXiv v2 text"
+      - claim: "Erratum: in footnote 4, Q ≡ 1.5 x^-2 (printed as 1.5 x²)"
+        location: "MNRAS 382, 1375"
+        location_verified: true
+        how_verified: "Publisher erratum page reached via DOI redirect (academic.oup.com article-lookup)."
+      - claim: "stated validity: a ≲ 1e-4; 'precision of 1e-4 or better for x ≲ 4 … difference peaks around x = 4 to a value of the order of 0.01'"
+        location: "Abstract; §5.2"
+        location_verified: true
+        how_verified: "arXiv v2 text"
+    status: verified
+    notes: >-
+      Independent numeric check (this audit, scipy 1.15.2): relative error of the TG approximation reaches
+      1.5–2 % near x ≈ 3.7–4 for any a ≤ 2e-3, consistent with the paper's own §5.2 and with the repo's note that it
+      was rejected. Lyα forest lines have a ≈ 3–5e-4 (b = 13–18 km/s), i.e. above the paper's stated a ≲ 1e-4 anyway.
+
+  - id: REF-SCIPY-WOFZ
+    anchor: ref-scipy-wofz
+    short: "SciPy scipy.special.wofz"
+    kind: documentation
+    citation: "SciPy scipy.special.wofz documentation (v1.18.0 docs page): w(z) = exp(−z²) erfc(−iz); Reference [1] Steven G. Johnson, Faddeeva W function implementation, http://ab-initio.mit.edu/Faddeeva"
+    identifiers: {url: "https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.wofz.html"}
+    supports:
+      - claim: "scipy.special.wofz computes the Faddeeva function and cites Johnson's Faddeeva package"
+        location: "docstring References [1]"
+        location_verified: true
+        how_verified: "WebFetch of the docs page (v1.18.0) on 2026-10-02."
+      - claim: "H(a,x) = Re w(x + i a)"
+        location: "identity (not stated on the scipy page)"
+        location_verified: false
+        how_verified: "Verified NUMERICALLY in this audit (quad integration of the definition vs wofz at 4 points, agreement to 1e-10). Textual source for the identity not located; fake_spectra singleabs.h states it in a comment."
+    status: verified
+    notes: "Local scipy used for checks: 1.15.2."
+
+  - id: REF-FADDEEVA-JOHNSON
+    anchor: ref-johnson-faddeeva
+    short: "Johnson 2012 (Faddeeva Package)"
+    kind: software
+    citation: "Johnson, S. G. 2012, Faddeeva Package (MIT license), http://ab-initio.mit.edu/Faddeeva — continued fraction (Gautschi 1970, SIAM J. Numer. Anal. 7, 187; Poppe & Wijers 1990, ACM TOMS 16, 38) for large |z|; Zaghloul & Ali 2011 'Algorithm 916', ACM TOMS 38(2), 15 for small |z|"
+    identifiers: {url: "http://ab-initio.mit.edu/Faddeeva", source_read: "https://raw.githubusercontent.com/scipy/xsf/main/include/xsf/faddeeva.h"}
+    supports:
+      - claim: "algorithms used by SciPy's wofz"
+        location: "header comment of xsf/include/xsf/faddeeva.h (SciPy's special-function library)"
+        location_verified: true
+        how_verified: "Read the header comment in the scipy/xsf repository (the ab-initio.mit.edu page itself did not load)."
+    status: partially_verified
+    notes: "Bibliographic details of Gautschi, Poppe & Wijers, Zaghloul & Ali are as quoted in the source comment; not independently checked."
+
+  # ------------------------------------------------------------------ Lyα forest / IGM
+  - id: REF-GP65
+    anchor: ref-gunn-peterson-1965
+    short: "Gunn & Peterson 1965"
+    kind: article
+    citation: "Gunn, J. E. & Peterson, B. A. 1965, ApJ 142, 1633–1636, 'On the Density of Neutral Hydrogen in Intergalactic Space'"
+    identifiers: {doi: "10.1086/148444", ads: "1965ApJ...142.1633G"}
+    supports:
+      - claim: "photons blueward of Lyα are redshifted into resonance and 'can be scattered by neutral hydrogen' (Gunn–Peterson effect); σ(ν) = (πe²/mc) f g(ν−ν_a); flux reduced by e^{-τ}"
+        location: "p. 1633 (setup, unnumbered equations) and p. 1634 (optical depth formula, unnumbered)"
+        location_verified: true
+        how_verified: "Read the scanned article (ADS full-text scan, 4 pp.)."
+      - claim: "observed depression ~40% ⇒ τ ≈ 1/2 ⇒ n_HI ≈ 6e-11 cm^-3 (q0 = 1/2) at z ≈ 2 — IGM must be highly ionised"
+        location: "p. 1634"
+        location_verified: true
+        how_verified: "same"
+    status: verified
+    notes: "Equations are unnumbered — cite page, not equation number. (A web-search summary claimed 2e-12 cm^-3; the scan says 6 × 10^-11 cm^-3.)"
+
+  - id: REF-HGZ97
+    anchor: ref-hui-gnedin-zhang-1997
+    short: "Hui, Gnedin & Zhang 1997"
+    kind: article
+    citation: "Hui, L., Gnedin, N. Y. & Zhang, Y. 1997, ApJ 486, 599–622, 'The Statistics of Density Peaks and the Column Density Distribution of the Lyα Forest'"
+    identifiers: {doi: "10.1086/304539", ads: "1997ApJ...486..599H", arxiv: "astro-ph/9608157 (v3 read)"}
+    supports:
+      - claim: "τ(ν0) = ∫ n_HI σ_α dx/(1+z) along the sightline; transmission e^{-τ}"
+        location: "§2, Eq. (1)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "real-space → velocity-space mapping u ≡ H̄ (x − x̄)/(1+z̄) + v_pec(x), x comoving (i.e. u = aHx + v_pec)"
+        location: "§2, Eq. (3) (with Eq. 2 for the frequency shift)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "τ(u0) as a sum over multiple streams with |du/dx|^-1; thermal Gaussian cross-section with b = sqrt(2kT/m_p); σ_α0 = 0.416 π q²/(m_e c ν_α) ≈ 4.5e-18 cm²; Voigt needed only for N ≳ 1e17"
+        location: "§2, Eq. (5) and following paragraph"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "neutral fraction in photoionisation equilibrium X_HI ~ 1.6e-6 (T/1e4)^-0.7 (Ω_b h²/0.0125)(J_HI/0.5)^-1 ((1+z)/4)^3 (1+δ_b), using α = 4.29e-13 (T/1e4 K)^-0.7; Γ = 4e-12 J_HI s^-1"
+        location: "§3.2, Eq. (17) and text after Eq. (18)"
+        location_verified: true
+        how_verified: "arXiv v3 (exponent of the Ω_b h² factor partly garbled in extraction; T, J, (1+z) exponents legible)"
+      - claim: "temperature–density relation T = T0(1+δ)^(γ−1)"
+        location: "§3.2, Eq. (19)"
+        location_verified: true
+        how_verified: "arXiv v3"
+    status: verified
+    notes: "Uses b = sqrt(2kT/m_p) (proton mass), not m_H."
+
+  - id: REF-HG97
+    anchor: ref-hui-gnedin-1997
+    short: "Hui & Gnedin 1997"
+    kind: article
+    citation: "Hui, L. & Gnedin, N. Y. 1997, MNRAS 292, 27–42, 'Equation of state of the photoionized intergalactic medium'"
+    identifiers: {doi: "10.1093/mnras/292.1.27", ads: "1997MNRAS.292...27H", arxiv: "astro-ph/9612232 (v1 read)"}
+    supports:
+      - claim: "α(T) ≈ 4 × 10^-13 (T/10^4 K)^-0.7 cm³ s^-1"
+        location: "Eq. (12)"
+        location_verified: true
+        how_verified: "arXiv v1"
+      - claim: "case-A H II recombination fit 1.269e-13 λ^1.503/[1+(λ/0.522)^0.470]^1.923 cm³ s^-1, λ = 2 × 157807 K / T, fit to Ferland et al. (1992), 2 % accurate 3 K–1e9 K"
+        location: "Appendix A"
+        location_verified: true
+        how_verified: "arXiv v1. Evaluates to 4.30e-13 at 1e4 K; local slope −0.714 at 1e4 K, −0.751 at 2e4 K (computed)."
+    status: verified
+    notes: ""
+
+  - id: REF-MEIKSIN09
+    anchor: ref-meiksin-2009
+    short: "Meiksin 2009"
+    kind: article
+    citation: "Meiksin, A. A. 2009, Rev. Mod. Phys. 81, 1405–1469, 'The physics of the intergalactic medium'"
+    identifiers: {doi: "10.1103/RevModPhys.81.1405", ads: "2009RvMP...81.1405M", arxiv: "0711.3358 (v3 read)"}
+    supports:
+      - claim: "forest features are not true absorption but scattering of resonance-line photons out of the line of sight"
+        location: "§I Introduction, footnote 7; §II.A opening ('The Lyman absorption features arise from the scattering of resonance line photons …')"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "Lorentz cross-section with damping width Γ_ul of the upper level (ground state sharp); integrated cross-section πe²f/(m_e c)"
+        location: "§II.A, Eqs. (6)–(7)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "Voigt profile = Lorentzian convolved with a Maxwellian; H(a,x) definition; a = Γ/(4πΔν_D); b = (2kT/m_a)^1/2; b² = b_th² + b_kin²; normalised profile φ_V = H/(√π Δν_D); for Lyα a ≃ 0.0472 T^-1/2"
+        location: "§II.A, Eqs. (9)–(13)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "τ_ν = ∫ n σ_ν ds; Gunn–Peterson optical depth; line-centre τ0 = N σ λ/(√π b) ≃ 0.38 (N/1e13)(b/20 km/s)^-1"
+        location: "§II.A, Eqs. (14), (15), (17)–(19)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "curve of growth: equivalent width, F(a,τ0), linear (Eq. 24), logarithmic (Eq. 25), square-root/damping (Eq. 26); damping wing φ_V ≃ a/(πx²) ⇔ H ≃ a/(√π x²)"
+        location: "§II.A, Eqs. (20)–(26) and text before Eq. (26)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "absorber classes: forest N ≲ 1e17; LLS 1e17–1e19; super-LLS 1e19–2e20; DLA > 2e20 cm^-2"
+        location: "§II.B.1, Table I"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "photoionisation equilibrium: Γ_HI definition; rate equation; x_HI^eq = n_e α_A/(Γ_HI + n_e α_A)"
+        location: "§III.A.1 'Hydrogen and helium', Eqs. (40)–(42)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "optical depth with peculiar velocity along the sightline (fluctuating Gunn–Peterson effect)"
+        location: "§VI.C.1, Eq. (104); also §II.A text: ordered flow shifts line centre to ν(1 − v∥/c)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "radiation emitted by the QSO at t0 is scattered where its frequency has redshifted to the line frequency ν_lu, so absorption appears at observed wavelengths λ_lu < λ < λ_lu a(t)/a(t0), i.e. between the rest wavelength and the QSO's own redshifted line (the Gunn–Peterson trough); the absorber redshift is z = ν_lu/ν − 1"
+        location: "§II.A 'Resonance absorption lines', text preceding Eq. (15) (arXiv v3 p. 7); also §I Introduction (arXiv v3 p. 2): Gunn–Peterson decrement and discrete Lyα lines 'shortward of' the QSO's Lyα emission line"
+        location_verified: true
+        how_verified: "2026-10-03: arXiv v3 PDF, per-page pdftotext. RMP journal pagination not checked."
+      - claim: "H(z) = H0 E(z), E(z) = [Ωm(1+z)³ + ΩK(1+z)² + Ωv]^(1/2), Ωm + ΩK + Ωv = 1"
+        location: "§II.A, text following Eq. (15) (arXiv v3 p. 7)"
+        location_verified: true
+        how_verified: "2026-10-03: arXiv v3 PDF."
+      - claim: "far from line centre the Lorentzian damping wings dominate, φ_V(a,x) ≃ a/(πx²), so τ ∝ N/Δv² independent of the Doppler width; Lyα forest systems are generally well fit by Doppler profiles, while DLAs show the damping wings and in super-LLSs (10^19 < N < 2×10^20 cm^-2) they begin to appear"
+        location: "§II.A, Eqs. (6), (12)–(13) and the text before Eq. (26) (arXiv v3 p. 9); §II.B.1 (arXiv v3 p. 9)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "Meiksin quotes f = 0.4162 and Γ = 6.262e8 s^-1 for Lyα (older values) — do not take atomic data from here."
+
+  - id: REF-RAUCH98
+    anchor: ref-rauch-1998
+    short: "Rauch 1998"
+    kind: article
+    citation: "Rauch, M. 1998, ARA&A 36, 267–316, 'The Lyman Alpha Forest in the Spectra of Quasistellar Objects'"
+    identifiers: {doi: "10.1146/annurev.astro.36.1.267", ads: "1998ARA&A..36..267R", arxiv: "astro-ph/9806286 (v1 read)"}
+    supports:
+      - claim: "mean flux decrement D_A = 1 − e^{-τ_eff}; τ_eff for a line population"
+        location: "§2.2, Eqs. (1)–(2)"
+        location_verified: true
+        how_verified: "arXiv v1"
+      - claim: "Voigt-profile decomposition; b = sqrt(2kT/m + b_turb²)"
+        location: "§2.4, Eq. (5)"
+        location_verified: true
+        how_verified: "arXiv v1"
+      - claim: "observed b-parameters (b ~ 10–45 km/s, median ~30–35 km/s at the time)"
+        location: "§3.3 'Absorption Line Widths'"
+        location_verified: true
+        how_verified: "arXiv v1"
+      - claim: "fluctuating Gunn–Peterson relation incl. photoionisation equilibrium (T4^-0.7, Γ_-12) and peculiar-velocity gradient term (1 + dv_pec/(H dr))^-1"
+        location: "§5.2, Eq. (17)"
+        location_verified: true
+        how_verified: "arXiv v1"
+      - claim: "neutral hydrogen along the sightline absorbs the QSO continuum in the redshifted Lyα (1215.67 Å) line; in an expanding universe the continuously redshifted line produces an absorption trough blueward of the QSO's Lyα emission line"
+        location: "§1 Introduction, first paragraph (arXiv v1 preprint p. 3)"
+        location_verified: true
+        how_verified: "2026-10-03: arXiv v1 PDF (pdftotext). Qualitative statement only: the formula λ_obs = 1215.67(1 + z_abs) Å is not printed there."
+      - claim: "from N ≳ 10^18.5 cm^-2 the damping wings of Lyα become detectable"
+        location: "§3.4 'The Column Density Distribution' (arXiv v1 p. 15)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "Curve of growth is mentioned only in passing (§2.3, §3.4, §5.2); not a derivation source."
+
+  - id: REF-MCQUINN16
+    anchor: ref-mcquinn-2016
+    short: "McQuinn 2016"
+    kind: article
+    citation: "McQuinn, M. 2016, ARA&A 54, 313–362, 'The Evolution of the Intergalactic Medium'"
+    identifiers: {doi: "10.1146/annurev-astro-082214-122355", ads: "2016ARA&A..54..313M", arxiv: "1512.00086 (v3 read)"}
+    supports:
+      - claim: "τ_Lyα ≈ 1.3 Δ_b (x_HI/1e-5)((1+z)/4)^{3/2}[(dv/dx)/(H/(1+z))]^-1; 'the Lyα forest is sensitive to x_HI ~ 1e-5 at z = 3' (n_HI ~ 1e-10 cm^-3)"
+        location: "§2.1 'the Lyα forest', Eq. (1) and following text"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "photoionisation equilibrium x_HI = α_A n_e/Γ (x_HI ≪ 1); Γ^-1 ~ 30,000 yr ≪ recombination time"
+        location: "§2.1, Eq. (2) and following text"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "fluctuating Gunn–Peterson approximation sets dv/dx = H/(1+z), ignoring peculiar velocities"
+        location: "§2.1, footnote 1"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "T = T0 Δ_b^(γ−1)"
+        location: "§2.1, Eq. (3)"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "line-width (b) distribution as a forest statistic"
+        location: "§2.1.3 'the line-width distribution'"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "self-shielding break at N_HI ~ σ_HI^-1(1 Ry) = 1.6e17 cm^-2"
+        location: "§2.2 'the H I column density distribution'"
+        location_verified: true
+        how_verified: "arXiv v3"
+      - claim: "recent measurements give T0 = (10–20) × 10^3 K over 2 < z < 4; thermal broadening sets forest line widths"
+        location: "§2.3 'the thermal history of the IGM'"
+        location_verified: true
+        how_verified: "arXiv v3"
+    status: verified
+    notes: >-
+      Caution: evaluating τ_GP = (πe²/m_e c) f λ n_HI/H(z) directly with Planck 2018 at z = 3, Δ = 1, x_HI = 1e-5 gives
+      1.63, not 1.3 — do not mix McQuinn's numerical prefactor with the app's own computation. McQuinn does not treat
+      the curve of growth.
+
+  - id: REF-DIJKSTRA14
+    anchor: ref-dijkstra-2014
+    short: "Dijkstra 2014"
+    kind: article
+    citation: "Dijkstra, M. 2014, PASA 31, e040, 'Lyα Emitting Galaxies as a Probe of Reionisation'"
+    identifiers: {doi: "10.1017/pasa.2014.33", ads: "2014PASA...31...40D", arxiv: "1406.7292 (v2 read)"}
+    supports:
+      - claim: "Lyα transfer is absorption followed by (practically) instant re-emission, closely resembling pure scattering"
+        location: "§4 'Lyα Radiative Transfer Basics', opening paragraph"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "σ_α(x) = σ0 H(a_v,x) [their φ, φ(0)=1]; σ0 = 5.88e-14 (T/1e4 K)^-1/2 cm²; a_v = 4.7e-4 (T/1e4 K)^-1/2; core e^{-x²}, wing a_v/(√π x²), transition x_crit ~ 3.2 at 1e4 K"
+        location: "§4.1 'The Cross Section', Eqs. (15)–(16)"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "IGM transmission and the Gunn–Peterson optical depth for a reionised IGM; photons 'scattered out of the line of sight'"
+        location: "§5.2 'Intergalactic Radiative Transfer', Eqs. (22)–(23); §6.2 text"
+        location_verified: true
+        how_verified: "arXiv v2"
+    status: verified
+    notes: "Dijkstra writes n̄_HI = Ω_b h²(1 − Y)(1+z)³/m_p (shorthand; ρ_crit factor implicit)."
+
+  - id: REF-BB13
+    anchor: ref-becker-bolton-2013
+    short: "Becker & Bolton 2013"
+    kind: article
+    citation: "Becker, G. D. & Bolton, J. S. 2013, MNRAS 436, 1023–1039, 'New measurements of the ionizing ultraviolet background over 2 < z < 5 and implications for hydrogen reionization'"
+    identifiers: {doi: "10.1093/mnras/stt1610", ads: unverified, arxiv: "1307.2259 (v2 read)"}
+    supports:
+      - claim: "Γ_HI at z ≈ 3 ≈ 0.8 × 10^-12 s^-1"
+        location: "Table 1: log(Γ/1e-12 s^-1) = −0.066 at z = 2.80 and −0.103 at z = 3.20 (γ = 1.4 nominal); total error ≈ +0.13/−0.12 to −0.13 dex"
+        location_verified: true
+        how_verified: "arXiv v2 Table 1. No bin at z = 3.0; log-linear interpolation gives Γ ≈ 0.82e-12 s^-1."
+    status: verified
+    notes: "Results depend on γ (±0.08 dex for γ = 1.2/1.6, Table 1)."
+
+  - id: REF-BECKER13
+    anchor: ref-becker-2013
+    short: "Becker et al. 2013"
+    kind: article
+    citation: "Becker, G. D., Hewett, P. C., Worseck, G. & Prochaska, J. X. 2013, MNRAS 430, 2067–2081, 'A refined measurement of the mean transmitted flux in the Lyα forest over 2 < z < 5 using composite quasar spectra'"
+    identifiers: {doi: "10.1093/mnras/stt031", ads: unverified, arxiv: "1208.2584 (v2 read)"}
+    supports:
+      - claim: "τ_eff(z) = τ0[(1+z)/(1+z0)]^β + C with [τ0, β, C] = [0.751, 2.90, −0.132], z0 = 3.5"
+        location: "§4 (fit), Eq. (5); covariance Table 3"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "tabulated mean flux: F = 0.6966 ± 0.0084 (z = 2.95), 0.6670 ± 0.0082 (z = 3.05)"
+        location: "Table 2"
+        location_verified: true
+        how_verified: "arXiv v2"
+    status: verified
+    notes: "Eq. (5) at z = 3 gives τ_eff = 0.402, F = 0.669; the Table 2 bins bracket F ≈ 0.68 (τ_eff ≈ 0.38). Quote both or say 'F ≈ 0.67–0.68'."
+
+  - id: REF-FG08
+    anchor: ref-faucher-giguere-2008
+    short: "Faucher-Giguère et al. 2008"
+    kind: article
+    citation: "Faucher-Giguère, C.-A., Prochaska, J. X., Lidz, A., Hernquist, L. & Zaldarriaga, M. 2008, ApJ 681, 831–855, 'A Direct Precision Measurement of the Intergalactic Lyα Opacity at 2 ≤ z ≤ 4.2'"
+    identifiers: {doi: "10.1086/588648", ads: unverified}
+    supports:
+      - claim: "alternative τ_eff(z) measurement"
+        location: "not read"
+        location_verified: false
+        how_verified: "Bibliographic data only (Crossref)."
+    status: partially_verified
+    notes: "Becker et al. 2013 scale their absolute flux to FG08 over 2.2 ≤ z ≤ 2.5 (Becker 2013 Table 2 caption)."
+
+  - id: REF-BECKER11
+    anchor: ref-becker-2011
+    short: "Becker et al. 2011"
+    kind: article
+    citation: "Becker, G. D., Bolton, J. S., Haehnelt, M. G. & Sargent, W. L. W. 2011, MNRAS 410, 1096–1112, 'Detection of extended He II reionization in the temperature evolution of the intergalactic medium'"
+    identifiers: {doi: "10.1111/j.1365-2966.2010.17507.x", ads: "2011MNRAS.410.1096B", arxiv: "1008.2622 (v1 read)"}
+    supports:
+      - claim: "T0 at z ≈ 3: 11640 ± 500 K (z = 2.79) and 10980 ± 700 K (z = 3.16) for fiducial γ ≈ 1.54–1.55; 15740 ± 660 K and 13820 ± 880 K for γ = 1.3 (2σ errors)"
+        location: "Table 3 'Temperature results'"
+        location_verified: true
+        how_verified: "arXiv v1 (accepted-version numbers could differ slightly; journal version not read)"
+    status: verified
+    notes: "Primary measurement is T(Δ̄) at an optimal overdensity (Δ̄ = 3.35 at z = 2.79, 2.62 at z = 3.16); T0 depends on assumed γ. Safe wording: 'T0 ≈ 1–1.6 × 10^4 K at z ≈ 3'."
+
+  - id: REF-WGP05
+    anchor: ref-wolfe-2005
+    short: "Wolfe, Gawiser & Prochaska 2005"
+    kind: article
+    citation: "Wolfe, A. M., Gawiser, E. & Prochaska, J. X. 2005, ARA&A 43, 861–918, 'Damped Lyα Systems'"
+    identifiers: {doi: "10.1146/annurev.astro.42.053102.133950", ads: "2005ARA&A..43..861W", arxiv: "astro-ph/0509481 (v2 read)"}
+    supports:
+      - claim: "DLA: N(H I) ≥ 2 × 10^20 cm^-2; forest < 10^17; LLS 10^17 < N < 2 × 10^20 (citing Péroux et al. 2003b); N = 10^17 ≈ unity optical depth at the Lyman limit"
+        location: "§1 'What are the damped Lyα systems and how are they found?', first paragraph"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "rationale for the 2e20 threshold (historical, and roughly the neutral/ionised division)"
+        location: "§1.3 'The Significance of the N(H I) ≥ 2×10^20 cm^-2 Survey Threshold'"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "natural (finite upper-level lifetime) + Doppler ⇒ Voigt profile"
+        location: "§1.1"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "Lyα has unit optical depth in the damping wings at Δν_τ=1 ∝ [A21 f21 N(H I)]^1/2 when N(H I) > 10^19 cm^-2 (and σ_v < 70 km/s); the damped profile falls off as 1/Δν²"
+        location: "§1.1 'History of damped Lyα surveys' (arXiv v2 p. 4)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: ""
+
+  - id: REF-VERNER96
+    anchor: ref-verner-1996
+    short: "Verner et al. 1996"
+    kind: article
+    citation: "Verner, D. A., Ferland, G. J., Korista, K. T. & Yakovlev, D. G. 1996, ApJ 465, 487, 'Atomic Data for Astrophysics. II. New Analytic Fits for Photoionization Cross Sections of Atoms and Ions'"
+    identifiers: {doi: "10.1086/177435", ads: unverified, arxiv: "astro-ph/9601009 (v2 read)"}
+    supports:
+      - claim: "analytic fit σ(E) (Eq. 1) with H I parameters E_th = 13.60 eV, E0 = 0.4298 eV, σ0 = 5.475e4 Mb, y_a = 32.88, P = 2.963"
+        location: "§3 Eq. (1); Table 1, H I row"
+        location_verified: true
+        how_verified: "arXiv v2. Fit evaluates to 6.35e-18 cm² at 13.6 eV (0.7 % above the exact hydrogenic 6.304e-18)."
+    status: verified
+    notes: "Journal ref from arXiv metadata (ApJ 465:487); page range not checked."
+
+  - id: REF-PLANCK18
+    anchor: ref-planck-2018
+    short: "Planck Collaboration 2020"
+    kind: article
+    citation: "Planck Collaboration (Aghanim, N. et al.) 2020, A&A 641, A6, 'Planck 2018 results. VI. Cosmological parameters'; Corrigendum A&A 652, C4 (2021)"
+    identifiers: {doi: "10.1051/0004-6361/201833910", ads: "2020A&A...641A...6P", ads_corrigendum: "2021A&A...652C...4P", arxiv: "1807.06209 (v4 read)"}
+    supports:
+      - claim: "base-ΛCDM TT,TE,EE+lowE+lensing: Ω_b h² = 0.02237 ± 0.00015, Ω_c h² = 0.1200 ± 0.0012, H0 = 67.36 ± 0.54, Ω_m = 0.3153 ± 0.0073, Ω_Λ = 0.6847 ± 0.0073; +BAO: 0.02242 ± 0.00014, 67.66 ± 0.42, 0.3111 ± 0.0056, 0.6889 ± 0.0056"
+        location: "Table 2 (columns 'TT,TE,EE+lowE+lensing' and '+BAO'); baseline also in Table 1"
+        location_verified: true
+        how_verified: "arXiv v4 Table 2"
+      - claim: "helium mass fraction from BBN: posterior mean Y_P ≈ 0.2454 (nucleon fraction Y_P^BBN ≈ 0.2467)"
+        location: "Table 2 caption (Y_P ≈ 0.2454); the nucleon-fraction value 0.2467 appears in the early methods text (section number not recorded)"
+        location_verified: true
+        how_verified: "arXiv v4"
+      - claim: "re-check: Table 2 column 'TT,TE,EE+lowE+lensing' gives H0 = 67.36 ± 0.54 km s^-1 Mpc^-1, Ωm = 0.3153 ± 0.0073, ΩΛ = 0.6847 ± 0.0073; the caption states that the baseline results are based on TT,TE,EE+lowE+lensing"
+        location: "Table 2, arXiv v4 p. 15, column 'TT,TE,EE+lowE+lensing' (the adjacent column 'TT,TE,EE+lowE+lensing+BAO' gives 67.66, 0.3111, 0.6889)"
+        location_verified: true
+        how_verified: "2026-10-03: arXiv v4 PDF (9 Aug 2021), pdftotext. h = 0.6736 is H0/100 (not a separate table entry)."
+    status: verified
+    notes: "Per arXiv v4 comment, the corrigendum concerns the reionization result (p. 59), not Table 2."
+
+  # ------------------------------------------------------------------ fake_spectra / instruments
+  - id: REF-BIRD15
+    anchor: ref-bird-2015
+    short: "Bird et al. 2015"
+    kind: article
+    citation: "Bird, S., Haehnelt, M., Neeleman, M., Genel, S., Vogelsberger, M. & Hernquist, L. 2015, MNRAS 447, 1834–1846, 'Reproducing the kinematics of damped Lyman α systems'"
+    identifiers: {doi: "10.1093/mnras/stu2542", ads: "2015MNRAS.447.1834B", arxiv: "1407.7858 (v2 read)"}
+    supports:
+      - claim: "fake_spectra method: cells interpolated onto the sightline at redshift-space position v = H(z)x + v_par (x proper); τ = Voigt profile convolved with the density kernel, trapezium-rule integration, tails τ < 1e-5 neglected; code at github.com/sbird/fake_spectra"
+        location: "§2.6 'Artificial Spectra', Eqs. (6)–(7) and footnote 3"
+        location_verified: true
+        how_verified: "arXiv v2"
+    status: verified
+    notes: "This is the paper that describes the spectral-generation method."
+
+  - id: REF-BIRD14
+    anchor: ref-bird-2014
+    short: "Bird et al. 2014"
+    kind: article
+    citation: "Bird, S., Vogelsberger, M., Haehnelt, M., Sijacki, D., Genel, S., Torrey, P., Springel, V. & Hernquist, L. 2014, MNRAS 445, 2313–2324, 'Damped Lyman α absorbers as a probe of stellar feedback'"
+    identifiers: {doi: "10.1093/mnras/stu1923", ads: unverified, arxiv: "1405.3994 (v2 read)"}
+    supports:
+      - claim: "(NOT the spectra-method paper) DLA column densities from projecting gas onto a grid with an SPH kernel; scripts at github.com/sbird/DLA_script"
+        location: "§2 intro and §2.3 'Projection and DLA Identification'"
+        location_verified: true
+        how_verified: "arXiv v2"
+    status: verified
+    notes: "Full 8-author list verified against Crossref record for the DOI."
+
+  - id: REF-FAKESPECTRA
+    anchor: ref-fake-spectra
+    short: "fake_spectra (Bird)"
+    kind: software
+    citation: "fake_spectra (S. Bird), MIT license, https://github.com/sbird/fake_spectra; PyPI package 'fake_spectra' v2.2.4"
+    identifiers: {url: "https://github.com/sbird/fake_spectra", pypi: "https://pypi.org/project/fake_spectra/2.2.4/", git_tag: "v2.2.4"}
+    supports:
+      - claim: "version 2.2.4 exists (PyPI sdist uploaded 2025-08-11; git tag v2.2.4)"
+        location: "PyPI JSON API; GitHub tags API"
+        location_verified: true
+        how_verified: "Queried 2026-10-02. Newer releases exist: 2.2.5 (2026-03-10), 2.2.6 (2026-03-26), 2.3.0 (2026-08-17), 2.3.1 (2026-09-17)."
+      - claim: "line data and constants used by v2.2.4: VPFIT atom.dat H I 1215.6701 Å, f = 0.416400, Γ = 6.265E8 s^-1 ('Morton(03), 2cpts sep by 1.3 km/s'); absorber mass = 1.00794 × PROTONMASS (1.67262178e-24 g); BOLTZMANN = 1.3806504e-16; σ_a = sqrt(3πσ_T/8) λ f = π r_e λ f; Voigt = Re Faddeeva::w (Johnson)"
+        location: "fake_spectra/atom.dat line 7; absorption.cpp (constants, LineAbsorption ctor); absorption.h (PROTONMASS); line_data.py (masses); singleabs.h (profile)"
+        location_verified: true
+        how_verified: "Read raw files at tag v2.2.4 on GitHub."
+      - claim: "Unit system: defaults UnitLength_in_cm = 3.085678e21 (comment '1 kpc/h in cm/h'), UnitMass_in_g = 1.98892e43 ('1e10 M_sun/h in g/h'), UnitVelocity_in_cm_per_s = 1e5 ('1 km/s'), replaced by the snapshot header's values when present; positions and box in comoving kpc/h; proper cm per code length rscale = UnitLength_in_cm·a/h; velfac = rscale·H(z)/3.085678e24 km/s per comoving kpc/h with H(z) = 100 h sqrt(Ωm/a³ + ΩΛ); HDF5 (Gadget) Velocities × √a → peculiar km/s; BigFile Velocity ÷ a unless UsePeculiarVelocity; density × UnitDensity·h²/m_p·(1+z)³ → proper cm^-3"
+        location: "sdist 2.2.4: unitsystem.py:7–17; abstractsnapshot.py:102–112 (get_units), 114–119 (HDF5 velocities ×√a), 399–406 (BigFile velocities); spectra.py:103–107 and 190–195 (which unit system is used), 182–187 (BoxSize, Time, HubbleParam, Omega0, OmegaLambda from the header), 210 (rscale), 212–217 (H(z), velfac, vmax); spectra.py:552 and 573 (positions, velocities read); absorption.h:15–20 and 40–46 (units of the C arguments); absorption.cpp:234 (u = velfac·x + v_pec); gas_properties.py:105–110 (density conversion)"
+        location_verified: true
+        how_verified: "2026-10-03: read in the unpacked sdist science/.cache/fake_spectra-2.2.4 (sha256 4cc80e6c…, see notes/FAKE_SPECTRA_CONVENTIONS.md §0). Quirk: the docstring (spectra.py:67) says a passed `units` overrides the snapshot's, but with reload_file=True spectra.py:190–192 replaces it with the header's units, or with the defaults if the header has none (abstractsnapshot.py:109–111)."
+    status: verified
+    notes: >-
+      README contains no citation request; no CITATION file. Oracle-comparison caveat: fake_spectra's thermal width
+      uses m = 1.00794 m_p = 1.68590e-24 g (0.74 % heavier than m(1H)), so b_fake = 0.99632 b_true at equal T.
+
+  - id: REF-PD13
+    anchor: ref-palanque-delabrouille-2013
+    short: "Palanque-Delabrouille et al. 2013"
+    kind: article
+    citation: "Palanque-Delabrouille, N., Yèche, Ch., Borde, A., Le Goff, J.-M., Rossi, G., et al. 2013, A&A 559, A85, 'The one-dimensional Lyα forest power spectrum from BOSS'"
+    identifiers: {doi: "10.1051/0004-6361/201322130", ads: "2013A&A...559A..85P", arxiv: "1306.5896 (v2 read)"}
+    supports:
+      - claim: "spectrograph resolution enters as a Gaussian kernel: P1D = (⟨P_raw⟩ − P_noise)/W², W(k,R,Δv) = exp(−(kR)²/2) × sin(kΔv/2)/(kΔv/2), R = Gaussian rms resolution in km/s (not resolving power), Δv = pixel width"
+        location: "§4 'Methods for determining P(k)', Eqs. (4)–(6); calibration of the resolution in §2.4"
+        location_verified: true
+        how_verified: "arXiv v2"
+      - claim: "velocity difference between pixels Δv = c Δλ/λ = c Δ[ln λ] (the differential form of the log-λ convention)"
+        location: "§4.1.1 'Measurement of the power spectrum with a Fourier transform' (arXiv v2 p. 9)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "W is the Fourier transform of (Gaussian LSF) ⊗ (pixel top-hat); equivalent to convolving the flux with a Gaussian LSF of rms R, then pixelising."
+
+  - id: REF-RAUCH96
+    anchor: ref-rauch-1996
+    short: "Rauch et al. 1996"
+    kind: article
+    citation: "Rauch, M., Sargent, W. L. W., Womble, D. S. & Barlow, T. A. 1996, ApJ 467, L5, 'Temperature and Kinematics of C IV Absorption Systems'"
+    identifiers: {doi: "10.1086/310187", arxiv: "astro-ph/9606041"}
+    supports:
+      - claim: "two ions of different mass in the same gas separate temperature from bulk motion: b_i² = b_b² + 2kT/m_i, done with C IV and Si IV; the shared bulk component is an assumption that 'need not be universally true'"
+        location: "§1 (arXiv p. 3); §3 'Analysis of the absorption line profiles', Eq. (1) and the text after it (arXiv p. 5)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "Their pair is C IV with Si IV, not H I with Si IV; for H I with a metal ion, sharing the same gas is a stronger assumption."
+
+  - id: REF-GK00
+    anchor: ref-griesmann-kling-2000
+    short: "Griesmann & Kling 2000"
+    kind: article
+    citation: "Griesmann, U. & Kling, R. 2000, ApJ 536, L113, 'Interferometric Measurement of Resonance Transition Wavelengths in C IV, Si IV, Al III, Al II, and Si II'"
+    identifiers: {doi: "10.1086/312741", arxiv: "astro-ph/0004190"}
+    supports:
+      - claim: "Si IV 3s ²S1/2 – 3p ²P3/2: 71748.355(2) cm^-1, vacuum λ 1393.76018(4) Å (laboratory Fourier-transform spectroscopy); ²P1/2: 1402.77291(4) Å"
+        location: "Table 1 'Resonance transitions' (arXiv p. 5)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "The laboratory wavelength behind the label 'Si IV 1394'; NIST's Ritz value differs by 0.0056 Å (≈ 1.2 km/s), irrelevant here."
+
+  - id: REF-KARACAYLI24
+    anchor: ref-karacayli-2024
+    short: "Karaçaylı et al. 2024"
+    kind: article
+    citation: "Karaçaylı, N. G. et al. 2024, MNRAS 528, 3941, 'Optimal 1D Lyα forest power spectrum estimation — III. DESI early data'"
+    identifiers: {doi: "10.1093/mnras/stae171", ads: "2024MNRAS.528.3941K", arxiv: "2306.06316 (v3 read)"}
+    supports:
+      - claim: "wavelength is converted to velocity with logarithmic spacing, 'following the convention in cosmology': v = c ln(λ/λ_Lyα)"
+        location: "§3.2 'Quadratic estimator', Eq. (14) (arXiv v3 p. 6)"
+        location_verified: true
+        how_verified: "2026-10-04 (literature check): read in the text at this location; quote re-checked against the saved extract."
+    status: verified
+    notes: "The resource uses the same convention with its zero point at λ0(1+z0): λ_obs = λ0(1+z0) e^(u/c)."
+
+  - id: REF-ZAGHLOUL15
+    anchor: ref-zaghloul-2015
+    short: "Zaghloul 2015"
+    kind: article
+    citation: "Zaghloul, M. R. 2015, arXiv:1505.05596, 'A simple reform for treating the loss of accuracy of Humlicek's W4 algorithm near the real axis'"
+    identifiers: {arxiv: "1505.05596", doi: unverified}
+    supports:
+      - claim: "Humlíček W4 loses accuracy near the real axis"
+        location: "abstract"
+        location_verified: true
+        how_verified: "arXiv abstract page via WebFetch; journal publication (if any) not checked."
+      - claim: "Original W4 region borders (Table 1, middle column); W4 loses its claimed accuracy for y < 1e-7 in region II (Fig. 2); proposed reform: use the region-IV formula also for y ≤ 1e-6 and 5.5 ≤ |x| + y < 15 (Table 1, right column)"
+        location: "§2, Table 1 and Fig. 2 (p. 3); §3 (p. 4); arXiv v1"
+        location_verified: true
+        how_verified: "2026-10-03: read the arXiv v1 PDF (pdftotext; p. 3 also as an image, because the ≥/≤ glyphs drop out of the text extraction). The arXiv abs page lists only v1 (21 May 2015) and no journal-ref."
+    status: partially_verified
+    notes: ""
+
+  # ------------------------------------------------------------------ added 2026-10-03
+  - id: REF-HOGG99
+    anchor: ref-hogg-1999
+    short: "Hogg 1999"
+    kind: article
+    citation: "Hogg, D. W. 1999, 'Distance measures in cosmology', arXiv:astro-ph/9905116 (v4, 16 Dec 2000); pedagogical note, not published in a journal"
+    identifiers: {arxiv: "astro-ph/9905116 (v4 read)", doi: "10.48550/arXiv.astro-ph/9905116", ads: "1999astro.ph..5116H"}
+    supports:
+      - claim: "redshift definition z ≡ ν_e/ν_o − 1 = λ_o/λ_e − 1"
+        location: "§3 'Redshift', Eq. (8)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF (pdftotext), 2026-10-03"
+      - claim: "1 + z = a(t_o)/a(t_e)"
+        location: "§3, Eq. (12)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+      - claim: "redshift of object 2 seen by an observer at z1 < z2: 1 + z12 = a(t1)/a(t2) = (1 + z2)/(1 + z1) (e.g. an absorber's wavelength in the quasar's frame)"
+        location: "§3, Eq. (13)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+      - claim: "peculiar velocity from a redshift difference: v_pec = c (z_obs − z_cos)/(1 + z), for v_pec ≪ c"
+        location: "§3, Eq. (10)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+      - claim: "Hubble distance D_H ≡ c/H0 = 3000 h^-1 Mpc"
+        location: "§2 'Cosmographic parameters', Eq. (4)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+      - claim: "E(z) ≡ sqrt(ΩM(1+z)³ + Ωk(1+z)² + ΩΛ) with ΩM + ΩΛ + Ωk = 1 (flat: Ωk = 0); H(z) = H0 E(z)"
+        location: "§4 'Comoving distance (line-of-sight)', Eq. (14) and the text after it; §2, Eq. (7)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+      - claim: "line-of-sight comoving distance D_C = D_H ∫_0^z dz′/E(z′)"
+        location: "§4, Eq. (15)"
+        location_verified: true
+        how_verified: "arXiv v4 PDF"
+    status: verified
+    notes: >-
+      Not refereed (arXiv comment: the text is not submitted anywhere else). E(z) has no radiation term, as in
+      lyaphys.js. The DOI is the arXiv-issued DataCite DOI shown on the abs page; the ADS bibcode was returned by a
+      search restricted to ui.adsabs.harvard.edu. Equation numbers are those of v4.
+
+  - id: REF-GADGET2-GUIDE
+    anchor: ref-gadget2-guide
+    short: "Springel 2005 (GADGET-2 user guide)"
+    kind: documentation
+    citation: "Springel, V. 2005, 'User guide for GADGET-2' (dated May 1, 2005), https://wwwmpa.mpa-garching.mpg.de/gadget/users-guide.pdf"
+    identifiers: {url: "https://wwwmpa.mpa-garching.mpg.de/gadget/users-guide.pdf", doi: unverified, ads: unverified}
+    supports:
+      - claim: "snapshot positions are comoving coordinates in internal length units (h^-1 kpc for the default units); stored particle velocities u give the peculiar velocity as v = u √a in cosmological runs"
+        location: "§6.1 'Structure of the default snapshot file format', items 2 ('Particle positions') and 3 ('Particle velocities'), p. 32"
+        location_verified: true
+        how_verified: "PDF read 2026-10-03 (pdftotext, per-page extraction)."
+      - claim: "default units: UnitLength_in_cm 3.085678e21 (1.0 kpc/h), UnitVelocity_in_cm_per_s 1e5 (km/s), UnitMass_in_g 1.989e43 (1e10 M_sun/h)"
+        location: "§5.9 'System of units', pp. 25–26"
+        location_verified: true
+        how_verified: "same"
+      - claim: "HDF5 snapshots store the blocks of the default format as datasets named Coordinates, Velocities, SmoothingLength, ..."
+        location: "§6.3 'The HDF file format', p. 35; HDF5 identifiers in Table 2, p. 30"
+        location_verified: true
+        how_verified: "same. The guide does not restate the √a convention for HDF5; that it carries over is inferred from §6.3, not stated."
+    status: partially_verified
+    notes: >-
+      Supports the Gadget velocity convention that fake_spectra applies (abstractsnapshot.py:114–119). The guide also
+      says (p. 26, CourantFac entry) that GADGET-2's smoothing length differs by a factor of 2 from much of the SPH
+      literature; whether fake_spectra's SmoothingLength/2 (abstractsnapshot.py:93–100) matches a given simulation
+      code's convention was NOT checked.
+
+constants:
+
+  # ---------------------------------------------------------------- H I Lyα atomic data
+  - id: CONST-LYA-LAMBDA
+    quantity: "H I Lyα rest wavelength (vacuum), 1s–2p fine-structure components, unresolved multiplet, and gf-weighted mean"
+    value:
+      lambda_2p3_2_ritz: 1215.668237310   # ± 0.000000006 Å, 1s 2S1/2 – 2p 2P°3/2
+      lambda_2p1_2_ritz: 1215.673644608   # ± 0.000000004 Å, 1s 2S1/2 – 2p 2P°1/2
+      lambda_components_observed: 1215.6699  # ± 0.0020 Å (both components, unresolved observation)
+      lambda_1s_2_multiplet: 1215.6701    # obs ± 0.0021, Ritz ± 0.0015 Å; upper level = n=2 centroid incl. 2s (gk = 8)
+      lambda_gf_weighted_2p: 1215.67004   # computed: Σ gf λ / Σ gf over the two 2p components
+      fine_structure_separation_kms: 1.3335  # computed c Δλ/λ
+    unit: "Å (vacuum)"
+    source: "NIST ASD v5.12 (2024), lines output for H I 1215–1216 Å, accessed 2026-10-02 (query in REF-NIST-ASD); levels from Kramida 2010; observed λ from Sansonetti et al. 2004"
+    notes: >-
+      ASSUMED 1215.6701 Å = the NIST unresolved '1s–2' value (also VPFIT/fake_spectra). The physically appropriate
+      2p gf-weighted centroid is 1215.67004 Å; the 0.00006 Å difference is 0.015 km/s — negligible. Suggest the code
+      comment say 'NIST multiplet value' rather than 'fine-structure weighted'.
+
+  - id: CONST-LYA-F
+    quantity: "absorption oscillator strength f(1s→2p)"
+    value: {total: 0.41641, f_2p3_2: 0.27760, f_2p1_2_nist: 0.13880, f_2p1_2_wf09: 0.13881}
+    unit: "dimensionless"
+    source: "NIST ASD v5.12 (accessed 2026-10-02); Wiese & Fuhr 2009 Table 6 No. 1, p. 578"
+    notes: "ASSUMED 0.4164 — consistent (rounded). Draine 2011 first printing had 0.4162 (corrected to 0.4164 in errata); Meiksin 2009 quotes 0.4162."
+
+  - id: CONST-LYA-A
+    quantity: "Einstein A(2p→1s) = total decay rate of 2p = Lorentzian damping constant Γ for Lyα"
+    value: {wf09_multiplet: 6.2649e8, wf09_2p1_2: 6.2649e8, wf09_2p3_2: 6.2648e8, nist_v5_12_2p1_2: 6.2648e8, nist_v5_12_2p3_2: 6.2647e8, nist_1s_2_gaveraged_DO_NOT_USE: 4.6986e8, vpfit_fake_spectra: 6.265e8}
+    unit: "s^-1"
+    source: "Wiese & Fuhr 2009 Table 6 No. 1 (source: Baker 2008); NIST ASD v5.12 (Jitrik & Bunge 2004 rescaled to CODATA 2018)"
+    notes: "ASSUMED 6.2649e8 — matches W&F 2009 multiplet value; NIST v5.12 is lower by 2–3e-5 relative (negligible). Cross-check: A = (g_l/g_u)(8π²e²/(m_e c λ²)) f with λ = 1215.6701 Å, f = 0.41641 gives 6.2648e8."
+
+  - id: CONST-2P-LIFETIME
+    quantity: "radiative lifetime of H 2p"
+    value: 1.5962
+    unit: "ns"
+    source: "computed 1/A with A = 6.2649e8 s^-1 (2p decays only to 1s in E1; 2p→2s rate negligible)"
+    notes: "1/6.2648e8 = 1.59622 ns. 'τ ≈ 1.60 ns' is fine."
+
+  - id: CONST-LYA-G
+    quantity: "statistical weights"
+    value: {g_1s: 2, g_2p1_2: 2, g_2p3_2: 4, g_2p_total: 6, g_n2_all_incl_2s: 8}
+    unit: "dimensionless"
+    source: "NIST ASD v5.12 lines output (gi, gk columns); W&F 2009 Table 6 (gi–gk = 2–6)"
+    notes: ""
+
+  - id: CONST-LYA-DERIVED
+    quantity: "derived Lyα line parameters used in lyaphys.js"
+    value:
+      sigma_v_cm2_kms: 1.3435e-12        # (πe²/m_e c) f λ / 1e5, f = 0.41641, λ = 1215.6701 Å
+      sigma0_cm2: "7.580e-13 / b[km/s]"   # line-centre cross-section of pure Doppler profile
+      gamma_v_kms: 6.0607e-3              # Γλ/(4π), Lorentz HWHM in velocity
+      b_1e4K_kms: 12.845                  # sqrt(2kT/m(1H)), T = 1e4 K
+      a_1e4K: 4.718e-4                    # γ_v / b
+      tau0_N1e13_b20: 0.379
+    unit: "as labelled"
+    source: "computed in this audit from CONST-LYA-* and CODATA 2022"
+    notes: "Cross-checks: Meiksin 2009 Eq. (19) τ0 ≃ 0.38 (N/1e13)(b/20)^-1; Dijkstra 2014 Eq. (15) σ0 = 5.88e-14 T4^-1/2 and a_v = 4.7e-4 T4^-1/2 (ours 5.90e-14, 4.72e-4); Meiksin a ≃ 0.0472 T^-1/2."
+
+  - id: CONST-LYB-LAMBDA
+    quantity: "H I Lyβ (1s–3p) rest wavelength (vacuum): fine-structure components, 3p f-weighted centroid, NIST unresolved n = 3 line, W&F multiplet"
+    value:
+      lambda_3p3_2_ritz: 1025.72182505      # ± 0.00000007 Å, 1s 2S1/2 – 3p 2P°3/2
+      lambda_3p1_2_ritz: 1025.72296565      # ± 0.00000007 Å, 1s 2S1/2 – 3p 2P°1/2
+      lambda_f_weighted_3p: 1025.72221      # computed: Σ f λ / Σ f over the two 3p components
+      lambda_1s_3_unresolved_ritz: 1025.7220   # ± 0.0003 Å; upper level = centroid of all n = 3 levels (3s, 3p, 3d; gk = 18)
+      lambda_1s_3_unresolved_observed: 1025.728  # ± 0.003 Å
+      lambda_wf09_multiplet_printed: 1025.72   # Table 6 No. 2; its Ek = 97492.28 cm^-1 implies 1025.72224
+      assumed_in_app: 1025.7223
+    unit: "Å (vacuum)"
+    source: "NIST ASD v5.12 lines output, H I 1025–1026 Å (accessed 2026-10-03); Wiese & Fuhr 2009 Table 6 No. 2, p. 578"
+    notes: >-
+      ASSUMED 1025.7223 Å (experiments/canonical/src/beats_c.js:167) is 0.00009 Å (0.028 km/s) above the 3p
+      f-weighted centroid and 0.0003 Å above the NIST unresolved n = 3 Ritz value, whose upper level includes 3s
+      and 3d. Negligible. The same value is in VPFIT's atom.dat as shipped with fake_spectra 2.2.4
+      (atom.dat:8, 'H I 1025.7223 0.079120 1.897E8'); the 'Morton(03)' comment is on atom.dat:7 (Lyα) only, so
+      attributing line 8 to Morton 2003 is an inference, not verified.
+
+  - id: CONST-LYB-F
+    quantity: "absorption oscillator strength f(1s→3p)"
+    value: {total_nist: 0.079142, total_wf09: 0.079142, f_3p3_2: 0.052761, f_3p1_2_nist: 0.026380, f_3p1_2_wf09: 0.026381, assumed_in_app: 0.07912, vpfit_atom_dat: 0.079120}
+    unit: "dimensionless"
+    source: "NIST ASD v5.12 (accessed 2026-10-03); Wiese & Fuhr 2009 Table 6 No. 2, p. 578 (source: Baker 2008)"
+    notes: >-
+      ASSUMED 0.07912 is 2.2e-5 (−0.028 %) below 0.079142. (fλ)_Lyβ/(fλ)_Lyα = 0.16032 with the app's values and
+      0.16036 with NIST/W&F (3p centroid; Lyα f = 0.41641, λ = 1215.6701 Å), so 'fλ 6.24× smaller' holds either
+      way (6.2375 vs 6.2360). A(3p→1s) = 1.6725e8 s^-1 (both sources); the total 3p width (VPFIT Γ = 1.897e8,
+      including 3p→2s) was not checked. The app's Lyβ panel scales N by the fλ ratio and keeps Lyα's damping
+      constant (beats_c.js:120–123, 167); at the columns shown the damping wings are negligible.
+      Since 2026-10-03 lyaphys.js carries lyb_f = 0.079142 and lyb_lambda_A = 1025.72221 (3p centroid); Beat 13 uses them.
+
+  # ---------------------------------------------------------------- fundamental constants
+  - id: CONST-C
+    quantity: "speed of light in vacuum"
+    value: 299792458
+    unit: "m s^-1 (exact) = 2.99792458e10 cm s^-1"
+    source: "CODATA 2022 via NIST CUU allascii.txt (accessed 2026-10-02)"
+    notes: ""
+
+  - id: CONST-KB
+    quantity: "Boltzmann constant"
+    value: 1.380649e-23
+    unit: "J K^-1 (exact) = 1.380649e-16 erg K^-1"
+    source: "CODATA 2022 via NIST CUU"
+    notes: "fake_spectra v2.2.4 absorption.cpp uses 1.3806504e-16 (CODATA 2006); difference 1e-6 relative."
+
+  - id: CONST-E
+    quantity: "elementary charge"
+    value: {SI_C: 1.602176634e-19, gaussian_esu: 4.80320471e-10}
+    unit: "C (exact); esu = statC (computed as e_SI × c[cm/s] / 10)"
+    source: "CODATA 2022 via NIST CUU; esu value computed"
+    notes: ""
+
+  - id: CONST-ME
+    quantity: "electron mass"
+    value: {codata2022: 9.1093837139e-31, codata2018: 9.1093837015e-31}
+    unit: "kg (×1e3 for g); uncertainty 0.0000000028e-31 kg"
+    source: "CODATA 2022 / 2018 via NIST CUU"
+    notes: ""
+
+  - id: CONST-U
+    quantity: "atomic mass constant m_u"
+    value: {codata2022: 1.66053906892e-27, codata2018: 1.66053906660e-27}
+    unit: "kg (unc. 0.00000000052e-27 in 2022)"
+    source: "CODATA 2022 / 2018 via NIST CUU"
+    notes: ""
+
+  - id: CONST-RE
+    quantity: "classical electron radius r_e = e²/(m_e c²)"
+    value: {codata2022: 2.8179403205e-15, codata2018: 2.8179403262e-15}
+    unit: "m"
+    source: "CODATA 2022 / 2018 via NIST CUU"
+    notes: ""
+
+  - id: CONST-AR-H1
+    quantity: "relative atomic mass of 1H (neutral atom)"
+    value: {nist_isotopes_page: 1.00782503223, codata2022_derived: 1.0078250319}
+    unit: "u"
+    source: "NIST Atomic Weights & Isotopic Compositions (H entry; page attributes masses to AME2012), accessed 2026-10-02; derived value = A_r(p) + A_r(e) − 13.5984 eV/(m_u c²) with CODATA 2022"
+    notes: "Standard atomic weight of H (natural mix) = [1.00784, 1.00811] (same NIST page)."
+
+  - id: CONST-MH
+    quantity: "mass of the 1H atom in grams"
+    value: 1.6735328e-24
+    unit: "g"
+    source: "computed: 1.00782503 × 1.66053906892e-24 g (CODATA 2022); with CODATA 2018 m_u: 1.6735328e-24 (same to 8 digits)"
+    notes: >-
+      DIFFERS FROM ASSUMED 1.6735575e-24 g by +1.47e-5 relative. 1.6735575e-24 g corresponds to ≈1.00784 u
+      (numerically the lower bound of the IUPAC standard-atomic-weight interval for H), not to 1.00782503 u as the
+      lyaphys.js comment says. Effect on b is 7e-6 (negligible) but the value/comment pair is inconsistent; use
+      1.6735328e-24 g if the comment '(1.00782503 u)' is kept.
+
+  - id: CONST-PIE2MEC
+    quantity: "classical integrated line cross-section constant πe²/(m_e c) = π r_e c"
+    value: {codata2022: 0.026540089, codata2018: 0.026540089}
+    unit: "cm² s^-1"
+    source: "computed from CODATA 2022 (r_e, c) and checked against e_esu²/(m_e c)"
+    notes: "ASSUMED 0.026540 — consistent to 5 significant figures."
+
+  - id: CONST-G-NEWTON
+    quantity: "Newtonian constant of gravitation (for ρ_crit)"
+    value: 6.67430e-11
+    unit: "m³ kg^-1 s^-2 (unc. 0.00015e-11)"
+    source: "CODATA 2022 via NIST CUU"
+    notes: "ρ_crit,0 = 3H0²/(8πG) = 1.87834e-29 h² g cm^-3 (computed)."
+
+  - id: CONST-MPC
+    quantity: "megaparsec"
+    value: 3.0856775814913673e24
+    unit: "cm"
+    source: "computed as 1e6 × (648000/π) au with au = 149 597 870 700 m (IAU definitions); the IAU resolutions themselves were NOT fetched in this audit"
+    notes: "Matches lyaphys.js Mpc_cm."
+
+  # ---------------------------------------------------------------- photoionisation / recombination
+  - id: CONST-SIGMA912
+    quantity: "H I photoionisation cross-section at threshold (13.6 eV, 912 Å)"
+    value: {exact_hydrogenic_nonrel: 6.3043e-18, with_reduced_mass: 6.3112e-18, verner96_fit: 6.346e-18}
+    unit: "cm²"
+    source: "exact: (2^9 π²/(3 e_Euler^4)) α a0² computed with CODATA 2022 α, a0; Verner et al. 1996 Eq. (1) + Table 1 H I row"
+    notes: "1/σ = 1.586e17 cm^-2 (exact) ⇒ τ_912 = 1 at N_HI = 1.59e17 cm^-2. McQuinn 2016 §2.2 quotes 1.6e17. Textbook equation locations (Draine §13.1, O&F ch. 2) not verified."
+
+  - id: CONST-ALPHA-A
+    quantity: "case-A H recombination coefficient α_A(T)"
+    value:
+      at_1e4K_hui_gnedin97_fit: 4.30e-13
+      at_1e4K_hgz97_text: 4.29e-13
+      at_1e4K_draine_eq14_3: 4.13e-13
+      at_1e4K_draine_table14_1_revised: 4.17e-13
+      at_1e4K_osterbrock_ferland_table2_1: "4.18e-13 (UNVERIFIED)"
+      local_slope_dlnα_dlnT_at_1e4K: -0.71
+      local_slope_at_2e4K: "-0.73 (Draine fit) / -0.75 (HG97 fit)"
+      power_law_approx: "4e-13 (T/1e4 K)^-0.7 (Hui & Gnedin 1997 Eq. 12)"
+    unit: "cm³ s^-1"
+    source: "REF-HG97 Eq. (12) + Appendix A; REF-HGZ97 §3.2; REF-DRAINE11 §14.2 Eq. (14.3) + errata Table 14.1"
+    notes: "4e-13 T4^-0.7 is accurate to ~3–7 % for 1e4–2e4 K. Meiksin 2009 uses 4e-13 T4^-0.75."
+
+  # ---------------------------------------------------------------- IGM at z ≈ 3
+  - id: CONST-GAMMA-HI-Z3
+    quantity: "H I photoionisation rate at z ≈ 3"
+    value: {z2p8: 0.86e-12, z3p2: 0.79e-12, z3_interp: 0.82e-12}
+    unit: "s^-1"
+    source: "Becker & Bolton 2013, Table 1 (log Γ12 = −0.066, −0.103; γ = 1.4 nominal); interpolation in this audit"
+    notes: "Total uncertainty ≈ ±0.13 dex. '~1e-12 s^-1' is acceptable as an order of magnitude; prefer 0.8e-12."
+
+  - id: CONST-TAUEFF-Z3
+    quantity: "Lyα effective optical depth / mean transmitted flux at z = 3"
+    value: {tau_eff_eq5: 0.402, F_eq5: 0.669, F_table_z2p95: 0.6966, F_table_z3p05: 0.6670}
+    unit: "dimensionless"
+    source: "Becker et al. 2013, Eq. (5) with [0.751, 2.90, −0.132], z0 = 3.5; Table 2"
+    notes: ""
+
+  - id: CONST-T0-Z3
+    quantity: "IGM temperature at mean density, z ≈ 3"
+    value: {becker11_z2p79_fidgamma: 11640, becker11_z3p16_fidgamma: 10980, becker11_z3p16_gamma1p3: 13820, mcquinn16_range: "10000–20000"}
+    unit: "K"
+    source: "Becker et al. 2011 Table 3; McQuinn 2016 §2.3"
+    notes: "T0 depends on assumed γ; '1–2 × 10^4 K' is a fair, citable range."
+
+  - id: CONST-NH-Z3
+    quantity: "mean (proper) hydrogen number density at z = 3"
+    value: {nH_z0: 1.8946e-7, nH_z3: 1.2126e-5}
+    unit: "cm^-3"
+    source: "computed: n_H = (1 − Y_P) Ω_b h² ρ_crit,0/h² (1+z)³ / m(1H) with Planck 2018 TT,TE,EE+lowE+lensing Ω_b h² = 0.02237, Y_P = 0.2454, ρ_crit,0/h² = 1.87834e-29 g cm^-3, m(1H) = 1.67353e-24 g"
+    notes: "With +BAO (0.02242): 1.2153e-5. Independent of h. Meiksin 2009 quotes n_H(0) ≃ 0.186 m^-3 for Ω_b h² = 0.022, Y = 0.2477. n_He/n_H = 0.0819; n_e/n_H = 1.164 (He fully ionised) or 1.082 (He II)."
+
+  - id: CONST-XHI-Z3
+    quantity: "neutral hydrogen fraction at mean density, z = 3, photoionisation equilibrium"
+    value: {T1e4_Gamma0p82: 7.1e-6, T1e4_Gamma1p0: 5.8e-6, T1p1e4_Gamma0p82: 6.6e-6, range: "≈ (0.5–0.75) × 10^-5"}
+    unit: "dimensionless"
+    source: "computed: x_HI = α_A(T) n_e/Γ (McQuinn 2016 Eq. 2; Meiksin 2009 Eq. 42 with x ≪ 1), α_A from Draine Eq. (14.3), n_e = 1.164 n_H (He III), n_H(z=3) = 1.2126e-5 cm^-3"
+    notes: "Citable qualitative statement: McQuinn 2016 §2.1 'the Lyα forest is sensitive to x_HI ~ 10^-5 at z = 3'. Corresponding n_HI ≈ 7–9 × 10^-11 cm^-3."
+
+  - id: CONST-COSMO-PLANCK18
+    quantity: "flat ΛCDM parameters"
+    value: {Omega_b_h2: 0.02237, Omega_c_h2: 0.1200, H0: 67.36, h: 0.6736, Omega_m: 0.3153, Omega_L: 0.6847, Y_P: 0.2454}
+    unit: "H0 in km s^-1 Mpc^-1"
+    source: "Planck 2018 VI, Table 2, TT,TE,EE+lowE+lensing (arXiv v4)"
+    notes: "Since 2026-10-03 lyaphys.js COSMO_DEFAULT and the toy volume use these values; aH/h = 114.2 km/s per Mpc/h at z = 3 (was 111.5 with Ωm = 0.3, h = 0.7)."
+
+  - id: CONST-CLASS-THRESHOLDS
+    quantity: "H I column-density class boundaries"
+    value: {DLA_min: 2.0e20, LLS_tau912_eq_1: 1.59e17, superLLS_range: "1e19 – 2e20", forest_max: "≲ 1e17 (conventions vary: 1e17, 10^17.2 = 1.58e17)"}
+    unit: "cm^-2"
+    source: "Wolfe, Gawiser & Prochaska 2005 §1; Meiksin 2009 Table I; σ_912 computed (CONST-SIGMA912)"
+    notes: ""

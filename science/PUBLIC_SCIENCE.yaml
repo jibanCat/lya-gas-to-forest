@@ -1,0 +1,49 @@
+# Public science notes — the framing text of the public /science/ page and of each scene's "sources & assumptions".
+# The claims themselves are NOT written here: they come from SCIENCE_LEDGER.yaml, REFERENCES.yaml and the validation
+# reports, through science/tools/build_provenance.py (→ design/canonical/public_provenance.json → app/dist/science/).
+# [[SCI-…]] marks a link to a ledger entry (rendered as its title); numbers about accuracy are never typed here — the
+# accuracy section is generated from the validation reports, and the build fails if a number in this file sits next to
+# a word about accuracy.
+
+version: 0.1.0
+title: Lyα — from gas to forest · science notes
+
+about: >
+  An interactive teaching resource on how neutral hydrogen between a distant quasar and us becomes the Lyman-α forest:
+  atoms meet light, light stretches, gas maps to velocity, optical depth adds, transmitted light multiplies, and the
+  forest can be read backward only up to a point. These notes list, for every scientific claim the scenes make, its
+  sources, the assumptions under which it holds, the simplifications made for teaching, and how the browser's numbers
+  were checked.
+
+modeled:
+  - "Lyman-α absorption by neutral hydrogen: the 1s → 2p resonance [[SCI-ATOM-001]], met in each atom's own frame [[SCI-ATOM-002]], removes light from the beam by scattering it in other directions [[SCI-RES-001]]."
+  - "Line shapes: thermal Doppler broadening [[SCI-THERM-002]], natural broadening from the lifetime of the 2p level [[SCI-NAT-001]], and their combination, the Voigt profile [[SCI-VOIGT-001]]."
+  - "From gas to spectrum: cosmological redshift [[SCI-RED-001]]; the map from real space to velocity space, u = aH(z)·x + v_pec [[SCI-MAP-001]]; optical depth accumulated along the sightline [[SCI-TAU-002]], which adds [[SCI-TAU-003]]; and transmitted flux F = e^−τ [[SCI-FLUX-001]], which saturates [[SCI-SAT-001]]."
+  - "Observation and inference: a spectrograph's resolution and noise act on the recorded flux [[SCI-OBS-001]] [[SCI-OBS-002]]; several arrangements of gas can record the same line [[SCI-DEG-001]], and further information can break the tie [[SCI-DEG-002]]."
+
+not_modeled:
+  - "No hydrodynamics. The gas is a toy Zel'dovich volume [[SCI-SIM-TOY-001]], not an evolved simulation: temperature follows a power-law temperature–density relation and the velocities follow linear theory; nothing is computed from a thermal or dynamical history."
+  - "Neutral hydrogen is set by photoionisation equilibrium in a uniform ultraviolet background [[SCI-ION-001]]. There is no transfer of ionising radiation, no self-shielding and no collisional ionisation; the scene that changes the neutral amount holds density and temperature fixed."
+  - "One velocity and one temperature per sampling element [[SCI-TAU-004]]: velocity structure smaller than a cell is not represented."
+  - "Only Lyman-α is drawn, except in the last scene, where Lyman-β and a heavier-ion line appear as extra information. There is no continuum fitting, no quasar proximity effect, and the fine structure of Lyman-α is below every width shown [[SCI-ATOM-001]]."
+  - "Teaching representations are marked as such where they appear: atoms are a representative sample [[SCI-REP-001]], parcels are a decomposition of a continuous sightline [[SCI-REP-003]], and the natural width is magnified wherever it is drawn [[SCI-REP-004]]."
+
+toy_vs_real:
+  - term: The teaching toy
+    text: "Every scene draws from one small synthetic data set: a 20 Mpc/h Zel'dovich volume at z = 3 (a 20 × 8 × 8 Mpc/h block of it is drawn) and one sightline through it [[SCI-SIM-TOY-001]], decomposed for teaching into parcels and cells [[SCI-REP-003]]. It is not a hydrodynamic simulation and contains no data from any survey or simulation suite."
+  - term: Numerical oracles
+    text: "Independent calculations check the browser's physics: SciPy's Faddeeva function for the Voigt profile, exact-Voigt optical-depth sums, numerical integration of distances, and the fake_spectra code for the real-space method. Their results are listed under Accuracy."
+  - term: Simulation data, later
+    text: "The skewer interface [[SCI-SIM-001]] is independent of the data set, so a later release may replace the toy with simulation skewers whose conventions match fake_spectra [[SCI-SIM-002]]. No such data are included in this release."
+
+chapters:   # the claims, read as a technical companion to the story; every ledger domain belongs to exactly one chapter
+  - {anchor: ch-atomic, title: "1 · Lyα: one atom and the colour it absorbs", intro: "What a single hydrogen atom does to the quasar's light: the Lyα transition, resonance in the atom's own frame, and resonant scattering out of the beam.", domains: [atomic, atomic / kinematics, atomic / radiation, atomic / IGM]}
+  - {anchor: ch-profile, title: "2 · The line profile: thermal core and natural wings", intro: "How motion and the excited state's short life shape one absorption line — the Gaussian census, the Lorentzian wings, their Voigt combination and how the browser computes it.", domains: [line formation, statistical mechanics, numerics]}
+  - {anchor: ch-coordinates, title: "3 · Cosmological coordinates: redshift, distance and velocity space", intro: "How the expanding universe stretches the light, how real-space distance and peculiar motion map to observed velocity and wavelength, and the conventions used for both.", domains: [conventions, cosmology, cosmology / frames, cosmology / conventions, cosmology / kinematics, numerics / cosmology, cosmology / radiative transfer]}
+  - {anchor: ch-transmission, title: "4 · Optical depth, transmission and observation", intro: "Why optical depths add while transmitted light multiplies, what saturation does, and what an instrument changes — the record, not the gas.", domains: [radiative transfer, radiative transfer / Lyα forest, radiative transfer / numerics, observation]}
+  - {anchor: ch-sightline, title: "5 · The gas and how it is represented: a continuous sightline", intro: "The intergalactic gas itself — density, ionisation, temperature — and the teaching representations (volume, atoms, parcels, cells) that stand for it, with the toy data behind them.", domains: [IGM context, cosmology context, representation, data, teaching data, radiative transfer / data]}
+  - {anchor: ch-inference, title: "6 · Inference: reading the forest backwards", intro: "Tracing a colour back to the gas, and why different gas can leave the same shadow — what breaks the tie, and where the inverse problem stays open.", domains: [inference]}
+
+statuses:
+  verified: "claim, equation and source location checked; the numerical check passes where one applies"
+  verified-numeric: "the numerical check passes; it is an identity or a calculation, so no literature location applies"

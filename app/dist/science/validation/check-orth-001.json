@@ -1,0 +1,1009 @@
+{
+ "base": {
+  "x_mpch": 3.18,
+  "v_kms": 87,
+  "T_K": 27744,
+  "log10_N": 14.27,
+  "sx_mpch": 0.14721893675599934,
+  "b_thermal_kms": 21.395579938253253,
+  "b_size_kms": 23.774775769268327,
+  "b_drawn_kms": 31.988486786853052,
+  "peak_tau_drawn": 4.411850517900293,
+  "hub_kms_per_mpch": 114.19254572869457
+ },
+ "domains": {
+  "INT-PLACE-001": [
+   0.3,
+   4.1
+  ],
+  "INT-PUSH-001": [
+   -200,
+   200
+  ],
+  "INT-WARM-001": [
+   2000,
+   100000
+  ],
+  "INT-AMOUNT-001": [
+   12.5,
+   14.8
+  ]
+ },
+ "grids": {
+  "fine_kms": [
+   -700,
+   1400,
+   21001
+  ],
+  "scene_kms": [
+   -351.38664557791253,
+   853.8338467841686,
+   2200
+  ],
+  "drawn_kms": [
+   -51.38664557791256,
+   553.8338467841686,
+   1100
+  ]
+ },
+ "scene_prints_for": "18 of 18 cases",
+ "max_err": {
+  "centre_kms": 4.313305339564977e-7,
+  "fwhm2_rel": 0.00014855862320404078,
+  "amount_rel": 2.288117244280751e-15,
+  "width_rel": 0.00015826830135395276,
+  "peak_rel": 0.0002750479978553187
+ },
+ "cases": [
+  {
+   "dim": "place",
+   "value": 0.3,
+   "centre_shift_kms": -328.87453207322403,
+   "fwhm_ratio": 1.000000590035956,
+   "area_ratio": 1.0000000072259452,
+   "W_ratio": 0.999999999773406,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -329,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988505661210436,
+    "peak_fine": 4.4118473226237525,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "place",
+   "value": 1,
+   "centre_shift_kms": -248.93974964770274,
+   "fwhm_ratio": 0.9999996951287385,
+   "area_ratio": 1.0000000063814984,
+   "W_ratio": 0.999999999573111,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -249,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.98847703448273,
+    "peak_fine": 4.4118547763254545,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "place",
+   "value": 2,
+   "centre_shift_kms": -134.74720389714497,
+   "fwhm_ratio": 0.9999997297480523,
+   "area_ratio": 1.000000001270842,
+   "W_ratio": 1.0000000001327274,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -135,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988478141902192,
+    "peak_fine": 4.4118540574138745,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "place",
+   "value": 3.6,
+   "centre_shift_kms": 47.960869244485195,
+   "fwhm_ratio": 0.9999996943936855,
+   "area_ratio": 1.0000000078245896,
+   "W_ratio": 1.000000000062931,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 48,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.9884770109695,
+    "peak_fine": 4.411854814465583,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "comparison grid"
+    }
+   }
+  },
+  {
+   "dim": "place",
+   "value": 4.1,
+   "centre_shift_kms": 105.05714214398722,
+   "fwhm_ratio": 0.9999997037804017,
+   "area_ratio": 1.0000000043941701,
+   "W_ratio": 0.9999999999544281,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 105,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988477311236345,
+    "peak_fine": 4.411854534815065,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "comparison grid"
+    }
+   }
+  },
+  {
+   "dim": "motion",
+   "value": -200,
+   "centre_shift_kms": -287.00000000000034,
+   "fwhm_ratio": 1,
+   "area_ratio": 1.0000000000000002,
+   "W_ratio": 1.0000000000000002,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -287,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 4.4118505179002945,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "motion",
+   "value": -50,
+   "centre_shift_kms": -137,
+   "fwhm_ratio": 1,
+   "area_ratio": 1,
+   "W_ratio": 1,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -137,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 4.4118505179002945,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "motion",
+   "value": 0,
+   "centre_shift_kms": -87.00000000000182,
+   "fwhm_ratio": 1,
+   "area_ratio": 1,
+   "W_ratio": 1,
+   "edge": 0,
+   "scene_prints": {
+    "dc": -87,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 4.411850517900293,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "motion",
+   "value": 150,
+   "centre_shift_kms": 63.00000000000091,
+   "fwhm_ratio": 1.000000000000001,
+   "area_ratio": 1,
+   "W_ratio": 1,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 63,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853084,
+    "peak_fine": 4.411850517900293,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "comparison grid"
+    }
+   }
+  },
+  {
+   "dim": "motion",
+   "value": 200,
+   "centre_shift_kms": 112.99999999999909,
+   "fwhm_ratio": 1.000000000000001,
+   "area_ratio": 1,
+   "W_ratio": 1,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 113,
+    "w": 1,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853084,
+    "peak_fine": 4.411850517900293,
+    "scene_prints": {
+     "b": 32,
+     "peak": 4.41,
+     "measured_on": "comparison grid"
+    }
+   }
+  },
+  {
+   "dim": "width",
+   "value": 2000,
+   "centre_shift_kms": -4.313305339564977e-7,
+   "fwhm_ratio": 0.7647378905348906,
+   "area_ratio": 0.9999768727779592,
+   "W_ratio": 0.8243836942241727,
+   "edge": 0,
+   "fwhm2_increment": {
+    "got": -1177.890833995849,
+    "want": -1177.7158741470603
+   },
+   "scene_prints": {
+    "dc": 0,
+    "w": 0.76,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 5.744530276022695,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 24.458936832395835,
+    "b_drawn_fine_kms": 24.462807906781222,
+    "peak_fine": 5.768931662992235,
+    "scene_prints": {
+     "b": 24.5,
+     "peak": 5.77,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "width",
+   "value": 10000,
+   "centre_shift_kms": -4.9538243729330134e-8,
+   "fwhm_ratio": 0.8448938861646782,
+   "area_ratio": 0.9999855202427274,
+   "W_ratio": 0.8870845552170529,
+   "edge": 0,
+   "fwhm2_increment": {
+    "got": -811.8450619049029,
+    "want": -811.7382874015475
+   },
+   "scene_prints": {
+    "dc": 0,
+    "w": 0.84,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 12.845160195992374,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 27.022918112959143,
+    "b_drawn_fine_kms": 27.026876913871735,
+    "peak_fine": 5.221694163275345,
+    "scene_prints": {
+     "b": 27,
+     "peak": 5.22,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "width",
+   "value": 50000,
+   "centre_shift_kms": -9.977139825423365e-8,
+   "fwhm_ratio": 1.1657262882988209,
+   "area_ratio": 1.0000058064966115,
+   "W_ratio": 1.109335020530398,
+   "edge": 0,
+   "fwhm2_increment": {
+    "got": 1018.2814138764911,
+    "want": 1018.1496463260168
+   },
+   "scene_prints": {
+    "dc": 0,
+    "w": 1.17,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 28.72265138011347,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 37.28579709732008,
+    "b_drawn_fine_kms": 37.28981997033408,
+    "peak_fine": 3.784689860425558,
+    "scene_prints": {
+     "b": 37.3,
+     "peak": 3.78,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "width",
+   "value": 100000,
+   "centre_shift_kms": -7.99228132564167e-8,
+   "fwhm_ratio": 1.4714792142897866,
+   "area_ratio": 1.000010766301853,
+   "W_ratio": 1.2843844807308744,
+   "edge": 0,
+   "fwhm2_increment": {
+    "got": 3305.9201409800726,
+    "want": 3305.5095634854715
+   },
+   "scene_prints": {
+    "dc": 0,
+    "w": 1.47,
+    "a": 1
+   },
+   "width": {
+    "b_thermal_kms": 40.61996312907076,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 47.066138225756916,
+    "b_drawn_fine_kms": 47.07039340343775,
+    "peak_fine": 2.9983378745553,
+    "scene_prints": {
+     "b": 47.1,
+     "peak": 3,
+     "measured_on": "comparison grid"
+    }
+   }
+  },
+  {
+   "dim": "amount",
+   "value": 12.5,
+   "centre_shift_kms": 1.1368683772161603e-12,
+   "fwhm_ratio": 1,
+   "area_ratio": 0.016982436524617377,
+   "W_ratio": 0.047498992362224254,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 0,
+    "w": 1,
+    "a": 0.02
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 0.07492397137634246,
+    "scene_prints": {
+     "b": 32,
+     "peak": 0.07,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "amount",
+   "value": 13.5,
+   "centre_shift_kms": 3.410605131648481e-13,
+   "fwhm_ratio": 0.9999999999999989,
+   "area_ratio": 0.1698243652461745,
+   "W_ratio": 0.38105980920948046,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 0,
+    "w": 1,
+    "a": 0.17
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853016,
+    "peak_fine": 0.7492397137634249,
+    "scene_prints": {
+     "b": 32,
+     "peak": 0.75,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "amount",
+   "value": 14,
+   "centre_shift_kms": 2.2737367544323206e-13,
+   "fwhm_ratio": 1,
+   "area_ratio": 0.537031796370253,
+   "W_ratio": 0.7878035952321393,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 0,
+    "w": 1,
+    "a": 0.54
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 2.3693040089450284,
+    "scene_prints": {
+     "b": 32,
+     "peak": 2.37,
+     "measured_on": "drawn stretch"
+    }
+   }
+  },
+  {
+   "dim": "amount",
+   "value": 14.8,
+   "centre_shift_kms": -6.240344418984023e-8,
+   "fwhm_ratio": 1,
+   "area_ratio": 3.388446449115028,
+   "W_ratio": 1.307056784622678,
+   "edge": 0,
+   "scene_prints": {
+    "dc": 0,
+    "w": 1,
+    "a": 3.39
+   },
+   "width": {
+    "b_thermal_kms": 21.395579938253253,
+    "b_size_kms": 23.774775769268327,
+    "b_expected_kms": 31.984540074435547,
+    "b_drawn_fine_kms": 31.988486786853052,
+    "peak_fine": 14.949297657502338,
+    "scene_prints": {
+     "b": 32,
+     "peak": 14.95,
+     "measured_on": "drawn stretch"
+    }
+   }
+  }
+ ],
+ "checks": [
+  {
+   "name": "place x = 0.3: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 1.1e-13 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "place x = 0.3: τ moves by aH·Δx; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 3.7e-7 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "place x = 0.3: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -329 km/s · ×1 · ×1; fine grid -329 · ×1 · ×1"
+  },
+  {
+   "name": "place x = 0.3: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.989 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4118 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "place x = 0.3: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.989, 4.4118"
+  },
+  {
+   "name": "place x = 1: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 1.1e-13 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "place x = 1: τ moves by aH·Δx; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 4.1e-8 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "place x = 1: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -249 km/s · ×1 · ×1; fine grid -249 · ×1 · ×1"
+  },
+  {
+   "name": "place x = 1: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "place x = 1: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "place x = 2: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 1.4e-13 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "place x = 2: τ moves by aH·Δx; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 6.3e-8 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "place x = 2: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -135 km/s · ×1 · ×1; fine grid -135 · ×1 · ×1"
+  },
+  {
+   "name": "place x = 2: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "place x = 2: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "place x = 3.6: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 1.1e-13 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "place x = 3.6: τ moves by aH·Δx; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 3.8e-8 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "place x = 3.6: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 48 km/s · ×1 · ×1; fine grid 48 · ×1 · ×1"
+  },
+  {
+   "name": "place x = 3.6: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "place x = 3.6: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (comparison grid); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "place x = 4.1: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 1.6e-13 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "place x = 4.1: τ moves by aH·Δx; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 7.4e-8 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "place x = 4.1: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 105 km/s · ×1 · ×1; fine grid 105 · ×1 · ×1"
+  },
+  {
+   "name": "place x = 4.1: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "place x = 4.1: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (comparison grid); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "motion v = -200: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 5.7e-14 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "motion v = -200: τ moves by Δv; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 3.4e-13 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "motion v = -200: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -287 km/s · ×1 · ×1; fine grid -287 · ×1 · ×1"
+  },
+  {
+   "name": "motion v = -200: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "motion v = -200: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "motion v = -50: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 5.7e-14 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "motion v = -50: τ moves by Δv; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 0.0e+0 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "motion v = -50: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -137 km/s · ×1 · ×1; fine grid -137 · ×1 · ×1"
+  },
+  {
+   "name": "motion v = -50: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "motion v = -50: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "motion v = 0: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 5.7e-14 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "motion v = 0: τ moves by Δv; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 1.8e-12 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "motion v = 0: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints -87 km/s · ×1 · ×1; fine grid -87 · ×1 · ×1"
+  },
+  {
+   "name": "motion v = 0: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "motion v = 0: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (drawn stretch); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "motion v = 150: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 5.7e-14 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "motion v = 150: τ moves by Δv; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 9.1e-13 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "motion v = 150: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 63 km/s · ×1 · ×1; fine grid 63 · ×1 · ×1"
+  },
+  {
+   "name": "motion v = 150: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "motion v = 150: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (comparison grid); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "motion v = 200: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 5.7e-14 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "motion v = 200: τ moves by Δv; width and ink unchanged",
+   "ok": true,
+   "detail": "centre error 9.1e-13 km/s, FWHM ×1.00000, area ×1.000000"
+  },
+  {
+   "name": "motion v = 200: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 113 km/s · ×1 · ×1; fine grid 113 · ×1 · ×1"
+  },
+  {
+   "name": "motion v = 200: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 4.4119 vs 4.4128 (2.1e-4)"
+  },
+  {
+   "name": "motion v = 200: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 4.41 (comparison grid); fine grid 31.988, 4.4119"
+  },
+  {
+   "name": "width T = 2000: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "width T = 2000: FWHM² grows by 4 ln2 Δ(b²); centre and ink unchanged",
+   "ok": true,
+   "detail": "FWHM² increment error 1.5e-4 (relative), centre 4.3e-7 km/s, area ×0.999977"
+  },
+  {
+   "name": "width T = 2000: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×0.76 · ×1; fine grid 0 · ×0.76 · ×1"
+  },
+  {
+   "name": "width T = 2000: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 24.463 vs √(5.74² + 23.77²) = 24.459 km/s (1.6e-4); peak 5.7689 vs 5.7705 (2.8e-4)"
+  },
+  {
+   "name": "width T = 2000: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 24.5 km/s, peak τ = 5.77 (drawn stretch); fine grid 24.463, 5.7689"
+  },
+  {
+   "name": "width T = 10000: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "width T = 10000: FWHM² grows by 4 ln2 Δ(b²); centre and ink unchanged",
+   "ok": true,
+   "detail": "FWHM² increment error 1.3e-4 (relative), centre 5.0e-8 km/s, area ×0.999986"
+  },
+  {
+   "name": "width T = 10000: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×0.84 · ×1; fine grid 0 · ×0.84 · ×1"
+  },
+  {
+   "name": "width T = 10000: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 27.027 vs √(12.85² + 23.77²) = 27.023 km/s (1.5e-4); peak 5.2217 vs 5.2230 (2.5e-4)"
+  },
+  {
+   "name": "width T = 10000: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 27 km/s, peak τ = 5.22 (drawn stretch); fine grid 27.027, 5.2217"
+  },
+  {
+   "name": "width T = 50000: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "width T = 50000: FWHM² grows by 4 ln2 Δ(b²); centre and ink unchanged",
+   "ok": true,
+   "detail": "FWHM² increment error 1.3e-4 (relative), centre 1.0e-7 km/s, area ×1.000006"
+  },
+  {
+   "name": "width T = 50000: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1.17 · ×1; fine grid 0 · ×1.17 · ×1"
+  },
+  {
+   "name": "width T = 50000: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 37.290 vs √(28.72² + 23.77²) = 37.286 km/s (1.1e-4); peak 3.7847 vs 3.7854 (1.8e-4)"
+  },
+  {
+   "name": "width T = 50000: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 37.3 km/s, peak τ = 3.78 (drawn stretch); fine grid 37.290, 3.7847"
+  },
+  {
+   "name": "width T = 100000: cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 0.0e+0"
+  },
+  {
+   "name": "width T = 100000: FWHM² grows by 4 ln2 Δ(b²); centre and ink unchanged",
+   "ok": true,
+   "detail": "FWHM² increment error 1.2e-4 (relative), centre 8.0e-8 km/s, area ×1.000011"
+  },
+  {
+   "name": "width T = 100000: the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1.47 · ×1; fine grid 0 · ×1.47 · ×1"
+  },
+  {
+   "name": "width T = 100000: the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 47.070 vs √(40.62² + 23.77²) = 47.066 km/s (9.0e-5); peak 2.9983 vs 2.9988 (1.5e-4)"
+  },
+  {
+   "name": "width T = 100000: the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 47.1 km/s, peak τ = 3 (comparison grid); fine grid 47.070, 2.9983"
+  },
+  {
+   "name": "amount N = 12.50 (log): cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 2.7e-16"
+  },
+  {
+   "name": "amount N = 12.50 (log): τ ∝ N_HI; centre and width unchanged",
+   "ok": true,
+   "detail": "τ ratio error 2.0e-15, centre 1.1e-12 km/s, FWHM ×1.000000000, area ×1.000000 of N ratio"
+  },
+  {
+   "name": "amount N = 12.50 (log): the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1 · ×0.02; fine grid 0 · ×1 · ×0.02"
+  },
+  {
+   "name": "amount N = 12.50 (log): the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 0.0749 vs 0.0749 (2.1e-4)"
+  },
+  {
+   "name": "amount N = 12.50 (log): the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 0.07 (drawn stretch); fine grid 31.988, 0.0749"
+  },
+  {
+   "name": "amount N = 13.50 (log): cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 4.4e-16"
+  },
+  {
+   "name": "amount N = 13.50 (log): τ ∝ N_HI; centre and width unchanged",
+   "ok": true,
+   "detail": "τ ratio error 2.3e-15, centre 3.4e-13 km/s, FWHM ×1.000000000, area ×1.000000 of N ratio"
+  },
+  {
+   "name": "amount N = 13.50 (log): the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1 · ×0.17; fine grid 0 · ×1 · ×0.17"
+  },
+  {
+   "name": "amount N = 13.50 (log): the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 0.7492 vs 0.7494 (2.1e-4)"
+  },
+  {
+   "name": "amount N = 13.50 (log): the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 0.75 (drawn stretch); fine grid 31.988, 0.7492"
+  },
+  {
+   "name": "amount N = 14.00 (log): cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 2.3e-16"
+  },
+  {
+   "name": "amount N = 14.00 (log): τ ∝ N_HI; centre and width unchanged",
+   "ok": true,
+   "detail": "τ ratio error 2.3e-15, centre 2.3e-13 km/s, FWHM ×1.000000000, area ×1.000000 of N ratio"
+  },
+  {
+   "name": "amount N = 14.00 (log): the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1 · ×0.54; fine grid 0 · ×1 · ×0.54"
+  },
+  {
+   "name": "amount N = 14.00 (log): the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 2.3693 vs 2.3698 (2.1e-4)"
+  },
+  {
+   "name": "amount N = 14.00 (log): the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 2.37 (drawn stretch); fine grid 31.988, 2.3693"
+  },
+  {
+   "name": "amount N = 14.80 (log): cells — only the intended property changes",
+   "ok": true,
+   "detail": "|Δu − expected| 0.0e+0 km/s, b 0.0e+0, N 2.5e-16"
+  },
+  {
+   "name": "amount N = 14.80 (log): τ ∝ N_HI; centre and width unchanged",
+   "ok": true,
+   "detail": "τ ratio error 2.2e-15, centre 6.2e-8 km/s, FWHM ×1.000000000, area ×1.000001 of N ratio"
+  },
+  {
+   "name": "amount N = 14.80 (log): the scene's printed comparison",
+   "ok": true,
+   "detail": "prints 0 km/s · ×1 · ×3.39; fine grid 0 · ×1 · ×3.39"
+  },
+  {
+   "name": "amount N = 14.80 (log): the drawn line's width is heat and size in quadrature, its peak N σ_v/(√π b)",
+   "ok": true,
+   "detail": "b 31.988 vs √(21.40² + 23.77²) = 31.985 km/s (1.2e-4); peak 14.9493 vs 14.9524 (2.1e-4)"
+  },
+  {
+   "name": "amount N = 14.80 (log): the scene's printed width and peak are the drawn line's",
+   "ok": true,
+   "detail": "prints b = 32 km/s, peak τ = 14.95 (drawn stretch); fine grid 31.988, 14.9493"
+  },
+  {
+   "name": "the toy’s parcel: heat alone is not the drawn width (the size term is printed beside it)",
+   "ok": true,
+   "detail": "b_size/b_thermal = 1.11; drawn b 31.99 vs thermal 21.40 km/s"
+  }
+ ],
+ "flux_nonlinearity": {
+  "tau0_base": 4.411850517900293,
+  "amount_factor": 2,
+  "W_ratio_amount": 1.1873854894225708,
+  "T_factor": 2,
+  "W_ratio_T": 1.1324936764654494,
+  "note": "equivalent width of F = e^(−τ); τ itself behaves as tested above"
+ },
+ "pass": true
+}

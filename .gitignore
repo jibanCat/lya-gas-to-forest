@@ -1,0 +1,8 @@
+# disposable render scratch (frames, checks)
+experiments/out/
+# regenerable toy field: python3 experiments/gen/zeldovich2d.py
+experiments/data/
+.DS_Store
+# downloaded upstream sources / caches used for provenance reading (not redistributed)
+science/.cache/
+science/.venv/

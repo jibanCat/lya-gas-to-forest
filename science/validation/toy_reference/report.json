@@ -1,0 +1,33 @@
+{
+ "max_abs_dF_gauss": 0.0005829336834782817,
+ "max_abs_dF_voigt": 0.00003178924082491985,
+ "mean_F_browser": 0.6804053384905502,
+ "mean_F_reference": 0.6803605898842003,
+ "period_kms": 2283.8509145738913,
+ "n": 2048,
+ "du": 1.1151615793817828,
+ "method_reference": "producer's own τ: exact Voigt (scipy.special.wofz), point sampling at u_k = k·du, nearest periodic image; same real-space pixels as the browser; written by science/data/toy/zeldovich3d.py",
+ "checks": [
+  {
+   "name": "cosmology of the toy is Planck 2018",
+   "ok": true,
+   "detail": "Ωm 0.3153, h 0.6736"
+  },
+  {
+   "name": "browser as drawn (Gaussian kernels) vs reference: max |ΔF| < 1e-3",
+   "ok": true,
+   "detail": "5.8e-4"
+  },
+  {
+   "name": "browser Voigt kernels vs reference: max |ΔF| < 1e-4",
+   "ok": true,
+   "detail": "3.2e-5"
+  },
+  {
+   "name": "mean flux agrees to 1e-3",
+   "ok": true,
+   "detail": "0.6804 vs 0.6804"
+  }
+ ],
+ "pass": true
+}

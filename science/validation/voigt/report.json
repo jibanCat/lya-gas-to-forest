@@ -1,0 +1,58 @@
+{
+  "oracle": "scipy.special.wofz (Faddeeva function), Re w(x+ia)",
+  "scipy": "1.15.2",
+  "numpy": "2.2.6",
+  "n_points": 13482,
+  "regions": [
+    {
+      "region": "physical a (1e-4 ≤ a ≤ 6.1e-3), core |x| ≤ 4",
+      "n": 2240,
+      "max_rel_err": 0.00004974206434621794,
+      "max_abs_err": 0.00003289955506269315,
+      "worst_at": {
+        "a": 0.0001,
+        "x": 0.65,
+        "ref": 0.6553659476699872,
+        "js": 0.6553985469251266
+      }
+    },
+    {
+      "region": "physical a, wings 4 < |x| ≤ 2e4",
+      "n": 2254,
+      "max_rel_err": 0.00004897078566106079,
+      "max_abs_err": 2.95202894988716e-9,
+      "worst_at": {
+        "a": 0.0001,
+        "x": 15.086097693305645,
+        "ref": 2.495490432382048e-7,
+        "js": 2.4953682262549647e-7
+      }
+    },
+    {
+      "region": "tiny a (1e-6 ≤ a < 1e-4), all x",
+      "n": 3852,
+      "max_rel_err": 0.00004977737503613514,
+      "max_abs_err": 0.000032924610537832244,
+      "worst_at": {
+        "a": 0.000001,
+        "x": 0.65,
+        "ref": 0.6554058512502137,
+        "js": 0.6554384756330722
+      }
+    },
+    {
+      "region": "teaching exaggeration (6.1e-3 < a ≤ 1), all x",
+      "n": 5136,
+      "max_rel_err": 0.00008489466883618485,
+      "max_abs_err": 0.00003124641339702361,
+      "worst_at": {
+        "a": 0.03162277660168379,
+        "x": 1.05,
+        "ref": 0.33592162025592887,
+        "js": 0.3358931023012223
+      }
+    }
+  ],
+  "pass_criterion": "max relative error < 1e-3 in every region (the accepted criterion; SCI-VOIGT-001)",
+  "pass": true
+}

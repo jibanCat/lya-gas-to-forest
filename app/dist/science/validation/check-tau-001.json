@@ -1,0 +1,143 @@
+{
+ "cases": [
+  {
+   "name": "forest line N=1e13 b=20, fine pixels",
+   "mode": "point",
+   "max_rel_tau": 0.000049669730520227394,
+   "max_abs_dF": 0.000009622483505111745
+  },
+  {
+   "name": "forest line N=1e13 b=20, fine pixels",
+   "mode": "bin",
+   "max_rel_tau": 0.000049620064563565495,
+   "max_abs_dF": 0.000009612803417269333
+  },
+  {
+   "name": "weak line N=1e12 b=12.85 (T=1e4)",
+   "mode": "point",
+   "max_rel_tau": 0.00004952638898601706,
+   "max_abs_dF": 0.0000018530958370011064
+  },
+  {
+   "name": "weak line N=1e12 b=12.85 (T=1e4)",
+   "mode": "bin",
+   "max_rel_tau": 0.00004938945844796433,
+   "max_abs_dF": 0.0000018502456708979764
+  },
+  {
+   "name": "saturated N=1e15 b=25",
+   "mode": "point",
+   "max_rel_tau": 0.00004964290428706125,
+   "max_abs_dF": 1.168186369859825e-8
+  },
+  {
+   "name": "saturated N=1e15 b=25",
+   "mode": "bin",
+   "max_rel_tau": 0.00004960710440444481,
+   "max_abs_dF": 3.027099177432824e-7
+  },
+  {
+   "name": "LLS N=1e18 b=25 (wings start)",
+   "mode": "point",
+   "max_rel_tau": 0.00005011434444019681,
+   "max_abs_dF": 0.000002961613900898108
+  },
+  {
+   "name": "LLS N=1e18 b=25 (wings start)",
+   "mode": "bin",
+   "max_rel_tau": 0.00004958648855502713,
+   "max_abs_dF": 0.000003169388687718211
+  },
+  {
+   "name": "DLA N=2e20 b=25 (damping wings)",
+   "mode": "point",
+   "max_rel_tau": 0.00004957895058636769,
+   "max_abs_dF": 0.000004888788403704936
+  },
+  {
+   "name": "DLA N=2e20 b=25 (damping wings)",
+   "mode": "bin",
+   "max_rel_tau": 0.00004960910285023323,
+   "max_abs_dF": 0.0000048922851510549425
+  },
+  {
+   "name": "blend: two lines 1.2b apart",
+   "mode": "point",
+   "max_rel_tau": 0.00004806918743664129,
+   "max_abs_dF": 0.00001713641189177162
+  },
+  {
+   "name": "blend: two lines 1.2b apart",
+   "mode": "bin",
+   "max_rel_tau": 0.00004798249839619137,
+   "max_abs_dF": 0.000017105515985216257
+  },
+  {
+   "name": "narrow line, coarse pixels (b=3, du=10)",
+   "mode": "point",
+   "max_rel_tau": 0.00004586364224665758,
+   "max_abs_dF": 3.085171562666744e-9
+  },
+  {
+   "name": "narrow line, coarse pixels (b=3, du=10)",
+   "mode": "bin",
+   "max_rel_tau": 0.006241400370572944,
+   "max_abs_dF": 0.00032854489178923973
+  },
+  {
+   "name": "periodic wrap: line at 5 km/s from edge",
+   "mode": "point",
+   "max_rel_tau": 0.00004966973052015289,
+   "max_abs_dF": 0.000017566894927045773
+  },
+  {
+   "name": "periodic wrap: line at 5 km/s from edge",
+   "mode": "bin",
+   "max_rel_tau": 0.000048889543573285286,
+   "max_abs_dF": 0.000017290396735591962
+  }
+ ],
+ "checks": [
+  {
+   "name": "σ_v matches oracle",
+   "pass": true,
+   "detail": "1.343468e-12"
+  },
+  {
+   "name": "γ_v (natural HWHM) matches oracle",
+   "pass": true,
+   "detail": "0.006061 km/s"
+  },
+  {
+   "name": "point sampling: max rel τ < 1e-3 and |ΔF| < 1e-4 for every case",
+   "pass": true
+  },
+  {
+   "name": "bin averaging (16 sub-samples) vs exact bin average: |ΔF| < 2e-3",
+   "pass": true,
+   "detail": "largest: 3.3e-4"
+  },
+  {
+   "name": "∫τ du = N σ_v (equivalent width of optically thin line)",
+   "pass": true,
+   "detail": "ratio 0.99998"
+  },
+  {
+   "name": "τ0 = 0.758 (N/1e13)(10/b)",
+   "pass": true,
+   "detail": "0.75797"
+  },
+  {
+   "name": "wing τ=1 at Δu ≈ √(σ_v γ_v N/π) for N=1e+19",
+   "pass": true,
+   "detail": "numeric 164.0 vs formula 161.0 km/s"
+  },
+  {
+   "name": "wing τ=1 at Δu ≈ √(σ_v γ_v N/π) for N=2e+20",
+   "pass": true,
+   "detail": "numeric 720.7 vs formula 720.0 km/s"
+  }
+ ],
+ "b_1e4_kms": 12.845160195992374,
+ "pass": true
+}

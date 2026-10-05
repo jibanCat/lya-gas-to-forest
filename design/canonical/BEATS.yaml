@@ -1,0 +1,792 @@
+# Canonical path, Beats 0–13 — SINGLE SOURCE for beat content and the scene → science manifest.
+# The prototype (experiments/canonical) embeds this file (via beats.json); science/tools/build_provenance.py
+# checks every `science` and `validation` ID against science/SCIENCE_LEDGER.yaml and generates
+# design/canonical/CANONICAL_PATH.md. Edit here, then run:  python3 science/tools/build_provenance.py
+#
+# Equations: KaTeX strings (single-quoted so backslashes are literal). They appear only in "show the physics" mode,
+# beside the beat they belong to. `note` is one line of plain language; `ids` are the ledger entries behind it.
+# Numbers that come from a validation report are written as {{VAL-ID:dotted.path:format}} and filled in by the build,
+# so prose cannot drift from the measured value.
+# `stages` (optional): a progressive reveal inside the beat; the prototype shows one stage's controls at a time.
+# Surface statements are kept to about 25–35 words.
+
+version: 0.3
+audience: first-year college students, majors and non-majors; advanced layer optional
+spine: "real gas in space → atoms meet light → the light stretches → motions → velocity space → optical depth → flux → forest → inverse inference"
+
+beats:
+
+  - n: 0
+    slug: gas-occupies-space
+    title: Gas occupies real space
+    statement: |
+      Thin gas fills the space between a distant quasar and us — denser in filaments, emptier in voids.
+      The quasar's light crosses it along one line. What does the gas along that line do to the light?
+    objective: There is real gas distributed through a volume, and our light samples one path through it.
+    action: Move along the beam (hover near it, or press and slide along it); drag the gas to turn the volume. The cross-section, the stretch of the strip and the density reading report where you are.
+    consequence: The probe follows the hand along the beam; the cut through the volume, the cross-section around the beam, the highlighted stretch of the strip and the density reading follow it. Turned, the volume shows parallax — the beam passes behind near gas and in front of far gas.
+    equations:
+      - tex: '\bar n_{\rm H}(z{=}3) \approx 1.2\times10^{-5}\ {\rm cm^{-3}}'
+        note: about a dozen hydrogen nuclei per cubic metre, on average
+        ids: [SCI-CTX-001]
+    science: [SCI-REP-002, SCI-SIM-TOY-001, SCI-CTX-001, SCI-CTX-005, SCI-RED-004]
+    validation: [VAL-TOY-001]
+    interactions:
+      - id: INT-PROBE-001
+        control: move along the beam — hover near it, or press and slide along it (or the left and right arrows); the cut through the volume, the cross-section, the highlighted stretch of the strip and the density reading follow
+        gesture:
+          type: trace
+          mapping: 'the probe stays under the hand along the beam (the beam''s own scale on screen); the hand finds the beam within {band_px} px of it; moving the probe {learned_px} px counts as discovered; an arrow key moves it 0.25 Mpc/h'
+          params: {band_px: 28, learned_px: 30}
+          pedagogical: true
+        variable: the probe's place along the beam [Mpc/h] (inspection)
+        domain: [0.05, 19.95]
+        inspection: true
+        physics: science/data/toy/zeldovich3d.py#sightline
+        consequence: app/src/scenes/b00-gas.js#b0density
+        affects: [the cut through the volume, the cross-section around the beam, the highlighted stretch of the strip, the density reading]
+        claims: [SCI-SIM-TOY-001, SCI-REP-002]
+        display: the probe is a place on the line of sight, not an object in the gas; the gas is continuous (no beads, no simulation particles)
+      - id: INT-VIEW-001
+        control: drag the gas to turn the volume (or the up and down arrows to tilt it)
+        gesture:
+          type: drag
+          mapping: 'a sideways drag turns the view by {yaw_per_px} per px, a vertical drag tilts it by {tilt_per_px} per px'
+          params: {yaw_per_px: 0.004, tilt_per_px: 0.004}
+          pedagogical: true
+        variable: the viewpoint — yaw and tilt of the drawing (display only; no physical state)
+        inspection: true
+        physics: app/src/primitives/slab.js#slabGeom
+        consequence: app/src/primitives/slab.js#drawSlab
+        affects: [the parallax of the volume, which gas is drawn in front of and behind the beam]
+        claims: [SCI-REP-002]
+        display: a depth cue only; the gas and the beam are unchanged
+    visual_transforms:
+      - id: VT-GAS-DEPTH
+        gesture: the gas volume in shallow depth — near gas in front of the beam, far gas behind it, paler with distance; its edges dissolve into paper
+        from: the toy volume's density around the beam (a 20 × 8 × 8 Mpc/h sample)
+        to: ink in depth (stacked translucent slices)
+        claims: [SCI-REP-002, SCI-SIM-TOY-001]
+        computed_by: science/data/toy/zeldovich3d.py#decompose
+        drawn_by: app/src/primitives/slab.js#drawSlab
+        display: the fade at the sample's edges is a drawing convention — the sample ends, the gas does not; the sample's boundary is drawn, labelled, only in "show the physics"
+    simplifications:
+      - The observer and the quasar are drawn at the ends of the beam for orientation only; the beam is broken at each end because the gaps are not to scale — the toy sample lies ≈ {{VAL-RED-001:chi_z3_planck_mpch:.0f}} Mpc/h (comoving) from us, and the quasar farther still (SCI-RED-004).
+      - The volume is a 20 × 8 × 8 Mpc/h teaching block from a Zel'dovich toy field, not a hydrodynamic simulation (SCI-SIM-TOY-001).
+      - Gas near the beam is drawn darker; that emphasis is ours (focus rule, SCI-REP-002). Perspective and the single slow drift on entry are display depth cues.
+      - The drawing dissolves into paper toward the sample's edges — the sample ends, the gas does not; "show the physics" draws the sample's boundary (SCI-REP-002).
+
+  - n: 1
+    slug: continuum-to-atoms
+    title: Same gas, different scale
+    statement: |
+      Zoom into one parcel on the beam: the smooth gas is a crowd of protons, helium nuclei and electrons — atoms with their electrons knocked off by ultraviolet light from galaxies and quasars.
+      About one hydrogen atom in 100 000 is still neutral (a few times more in a filament) — and only those can absorb the light.
+    objective: A macroscopic gas parcel is a vast microscopic population, almost all ionised; the atoms drawn next are a representative few.
+    action: Set the magnification (an instrument setting) from the volume, to one parcel, to its particles, to the neutral atoms.
+    consequence: Nested frames show the same gas at four scales; the stipple of ionised particles gives way to the rare neutral atoms, which are then gathered for display.
+    stages:
+      - {key: web, label: 'volume', text: 'the gas fills the volume; the beam crosses it'}
+      - {key: parcel, label: 'one parcel', text: 'still smooth gas, 1 Mpc/h across'}
+      - {key: particles, label: 'particles', text: 'protons and electrons; a rare neutral atom'}
+      - {key: atoms, label: 'neutral atoms', text: 'representative atoms · not to scale'}
+    equations:
+      - tex: 'N_{\rm H}\ \text{in a 100 kpc parcel} \sim 10^{66}'
+        note: a 100 kpc (proper) parcel at about 5× the mean density — smaller than the 1 Mpc/h frame drawn; only about one in 10⁵ of these nuclei carries its electron (a neutral atom), the rest are protons and free electrons
+        ids: [SCI-CTX-007, SCI-ION-002]
+    science: [SCI-REP-001, SCI-REP-006, SCI-CTX-001, SCI-CTX-004, SCI-CTX-007, SCI-ION-001, SCI-ION-002, SCI-RED-004]
+    validation: [VAL-TOY-001]
+    simplifications:
+      - The observer and the quasar are drawn at the ends of the beam for orientation only; the beam is broken at each end because the gaps are not to scale — the toy sample lies ≈ {{VAL-RED-001:chi_z3_planck_mpch:.0f}} Mpc/h (comoving) from us, and the quasar farther still (SCI-RED-004).
+      - The atoms are a representative sample (a few hundred), not a count and not simulation particles (SCI-REP-001).
+      - The particle stage shows the ionised majority as a stipple, with neutral atoms drawn far more common than the true 1 in ~10⁵; from Beat 2 on only neutral atoms are drawn (SCI-ION-002, SCI-REP-006).
+      - Atom motions are straight lines (collisions are rare at these densities) and slowed enormously for display.
+
+  - n: 2
+    slug: atom-meets-colour
+    title: One atom meets one colour
+    statement: |
+      Among these colours of the quasar's light, hydrogen responds to one: Lyman-alpha, 1215.67 Å — ultraviolet — in the atom's own frame. (Its weaker siblings, such as Lyman-β, return in Beat 13.)
+      A moving atom sees colours Doppler-shifted, so a different colour comes into resonance — and is scattered out of the beam.
+    objective: The physical origin of the shadow is resonant scattering of one colour in the atom's frame.
+    action: Push the atom along the beam (drag its motion); the speed ruler reports it; switch to "one colour, many atoms".
+    consequence: A different photon colour is caught and scattered sideways out of the beam; the atom-frame panel shows which colour sits on the resonance.
+    equations:
+      - tex: '\lambda_{\rm res} = \lambda_0\,\Bigl(1 + \dfrac{v}{c}\Bigr),\quad \lambda_0 = 1215.67\ \text{Å}'
+        note: an atom moving away from us (v > 0) brings a redder colour into resonance
+        ids: [SCI-ATOM-001, SCI-ATOM-002, SCI-MAP-003]
+      - tex: '\text{1s} \to \text{2p} \to \text{1s} + \gamma\ (\text{random direction}),\ \ t_{\rm 2p} \approx 1.6\ {\rm ns}'
+        note: the photon is re-emitted, but almost never back into our narrow beam — so it is lost to us
+        ids: [SCI-RES-001]
+    science: [SCI-ATOM-001, SCI-ATOM-002, SCI-RES-001, SCI-MAP-003, SCI-REP-004]
+    validation: [VAL-MAP-001]
+    interactions:
+      - id: INT-ATOMV-001
+        control: push the atom — grab its motion arrow (or the atom) and drag along the beam (or the left and right arrows); the speed ruler reports it, and the colour that comes into resonance is the one scattered
+        gesture:
+          type: drag
+          mapping: the arrow's tip stays under the hand — {px_per_kms} px per km/s; an arrow key moves it by {key_step_kms} km/s
+          params: {px_per_kms: 2.2, key_step_kms: 1}
+          pedagogical: true
+          metaphor: pushing the atom by hand is a way to explore other speeds along the beam; it does not claim that touching an atom moves it
+        variable: the atom's speed along the beam v [km/s] (v > 0 away from us)
+        domain: [-40, 40]
+        state: scene state v (URL `v`)
+        physics: science/js/lyaphys.js#uOfX
+        consequence: app/src/scenes/b02-resonance.js#atomFramePanel
+        affects: [the atom's motion arrow, where each photon colour sits in the atom's frame, which colour is in resonance and scattered]
+        claims: [SCI-ATOM-002, SCI-MAP-003]
+        validation: [VAL-MAP-001]
+        display: the shared push law (app/src/primitives/motion.js) at this beat's scale; the resonance window is drawn ~500× wider than natural (SCI-REP-004)
+    simplifications:
+      - The resonance window is drawn about 500× wider than the true natural width so it is visible (SCI-REP-004).
+      - '"Scattered out of the beam" is said here and again in Beat 5, where "shadow" is introduced; elsewhere "removed" or "absorbed" is shorthand (SCI-RES-001).'
+
+  - n: 3
+    slug: temperature-is-width
+    title: Temperature becomes line width
+    statement: |
+      A parcel holds many atoms, each moving its own way: temperature is that random motion.
+      Count them by their speed along the beam: that census is the shape of the line. Hotter gas, wider line — heat sets its core, but not its faint far wings.
+    objective: Temperature is particle motion, and the thermal line profile is the census of line-of-sight speeds.
+    action: Hold the gas to explore warmer gas (move down while holding for cooler); the temperature ruler and the reading beside the gas report it; touch the census or the line to see which atoms are there; replay how it forms.
+    consequence: Atoms move faster and their line-of-sight arrows lengthen; each atom's arrow travels down to a speed ruler (tail at zero) and leaves a mark at its speed; the marks form a band, stack into the census and settle onto its curve; the curve drops into the parcel's line — wider and shallower when hotter, at fixed amount.
+    stages:
+      - {key: atoms, label: '1 · atoms move', text: 'temperature is random motion'}
+      - {key: write, label: '2 · each writes its speed', text: 'every atom leaves a mark at its speed along the beam'}
+      - {key: census, label: '3 · the census', text: 'the marks stack up: how many atoms at each speed'}
+      - {key: line, label: '4 · the line', text: 'the census becomes the parcel’s absorption line'}
+    equations:
+      - tex: 'b = \sqrt{\dfrac{2kT}{m_{\rm H}}} \approx {{VAL-TAU-001:b_1e4_kms:.2f}}\ {\rm km\,s^{-1}}\,\Bigl(\dfrac{T}{10^4\,{\rm K}}\Bigr)^{1/2}'
+        note: the census along the beam is a Gaussian of width b (σ = b/√2)
+        ids: [SCI-THERM-001, SCI-THERM-002]
+      - tex: '\phi_{\rm G}(\Delta v) = \dfrac{1}{\sqrt{\pi}\,b}\,e^{-\Delta v^2/b^2}'
+        note: normalised — heating spreads the same absorption, it does not add any
+        ids: [SCI-THERM-002, SCI-TAU-001]
+    science: [SCI-THERM-001, SCI-THERM-002, SCI-TAU-001, SCI-REP-001, SCI-CTX-002]
+    validation: [VAL-TAU-001]
+    interactions:
+      - id: INT-TEMP-001
+        control: hold the gas parcel to explore warmer gas; move up or down while holding to refine either way; arrow keys; the temperature ruler and the reading beside the gas report it (after the gesture is learned, the ruler also takes a precise value)
+        gesture:
+          type: hold
+          mapping: 'holding still raises log10 T by {rate_dex_per_s} dex per second; moving vertically while holding (after {deadband_px} px) changes log10 T by {refine_dex_per_px} dex per px, down cooler; an arrow key multiplies T by {key_factor}'
+          params: {rate_dex_per_s: 0.3, refine_dex_per_px: 0.008, deadband_px: 6, key_factor: 1.12}
+          pedagogical: true
+          metaphor: '"hold the gas to explore warmer gas" — holding is how the reader explores warmer gas; it does not claim that touching gas heats it (the forest''s gas is heated by the ultraviolet background), and releasing keeps the state reached — no cooling physics is invented'
+        variable: T [K]
+        domain: [2000, 100000]
+        state: scene state T (URL `T`)
+        physics: science/js/lyaphys.js#dopplerB
+        consequence: app/src/scenes/b03-temperature.js#b3census
+        affects: [the atoms' line-of-sight speeds and arrows, the marks on the speed ruler, the census and its curve, the Doppler width b, the line profile (wider and shallower at a fixed column)]
+        claims: [SCI-THERM-001, SCI-THERM-002, SCI-TAU-001]
+        validation: [VAL-TAU-001]
+        display: every representation is recomputed from T in the same frame — no width or position is eased; the first-encounter formation (about 3.5 s, once per viewer) and the slow replay (about 9 s) only move marks between representations, landing at the exact v and b(T)
+      - id: INT-THERM-BIN-001
+        control: touch, hover or [ ] on the census or the line — one 2.5 km/s speed bin
+        gesture:
+          type: dwell
+          mapping: the {bin_kms} km/s bin under the pointer (a tap pins it); dwelling {learned_s} s counts as discovered
+          params: {bin_kms: 2.5, learned_s: 0.6}
+          pedagogical: true
+        variable: speed along the beam (one bin) [km/s]
+        domain: [-80, 80]
+        inspection: true
+        physics: app/src/data/scene-data.js#sigmaLOS
+        consequence: app/src/scenes/b03-temperature.js#b3census
+        affects: [the atoms in that bin (ringed in the parcel), their marks in the census, the band of colour offsets they absorb in]
+        claims: [SCI-THERM-001, SCI-THERM-002, SCI-REP-001]
+        display: the atoms shown are exactly the representative sample's atoms whose v = g·σ(T) falls in the bin; each absorbs at its own Doppler offset (the natural width is ~2000× narrower), so the line's band is the bin's range, not a one-to-one map of colours to atoms
+    visual_transforms:
+      - id: VT-THERM-WRITE
+        gesture: each atom's speed arrow travels down to one ruler, tail at zero, and its tip leaves a mark at that atom's speed along the beam
+        from: representative atoms' line-of-sight velocities, v = g·σ(T)
+        to: marks on a speed ruler (a band, darkest where most atoms are)
+        claims: [SCI-THERM-001, SCI-REP-001]
+        computed_by: app/src/data/scene-data.js#sigmaLOS
+        drawn_by: app/src/scenes/b03-temperature.js#b3census
+        display: one mark per representative atom (a few hundred, SCI-REP-001)
+      - id: VT-THERM-CENSUS
+        gesture: the marks stack into a census and settle onto its curve
+        from: marks at each atom's speed
+        to: the census of speeds — counts per 2.5 km/s, and the expected count N·Δv·e^(−v²/b²)/(√π b)
+        claims: [SCI-THERM-001, SCI-THERM-002]
+        computed_by: science/js/lyaphys.js#dopplerB
+        drawn_by: app/src/scenes/b03-temperature.js#b3census
+      - id: VT-THERM-LINE
+        gesture: the census curve drops into the parcel's absorption line — the same shape, now in optical depth
+        from: the census of line-of-sight speeds (normalised)
+        to: the thermal line profile τ(Δv) = τ0(N, b)·e^(−Δv²/b²), at a fixed amount of hydrogen
+        claims: [SCI-THERM-002, SCI-TAU-001]
+        computed_by: science/js/lyaphys.js#tau0
+        drawn_by: app/src/scenes/b03-temperature.js#sceneTemperature
+        validation: [VAL-TAU-001]
+    micro:
+      - key: gaussian
+        ask: why a Gaussian?
+    simplifications:
+      - Thermal motion only; turbulent/unresolved bulk motions within the parcel are ignored (b_turb = 0) unless stated (SCI-THERM-002).
+
+  - n: 4
+    slug: lifetime-wings
+    title: The atom's lifetime leaves faint, far wings
+    statement: |
+      An excited atom does not stay excited forever, so the colour it absorbs is not perfectly sharp.
+      This lifetime spread is tiny next to the thermal spread — but far from the centre, it wins. In most forest gas these wings are too faint to see; they show only where the beam crosses a very high column of neutral hydrogen (high N_HI).
+    objective: The Voigt profile has two physically different pieces — a thermal core and lifetime-driven wings.
+    action: Step through the four statements (a chain of reasoning). With "show the physics", a temperature setting changes the core's width; the wings stay.
+    consequence: The survival curve decays in ~1.6 ns; the natural line appears as a hairline; inside the thermal core it is invisible; on a logarithmic scale its wings overtake the Gaussian beyond a few b.
+    stages:
+      - {key: decay, label: '1 · it does not last', text: 'the excited state survives ~1.6 ns'}
+      - {key: sharp, label: '2 · so not perfectly sharp', text: 'a very narrow natural line remains'}
+      - {key: core, label: '3 · tiny next to motion', text: 'thermal motion is well over a thousand times wider'}
+      - {key: wings, label: '4 · far out, it wins', text: 'the wings reach farther than the Gaussian'}
+    equations:
+      - tex: 'P_{\rm 2p}(t) = e^{-t/t_{\rm 2p}},\qquad t_{\rm 2p} = 1/A_{21} \approx 1.6\ {\rm ns}'
+        note: the chance the atom is still excited
+        ids: [SCI-NAT-001, SCI-ATOM-001]
+      - tex: '\gamma = \dfrac{\Gamma\lambda_0}{4\pi} = 0.0061\ {\rm km\,s^{-1}}'
+        note: natural half-width; Γ = A₂₁ = 6.26×10⁸ s⁻¹; damping parameter a = γ/b
+        ids: [SCI-NAT-001, SCI-ATOM-001]
+      - tex: 'H(a,x) \simeq e^{-x^2} + \dfrac{a}{\sqrt{\pi}\,x^2}'
+        note: x = Δv/b; core + wings — the full Voigt function is in the microscope
+        ids: [SCI-VOIGT-001]
+    science: [SCI-NAT-001, SCI-ATOM-001, SCI-VOIGT-001, SCI-VOIGT-002, SCI-SAT-002, SCI-REP-004]
+    validation: [VAL-VOIGT-001, VAL-TAU-001]
+    micro:
+      - key: lifetime
+        ask: why does a short life spread the colour?
+      - key: voigt
+        ask: how do the two pieces combine?
+    simplifications:
+      - The surface shows only the survival probability; the classical damped-oscillator analogue is in the microscope, labelled as an analogue (SCI-NAT-001).
+      - The natural line is magnified (×1200) in the inset and labelled (SCI-REP-004).
+
+  - n: 5
+    slug: same-colour-stretched
+    title: The same colour, stretched
+    statement: |
+      Hydrogen absorbs at Lyman-alpha in its own frame, scattering that colour out of the beam: a shadow.
+      Between the gas and us the universe expands: the light stretches, and every shadow written in it stretches too.
+    objective: Lyα absorption is local and always at 1215.67 Å in the absorber's own frame; the forest is many such shadows, written at different redshifts and stretched on to us, so observed wavelength records where along the way each was written.
+    action: Drag the light along its path (or step through, or play, the journey); select a structure in the gas; at the end, zoom into one shadow.
+    consequence: The whole spectral ribbon stretches past a fixed Lyα mark; each structure writes a shadow where the ribbon sits under the mark; earlier shadows move redward as the stretching continues, behind the quasar's own Lyα, which rides the ribbon as a quiet anchor ahead of them all (the close-up keeps a trail of its drift); at our telescope the shadows form the observed forest, the selected one at 1215.67 × (1 + z) Å.
+    stages:
+      - {key: light, label: '1 · the quasar’s light', text: 'a smooth spectrum sets out'}
+      - {key: write, label: '2 · a structure writes', text: 'at 1215.67 Å in its own frame'}
+      - {key: stretch, label: '3 · it stretches on', text: 'the shadow moves redward with the light'}
+      - {key: next, label: '4 · the next structure', text: 'writes at its own Lyα, on a different part of the light'}
+      - {key: many, label: '5 · all along the way', text: 'the sequence accelerates'}
+      - {key: forest, label: '6 · the forest', text: 'at our telescope'}
+      - {key: zoom, label: '7 · zoom in', text: 'one shadow, read in km/s'}
+    equations:
+      - tex: '\lambda_{\rm here} = \lambda_{\rm emit}\,\dfrac{1+z_{\rm q}}{1+z_{\rm here}}'
+        note: the light's wavelength as measured where it is now; it grows as the light travels
+        ids: [SCI-RED-001, SCI-RED-005]
+      - tex: '\lambda_{\rm here}(z_{\rm abs}) = 1215.67\ \text{Å}\;\Rightarrow\;\lambda_{\rm obs} = 1215.67\ \text{Å}\,(1+z_{\rm abs})'
+        note: gas at z_abs absorbs what is at Lyα there; we receive that shadow stretched by (1 + z_abs)
+        ids: [SCI-RED-005, SCI-RED-001]
+      - tex: '\lambda_{\rm abs\,frame} = \dfrac{\lambda_{\rm obs}}{1+z_{\rm abs}}'
+        note: the recorded spectrum in the selected structure's rest frame — its own shadow is back at exactly 1215.67 Å
+        ids: [SCI-RED-001]
+      - tex: '\lambda_{\rm q\,frame} = \dfrac{\lambda_{\rm obs}}{1+z_{\rm q}} = 1215.67\,\text{Å}\;\dfrac{1+z_{\rm abs}}{1+z_{\rm q}} < 1215.67\ \text{Å}'
+        note: in the quasar's rest frame every intervening shadow lies blueward of the quasar's own Lyα
+        ids: [SCI-RED-002]
+      - tex: '\ln\lambda_{\rm obs} = \ln\lambda_{\rm here} + \ln(1+z_{\rm here})'
+        note: on a logarithmic ruler a stretch is a slide
+        ids: [SCI-RED-003]
+      - tex: '\Delta u = c\,\Delta\ln\lambda'
+        note: small slides are the velocities used from Beat 6 on
+        ids: [SCI-RED-003, SCI-MAP-004]
+    science: [SCI-RED-001, SCI-RED-002, SCI-RED-003, SCI-RED-004, SCI-RED-005, SCI-ATOM-001, SCI-TAU-001, SCI-FLUX-001, SCI-MAP-001, SCI-MAP-004, SCI-SIM-TOY-001, SCI-REP-007]
+    validation: [VAL-RED-001]
+    interactions:
+      - id: INT-LIGHT-001
+        control: drag the light along its path (it holds where it was grabbed), or left/right arrows; "play the whole journey" moves it for you
+        gesture:
+          type: drag
+          mapping: the light stays under the hand where it was grabbed; its comoving distance is proportional to its position along the path
+          pedagogical: true
+        variable: where the light is — its comoving distance along the path from the quasar (z_q = 3.2) to us [Mpc/h]
+        state: the journey position (scene state; the margin's step follows it)
+        physics: science/js/lyaphys.js#comovingDistance
+        consequence: app/src/scenes/b05-stretched.js#b5tauCols
+        affects: [the light's redshift and stretch, the ribbon against the ruler of "here", the shadows written so far, the quasar's Lyα anchor and its trail, the close-up, the forest]
+        claims: [SCI-RED-001, SCI-RED-004, SCI-RED-005, SCI-REP-007]
+        validation: [VAL-RED-001]
+        display: the reader controls position; redshift and every wavelength follow from it (z from the comoving distance, Planck 2018) — redshift is never the slider
+      - id: INT-STRUCT-001
+        control: click a structure on the path or its shadow in the forest (or [ and ])
+        gesture:
+          type: tap
+          mapping: the structure (or its shadow) under the pointer is followed
+          pedagogical: true
+        variable: which structure is followed
+        inspection: true
+        physics: science/js/lyaphys.js#lambdaEmitAbsorbed
+        consequence: app/src/scenes/b05-stretched.js#b5frameD
+        affects: [the cinnabar bracket on the path, its shadow's tick on the ribbon, the frame the recorded spectrum can be read in]
+        claims: [SCI-RED-005]
+        validation: [VAL-RED-001]
+      - id: INT-SQUEEZE-001
+        control: "grab a shadow (or the recorded spectrum) and pull it toward short wavelengths — in review probes 3–4 and, with \"show the physics\", at the forest; the frame selector remains for repeat use"
+        gesture:
+          type: squeeze
+          mapping: the grabbed point stays under the hand — the spectrum is compressed about 0 Å by the ratio of the hand's position to where it grabbed; with "show the physics" the squeeze settles onto a named frame within {detent_px} px of it (none in review probes)
+          params: {detent_px: 7}
+          pedagogical: true
+          metaphor: 'the squeeze is the frame change itself — every intermediate state is a named frame, "the rest frame of gas at z", stated on the ruler'
+        variable: the stretch undone — the recorded spectrum divided by (1 + z) for a frame between ours and the quasar's
+        state: probe state (the squeeze), cleared at the reveal
+        physics: science/js/lyaphys.js#lambdaRestOfObs
+        consequence: app/src/scenes/b05-stretched.js#b5frameD
+        affects: [every shadow and the anchor together, the ruler's label (the stretch undone), the probe's answer]
+        claims: [SCI-RED-001, SCI-RED-002]
+        validation: [VAL-RED-001]
+        teaching_bounds: a uniform compression about 0 Å that stops at the quasar's own frame (it cannot be squeezed further) and cannot stretch beyond ours
+    visual_transforms:
+      - id: VT-RED-WRITE
+        gesture: the gas the light is passing writes at a fixed Lyα mark; written shadows ride the ribbon and stretch redward with it
+        from: continuous gas along the line of sight (schematic field)
+        to: shadows on the stretching ribbon — the forest, written along the way
+        claims: [SCI-RED-005, SCI-RED-001, SCI-REP-007]
+        computed_by: science/js/lyaphys.js#lambdaEmitAbsorbed
+        drawn_by: app/src/scenes/b05-stretched.js#b5tauCols
+        validation: [VAL-RED-001]
+      - id: VT-RED-ANCHOR
+        gesture: the quasar's own Lyα is a quiet mark on the ribbon; it leaves the Lyα mark at the quasar and drifts redward ahead of every shadow
+        from: the quasar's Lyα (1215.67 Å in its own frame)
+        to: a mark carried by the stretching ribbon, at 1215.67 × (1 + z_q)/(1 + z) where the light is
+        claims: [SCI-RED-002, SCI-RED-001]
+        computed_by: science/js/lyaphys.js#lambdaLocal
+        drawn_by: app/src/scenes/b05-stretched.js#b5anchor
+        validation: [VAL-RED-001]
+      - id: VT-RED-UNDO
+        gesture: compressing the recorded spectrum undoes the stretch — every shadow and the anchor move together toward short wavelengths
+        from: the recorded spectrum in our frame
+        to: the same spectrum divided by (1 + z) for a chosen frame
+        claims: [SCI-RED-001, SCI-RED-002, SCI-RED-005]
+        computed_by: science/js/lyaphys.js#lambdaRestOfObs
+        drawn_by: app/src/scenes/b05-stretched.js#b5frameD
+        validation: [VAL-RED-001]
+    simplifications:
+      - The gas along the line of sight is a schematic continuous field (seeded), with three density peaks placed for the narration; its density peaks — the "structures", about thirty along the path — are denser parts of the continuous gas, not separate objects; every bit of it writes at its own Lyα, so peaks write dark shadows and the gas between them faint ones. Shadows are drawn ~60× wider than real forest lines (SCI-REP-007).
+      - Only Lyα is drawn; the gas also absorbs Lyβ and higher lines at shorter wavelengths, and the atmosphere hides the far blue (not shown).
+      - The surface spectrum is continuum-normalised; the quasar's own Lyα emission appears with "show the physics" (SCI-RED-002).
+      - Positions along the path are comoving distances in Planck 2018 cosmology; "measured here" means by an observer at rest in the expanding universe at that point (SCI-RED-004).
+      - Each structure's redshift is treated as one number here; Beats 6–7 separate the expansion from the gas's own motion (SCI-MAP-001).
+
+  - n: 6
+    slug: one-parcel-lands
+    title: Where does one parcel land?
+    statement: |
+      One parcel of gas from the 4.4 Mpc/h stretch around the selected shadow. Move it, push it, warm it, or change how much of it is neutral.
+      Each changes one thing about its ink — its contribution to optical depth — on the spectrum: where it lands (where its ink appears in the spectrum, not where the gas is), how wide, or how much.
+    objective: Position and bulk velocity set where the contribution lands; temperature and the parcel's size (the Hubble flow across it) set its spread; the neutral amount sets how much — ink is its contribution to optical depth τ.
+    action: Move the gas along the beam (its place); push its motion; hold it to explore warmer gas; set the amount of neutral hydrogen with the margin instrument. The rulers and the readings beside the gas report each change; a pencil ghost keeps the state before.
+    consequence: Moving it farther lengthens its recession from the expansion, so it lands redder; pushing it moves where it lands without moving it in space; warmer gas spreads the same ink wider; more neutral hydrogen deepens the ink in place. The ledger place · motion · width · amount marks what changed and what did not; the comparison with the ghost is measured.
+    equations:
+      - tex: 'u = aH(z)\,x_{\rm com} + v_{\rm pec}'
+        note: place
+        ids: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003]
+      - tex: 'b^2 \simeq \dfrac{2kT}{m_{\rm H}} + b_{\rm size}^2,\qquad b_{\rm size} = \sqrt{2}\,aH\,\sigma_x'
+        note: 'spread: heat and the parcel''s size (the Hubble flow across its width σ_x) add in quadrature; here b_size = {{VAL-ORTH-001:base.b_size_kms:.1f}} km/s, comparable to the thermal {{VAL-ORTH-001:base.b_thermal_kms:.1f}} km/s'
+        ids: [SCI-THERM-002, SCI-REP-003]
+      - tex: '\tau_0 = \dfrac{N_{\rm HI}\,\sigma_v}{\sqrt{\pi}\,b},\qquad \int\tau\,du = N_{\rm HI}\,\sigma_v'
+        note: amount and spread, with the b above (the drawn line's); σ_v = (πe²/m_e c) f λ₀
+        ids: [SCI-TAU-001, SCI-THERM-002]
+    science: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-TAU-001, SCI-THERM-002, SCI-ION-001, SCI-ION-002, SCI-REP-001, SCI-REP-003, SCI-REP-005]
+    validation: [VAL-MAP-001, VAL-TAU-001, VAL-ORTH-001]
+    interactions:
+      - id: INT-PLACE-001
+        control: move the gas along the beam (press it and slide, or the left and right arrows); the distance ruler and the tick on the real-space axis report it (after the gesture is learned, the ruler also takes a precise value)
+        gesture:
+          type: drag
+          mapping: 'the gas stays under the hand along the real-space axis (the axis''s own scale); a press becomes a move once the hand travels {deadband_px} px sideways before it travels up or down; an arrow key moves it {key_step_mpch} Mpc/h'
+          params: {deadband_px: 6, key_step_mpch: 0.05}
+          pedagogical: true
+          metaphor: moving the parcel by hand asks "what if this gas were farther away?" — it keeps its own amount, temperature and motion (no density evolution, no new surroundings); only its place, and so its recession from the expansion, changes
+        variable: the parcel's comoving place x along the beam [Mpc/h] (its amount, temperature and own motion are fixed)
+        domain: [0.3, 4.1]
+        state: scene state x (URL `x`)
+        physics: science/js/lyaphys.js#parcelToCells
+        consequence: app/src/scenes/b06-parcel.js#b6parcel
+        affects: [the recession from the expansion aH·x, where the parcel lands u = aH·x + v_pec, the position of its optical depth]
+        claims: [SCI-MAP-001, SCI-MAP-002, SCI-REP-003]
+        validation: [VAL-ORTH-001, VAL-MAP-001]
+        teaching_bounds: 'the parcel is moved within the 4.4 Mpc/h teaching stretch; a real parcel elsewhere would have its own density, temperature and motion — here only the place changes, one variable at a time'
+        display: every frame recomputes the parcel's cells, its τ (lyaphys parcelTau) and the chained arrows from (x, v_pec, T, N_HI)
+      - id: INT-PUSH-001
+        reuses: INT-VPEC-001
+        control: push the parcel's motion — grab its velocity arrow and drag (or [ and ]); the number at the arrow, the measured-range band, the chained arrows and the velocity ruler report it
+        variable: the parcel's line-of-sight peculiar velocity v_pec [km/s] (its place, temperature and amount are fixed)
+        state: scene state v (URL `v`)
+        physics: science/js/lyaphys.js#parcelToCells
+        consequence: app/src/primitives/motion.js#pushTo
+        affects: [its own-motion arrow, where it lands, the position of its optical depth]
+        claims: [SCI-MAP-001, SCI-MAP-003, SCI-REP-003]
+        validation: [VAL-ORTH-001, VAL-MAP-001]
+        display: the same instrument as Beat 7, one implementation (app/src/primitives/motion.js) — the same sign convention, scale, sandbox and measured range
+      - id: INT-WARM-001
+        reuses: INT-TEMP-001
+        gesture_extra:
+          params: {onset_s: 0.25}
+          mapping: 'on this parcel, which can also be moved, warming begins after {onset_s} s held still, and a sideways movement first turns the press into a move (T stays exactly where it was)'
+        control: hold the gas to explore warmer gas (move down while holding for cooler, or the up and down arrows); the temperature ruler and the reading beside the gas report it
+        variable: the parcel's temperature T [K] (its place, motion and amount are fixed)
+        state: scene state T (URL `T`)
+        physics: science/js/lyaphys.js#dopplerB
+        consequence: app/src/primitives/hold.js#holdT
+        affects: [the random motion of its representative atoms, its thermal Doppler width (the spread from its size is unchanged), the width of its optical depth (its area stays — heating spreads the same ink)]
+        claims: [SCI-THERM-002, SCI-TAU-001, SCI-REP-001]
+        validation: [VAL-ORTH-001, VAL-TAU-001]
+        display: the same law as Beat 3, one implementation (app/src/primitives/hold.js)
+      - id: INT-AMOUNT-001
+        control: set the amount of neutral hydrogen with the margin instrument (a notch on a quiet scale; keyboard-operable); the number of representative neutral atoms in the gas and the depth of its ink follow
+        gesture:
+          type: set
+          mapping: 'an explicit setting: the notch maps linearly onto log10 N_HI over the domain; an arrow key moves it {step_dex} dex'
+          params: {step_dex: 0.01}
+          pedagogical: true
+          metaphor: 'none — kept explicit on purpose. No gesture is physically honest for "more neutral atoms": touching or squeezing gas does not create them, and enlarging the drawn gas would change its size, not N_HI. What sets the amount in nature (the ultraviolet background) is in the microscope'
+        variable: the parcel's neutral hydrogen column N_HI [cm⁻², as log10] (its place, motion, temperature and size are fixed)
+        domain: [12.5, 14.8]
+        state: scene state logN (URL `logN`)
+        physics: science/js/lyaphys.js#tauFromCells
+        consequence: app/src/scenes/b06-parcel.js#b6parcel
+        affects: [the number of representative neutral atoms drawn in the gas (∝ N_HI), the depth of its optical depth (τ ∝ N_HI at every colour)]
+        claims: [SCI-TAU-001, SCI-ION-001, SCI-REP-001]
+        validation: [VAL-ORTH-001, VAL-TAU-001]
+        teaching_bounds: 'set directly at fixed density, temperature and place (the microscope shows what sets it in nature); the range spans lines from unsaturated (τ₀ < 1) to strongly saturated'
+    visual_transforms:
+      - id: VT-PARCEL-GAS
+        gesture: the parcel drawn as gas carrying representative neutral atoms — their number proportional to N_HI (the gas itself is not enlarged), their random motion to σ(T)
+        from: the parcel's state (x, T, N_HI)
+        to: a wash at x with dark dots (its neutral atoms) inside it
+        claims: [SCI-REP-001, SCI-REP-003, SCI-THERM-002]
+        computed_by: app/src/data/scene-data.js#sigmaLOS
+        drawn_by: app/src/scenes/b06-parcel.js#b6body
+        display: about 36 atoms for the toy's parcel, from 1 to 160 across the amount's domain; motion slowed for display and frozen under reduced motion
+      - id: VT-PARCEL-MAP
+        gesture: where it lands, as two chained arrows — the recession from the expansion (pencil, from the stretch's near edge) and the parcel's own motion (cinnabar)
+        from: place x and own motion v_pec
+        to: u = aH·x + v_pec on the velocity axis
+        claims: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003]
+        computed_by: science/js/lyaphys.js#hubblePerMpch
+        drawn_by: app/src/scenes/b06-parcel.js#sceneParcel
+        validation: [VAL-MAP-001]
+      - id: VT-PARCEL-BEFORE
+        gesture: the state before a gesture stays as a pencil ghost, with a measured comparison — where it lands, how wide, how much ink
+        from: the parcel's optical depth before and after one change
+        to: centre shift, FWHM ratio and area ratio printed under the spectrum; the ledger place · motion · width · amount marks what changed
+        claims: [SCI-TAU-001, SCI-MAP-001, SCI-THERM-002]
+        computed_by: science/js/lyaphys.js#lineMoments
+        drawn_by: app/src/scenes/b06-parcel.js#b6compare
+        validation: [VAL-ORTH-001]
+        thresholds: {grid_pad_kms: 300, grid_points: 2200, edge_max: 0.001}
+        display: measured from the two computed profiles (never typed) on a grid that extends the drawn stretch by grid_pad_kms on each side at the drawing's spacing; not printed when either profile still exceeds edge_max of its peak at that grid's ends
+    micro:
+      - key: bleach
+        ask: what sets the neutral amount?
+    simplifications:
+      - The parcel is a teaching Gaussian clump summarising one stretch of the real sightline (SCI-REP-003). Its width along the beam is real space, so the Hubble flow across it spreads its line as much as its temperature does; the margin prints both and the drawn line's own width.
+      - Moving the parcel changes only its place; its amount, temperature and own motion travel with it (no density evolution).
+      - The "neutral amount" setting changes N_HI directly, holding density, temperature and position fixed; what sets it (ultraviolet light from all galaxies and quasars) is in the microscope (SCI-ION-001).
+      - Warming the gas holds N_HI fixed, so that only the width changes; in photoionisation equilibrium the neutral amount would also fall as the gas warms (the recombination rate α_A ∝ T^−0.7, SCI-ION-001).
+      - The neutral atoms drawn in the gas are representative (SCI-REP-001), their number proportional to N_HI.
+
+  - n: 7
+    slug: distance-vs-colour
+    title: Distance and observed colour are not the same coordinate
+    statement: |
+      Now the parcel's neighbours: three parcels from the same stretch. Under expansion alone, farther gas recedes faster, so they land in order.
+      Now push one along the line of sight: its threads (from the gas to where it lands) tilt, and the gas can land out of order — and the gas between the parcels lands too.
+    objective: The spectrum is organised in observed velocity (wavelength), not simply by real-space distance.
+    action: Push a parcel (grab its velocity arrow) and drag its line-of-sight velocity; touch a parcel's gas to select it; switch between expansion alone and the toy's velocities; touch velocity space to see which gas lands there.
+    consequence: Each parcel hangs fine threads from where its gas is to where it lands; they hang straight under pure expansion, tilt with peculiar velocity, fold where the gas converges in velocity, and cross when the order reverses; the flux forms where they land; pencil ghosts mark where expansion alone would put each parcel.
+    equations:
+      - tex: 'u = aH(z)\,x_{\rm com} + v_{\rm pec}'
+        note: 'x_com comoving; v_pec > 0 means moving away from us (redder); here aH(z)/h = {{VAL-RED-001:hubble_per_mpch_z3:.1f}} km s⁻¹ per Mpc/h (Planck 2018, z = 3)'
+        ids: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-MAP-005]
+      - tex: '\lambda_{\rm obs} = \lambda_0\,(1+z_0)\,e^{u/c}'
+        note: the ruler converts velocity to observed wavelength (the stretch of Beat 5, measured in km/s)
+        ids: [SCI-MAP-004]
+    science: [SCI-MAP-001, SCI-MAP-002, SCI-MAP-003, SCI-MAP-004, SCI-MAP-005, SCI-REP-003]
+    validation: [VAL-MAP-001, VAL-RED-001]
+    interactions:
+      - id: INT-VPEC-001
+        control: grab a parcel's velocity arrow and drag it along the line of sight (or a, b, c and the arrow keys); the number at the arrow, the measured-range band and where it lands on the velocity ruler report it. Only the arrow carries motion — the gas itself is selected, never pushed (INT-PICK-001)
+        gesture:
+          type: drag
+          mapping: the arrow's tip stays under the hand — {px_per_kms} px per km/s; an arrow key moves it by {key_step_kms} km/s
+          params: {px_per_kms: 0.45, key_step_kms: 5}
+          pedagogical: true
+          metaphor: moving the gas's motion by hand is a way to explore other velocities; the toy's own velocities are restored with one quiet action, and a faint band shows the range it actually has
+        variable: the selected parcel's line-of-sight peculiar velocity v_pec [km/s] (its real-space place is fixed)
+        domain: [-200, 200]
+        state: scene state va, vb, vc (bulk v_pec) and grad (the toy's internal velocity gradient, on or off)
+        physics: science/js/lyaphys.js#parcelToCells
+        consequence: app/src/scenes/b07-distance.js#b7fibres
+        affects: [the velocity arrow, the threads from real to velocity space, where the parcel lands, its optical depth, the flux]
+        claims: [SCI-MAP-001, SCI-MAP-003, SCI-REP-003]
+        validation: [VAL-MAP-001]
+        teaching_bounds: 'the drag range exceeds the toy sightline''s measured peculiar velocities ({{VAL-TOY-001:vpec_window_kms.0:.1f}} to {{VAL-TOY-001:vpec_window_kms.1:.1f}} km/s in this stretch; {{VAL-TOY-001:vpec_sightline_kms.0:.1f}} to {{VAL-TOY-001:vpec_sightline_kms.1:.1f}} km/s along the whole 20 Mpc/h toy sightline): values outside are a controlled teaching intervention, and the scene says so beside the arrow; the range is wide enough to reverse b and c'
+        display: the threads, the parcel's τ and the flux are recomputed from the state in every frame (τ memoised on its exact inputs — identical numbers); the first-encounter reveal grows the toy's velocities in as v = f·v_sim, every frame a physical state
+      - id: INT-PICK-001
+        control: touch or click a parcel's gas (or a, b, c) to select it; its velocity arrow, measured-range band and threads come forward
+        gesture:
+          type: tap
+          mapping: the parcel whose gas is under the pointer is selected; dragging the gas changes nothing (its motion is its arrow's, INT-VPEC-001)
+          pedagogical: true
+          metaphor: the gas is the object, the arrow its motion — in Beat 6 dragging the gas moves its place, so here it never means its velocity
+        variable: which parcel is selected
+        inspection: true
+        physics: science/js/lyaphys.js#parcelToCells
+        consequence: app/src/scenes/b07-distance.js#sceneDistance
+        affects: [which parcel's arrow, band and threads are emphasised; which parcel the arrow keys move]
+        claims: [SCI-REP-003]
+      - id: INT-VSCAN-001
+        control: touch, hover or [ ] on velocity space
+        gesture:
+          type: dwell
+          mapping: the velocity under the pointer (a tap pins it)
+          pedagogical: true
+        variable: a velocity-space coordinate u [km/s] (the window's range)
+        inspection: true
+        physics: science/js/lyaphys.js#tauContributions
+        consequence: app/src/scenes/b07-distance.js#b7landingAt
+        affects: [the threads of the gas that lands at u (weighted by each sub-cell's optical depth there), ticks at its real-space origin, the flux at u]
+        claims: [SCI-MAP-001, SCI-REP-003]
+        display: emphasis uses each sub-cell's thermal-kernel optical depth at u — the Gaussian core of the Voigt profile the spectrum uses (for these columns the damping wings are negligible); several parcels can land at one colour; the scene lists every parcel carrying at least 5 % of the optical depth there (the share Beat 12 traces)
+    visual_transforms:
+      - id: VT-MAP-FIBRES
+        gesture: each parcel hangs fine threads from where its gas is to where it lands; straight under expansion alone, tilting, crossing and folding with the gas's own motion
+        from: real-space position x of each parcel sub-cell (the cells its τ is computed from)
+        to: velocity-space coordinate u = aH(z)·x + v_pec, where its optical depth is placed
+        claims: [SCI-MAP-001, SCI-MAP-003, SCI-REP-003]
+        computed_by: science/js/lyaphys.js#parcelToCells
+        drawn_by: app/src/scenes/b07-distance.js#b7fibres
+        validation: [VAL-MAP-001]
+        display: one thread per 4th sub-cell of 161 within ±2.75σ of the parcel; opacity ∝ (the sub-cell's share of the column)^1.6, so the topology shows and the loom does not
+    simplifications:
+      - Three parcels decompose a stretch of the toy sightline; their velocities are the means of the toy's gas, weighted by neutral hydrogen, and the reader may drag them (SCI-REP-003).
+      - Velocities are shown relative to the near edge of the stretch.
+
+  - n: 8
+    slug: parcels-to-continuum
+    title: From parcels back to a continuous sightline
+    statement: |
+      The three parcels were a teaching summary. Cut the same stretch finer — tens of cells, then the full sampling.
+      Every cell follows the same rule: map, place its optical depth (its ink), broaden — and the contributions combine.
+    objective: The toy rules apply cell by cell to a continuous, finely sampled sightline.
+    action: Drag the number of cells from 3 up to the full sampling.
+    consequence: The strip goes from three smudges to ruled cells to a continuous band; the optical depth converges to the full calculation (dashed).
+    equations:
+      - tex: '\tau(u) = \int n_{\rm HI}(x)\,\sigma_v\,\phi\bigl(u - u(x);\,b(x)\bigr)\,dx_{\rm prop}'
+        note: the continuous version of "every cell contributes"
+        ids: [SCI-TAU-002, SCI-SIM-001]
+      - note: 'valid where each sampling element has one velocity and lines span at least two pixels; outside that domain, particle-based codes differ (up to 0.2 in F for unresolved velocity structure, up to 0.46 for lines narrower than two pixels) — stated, not hidden'
+        ids: [SCI-TAU-004, SCI-TAU-005]
+    science: [SCI-TAU-002, SCI-TAU-004, SCI-TAU-005, SCI-SIM-001, SCI-SIM-002, SCI-SIM-TOY-001, SCI-REP-002, SCI-REP-003]
+    validation: [VAL-TOY-001, VAL-CLOSURE-FS]
+    simplifications:
+      - Real-space cells are the gas re-sampled on a line; particle codes such as fake_spectra deposit each particle's kernel directly in velocity space (VAL-CLOSURE-FS, SCI-SIM-002).
+      - One velocity and one temperature per cell. Where several velocities share one cell (unresolved velocity structure), absorption is misplaced; the toy stores one mass-weighted velocity per cell — it discards sub-cell velocity structure by design (SCI-TAU-004).
+      - The sum converges only once cells are finer than the narrowest line (aH·Δx ≤ b/2); the coarse slider settings are deliberately under-resolved (SCI-TAU-005).
+
+  - n: 9
+    slug: ink-adds
+    title: Ink adds
+    statement: |
+      Every cell has laid its ink in velocity space. Where contributions overlap, they stack.
+      The ink is optical depth — optical depths add. Dips in the light, the shadows, do not.
+    objective: Optical depth is the additive quantity.
+    action: Play the stacking; toggle "what if dips added instead?".
+    consequence: Transparent contributions stack into the total τ; the wrong rule (adding flux decrements) produces impossible negative light.
+    equations:
+      - tex: '\tau(u) = \sum_i \tau_i(u)'
+        note: absorbers act independently; their optical depths add
+        ids: [SCI-TAU-002, SCI-TAU-003]
+    science: [SCI-TAU-002, SCI-TAU-003, SCI-TAU-005, SCI-REP-005]
+    validation: [VAL-TAU-001]
+    simplifications:
+      - The stretch is drawn as 24 cells, coarser than Beat 8's criterion for convergence (half the narrowest line's width); the footer states how far their transmitted flux then differs from the full sampling (SCI-TAU-005).
+      - Each cell's optical depth is drawn as one transparent layer of ink; the layers picture the sum, not a physical order along the beam (SCI-REP-005).
+
+  - n: 10
+    slug: light-multiplies
+    title: Light multiplies
+    statement: |
+      Put the inked ribbon on a light table. Each layer passes a fraction of the light; the fractions multiply.
+      Where the ink is thick almost nothing gets through: the line saturates, and stops getting deeper. The backlit ribbon is the spectrum of this stretch.
+    objective: Transmitted flux is F = e^−τ, so transmissions multiply where optical depths add.
+    action: Drag the loupe along the ribbon (or along the spectrum) to hold any colour to the light; open "why does a line stop getting deeper?".
+    consequence: The backlit ribbon glows warm where light gets through and stays dark where it does not; the light it lets through also lights the paper around it; the probe lists each layer's transmission and their product; the flux curve is drawn from the light that gets through.
+    equations:
+      - tex: 'F(u) = e^{-\tau(u)},\qquad e^{-\sum_i \tau_i} = \prod_i e^{-\tau_i}'
+        note: the ribbon is rendered by stacking layers of opacity 1 − e^−τᵢ — the picture performs the rule
+        ids: [SCI-FLUX-001, SCI-FLUX-002, SCI-REP-005]
+    science: [SCI-FLUX-001, SCI-FLUX-002, SCI-REP-005, SCI-SAT-001, SCI-SAT-002, SCI-CTX-006]
+    validation: [VAL-TAU-001, VAL-REND-001]
+    interactions:
+      - id: INT-INSPECT-001
+        control: move the loupe along the ribbon or along the spectrum — by hovering, dragging or touch
+        gesture:
+          type: drag
+          mapping: the loupe's colour is the colour under the hand, on the ribbon or on the spectrum below it; moving it {learned_px} px counts as discovered
+          params: {learned_px: 30}
+          pedagogical: true
+        variable: the colour held to the light, u [km/s] (the window's range)
+        inspection: true
+        physics: app/src/primitives/sightline.js#windowKernels
+        consequence: app/src/scenes/b10-light.js#b10lightPath
+        affects: [the loupe on the ribbon, the lens view of the light crossing the layers, the flux point below]
+        claims: [SCI-FLUX-001, SCI-FLUX-002, SCI-REP-005]
+        validation: [VAL-REND-001, VAL-TAU-001]
+        display: the lens composites its beam exactly as the ribbon (light·T + ink·(1 − T), T the product so far) and shows the five deepest layers plus the others summed; the ribbon and its glow are not changed by inspecting
+    visual_transforms:
+      - id: VT-FLUX-LIGHT
+        gesture: the inked ribbon on a light table — each layer passes a fraction of the light; the light that gets through also lights the paper around it
+        from: each cell's optical depth τᵢ at each colour
+        to: transmitted light e^(−Στᵢ) = Πe^(−τᵢ) (layers of opacity 1 − e^(−τᵢ) over a warm backlight)
+        claims: [SCI-FLUX-001, SCI-FLUX-002, SCI-REP-005]
+        computed_by: app/src/scenes/b10-light.js#b10ribbon
+        drawn_by: app/src/scenes/b10-light.js#b10halo
+        validation: [VAL-REND-001]
+        display: the halo's strength at each colour is the transmitted fraction there (dark troughs cast no light), falling off over 16 px; paper fibres show only in that light; the ribbon's own pixels are checked against e^(−τ)
+      - id: VT-FLUX-LENS
+        gesture: one column of the sheet held to the light, as a lens view — the beam dims at each layer by its fraction e^(−τᵢ)
+        from: the optical depths τᵢ of the layers at the inspected colour
+        to: the light after each layer, down to the transmitted flux e^(−Στᵢ)
+        claims: [SCI-FLUX-001, SCI-FLUX-002, SCI-REP-005]
+        computed_by: app/src/primitives/sightline.js#windowKernels
+        drawn_by: app/src/scenes/b10-light.js#b10lightPath
+        validation: [VAL-TAU-001]
+    micro:
+      - key: saturation
+        ask: why does a line stop getting deeper?
+    simplifications:
+      - The quasar's intrinsic spectrum (continuum) is divided out; F = 1 means "all the expected light arrived".
+
+  - n: 11
+    slug: real-forest
+    title: A forest emerges
+    statement: |
+      Run the same rules along the toy's full 20 Mpc/h, not just 4.4: the Lyman-alpha forest up close, from 4 863 Å. Dense filaments write its deep lines.
+      A spectrograph blurs and adds noise to what we record — the gas and its optical depth are untouched.
+    objective: The forest is the same rules at scale; instrument resolution and noise act only on the final observation.
+    action: Zoom out; set the spectrograph's resolution and signal-to-noise (instrument settings — the gas does not change, the measurement does).
+    consequence: The recorded spectrum smooths and gets noisy; the gas strip and τ are visibly unchanged.
+    equations:
+      - tex: 'F_{\rm obs} = F \ast \mathrm{LSF} + n'
+        note: resolution convolves the transmitted flux, not the optical depth
+        ids: [SCI-OBS-001, SCI-OBS-002]
+      - tex: '\sigma_n = 1/(S/N)'
+        note: white noise per detector pixel
+        ids: [SCI-OBS-001, SCI-OBS-002]
+      - tex: '\lambda_{\rm obs} = \lambda_0\,(1+z_0)\,e^{u/c}'
+        note: the observed-wavelength ruler — Beat 5's stretch, read in km/s
+        ids: [SCI-MAP-004]
+      - note: 'broken line: the data producer''s own spectrum (exact Voigt, an independent code path); the browser''s differs by at most {{VAL-TOY-002:max_abs_dF_gauss:.0e}} in F'
+        ids: [SCI-SIM-001, SCI-TAU-002]
+    science: [SCI-OBS-001, SCI-OBS-002, SCI-MAP-004, SCI-SIM-001, SCI-TAU-002, SCI-SIM-TOY-001, SCI-CTX-003, SCI-CTX-004, SCI-RED-004]
+    validation: [VAL-TOY-001, VAL-TOY-002]
+    simplifications:
+      - The observer and the quasar are drawn at the ends of the beam for orientation only; the beam is broken at each end because the gaps are not to scale — the toy sample lies ≈ {{VAL-RED-001:chi_z3_planck_mpch:.0f}} Mpc/h (comoving) from us, and the quasar farther still (SCI-RED-004).
+      - The toy sightline's τ normalisation (Γ_HI) is tuned so the mean transmitted flux is 0.68, as measured at z ≈ 3; the tuned Γ_HI ({{VAL-TOY-001:gamma12_tuned:.1f}}×10⁻¹² s⁻¹) is ~{{VAL-TOY-001:gamma_ratio:.0f}}× the measured 0.8×10⁻¹², so the toy's absolute ionisation is not a physical claim (SCI-SIM-TOY-001, SCI-CTX-003, SCI-CTX-004).
+      - Gaussian line-spread function and white noise of constant σ (SCI-OBS-001, SCI-OBS-002).
+      - The student-facing spectrum is the app's own; the generating code's spectrum, an independent check, is an overlay in "show the physics".
+
+  - n: 12
+    slug: who-ate-this-colour
+    title: Who ate this colour?
+    statement: |
+      The recorded spectrum is all an observer gets. Go backwards — here we can, because we built the gas: point at a colour and light up the gas that absorbed it.
+      Sometimes one region dominates; sometimes separate places share one colour.
+    objective: One spectral pixel is not automatically one place in the gas; optical depths from many places add.
+    action: Press the spectrum and slide along it — the first time, the colour is traced back slowly; then every colour answers at once (or use the arrow keys); touch the gas to see which colours it takes.
+    consequence: A cinnabar thread rises from the colour into the optical depth, splits by contribution and lands on the gas that absorbed it; those regions develop like ink; then their shares appear and a ledger writes out τ as a sum and F as a product, and the threads fade.
+    equations:
+      - tex: '\tau(u) = \sum_j \tau_j(u),\qquad F = \prod_j e^{-\tau_j}'
+        note: a colour's optical depth is a sum over all the gas that lands there; the light that gets through is the product
+        ids: [SCI-TAU-003, SCI-FLUX-002]
+    science: [SCI-TAU-002, SCI-TAU-003, SCI-FLUX-002, SCI-MAP-001, SCI-RED-004]
+    validation: [VAL-TAU-001, VAL-INV-001]
+    interactions:
+      - id: INT-SCAN-001
+        control: press the spectrum and slide along it (or the arrow keys); the causal cursor follows the finger; the wavelength ruler is a reading, not a handle
+        gesture:
+          type: trace
+          mapping: the colour examined is the colour under the finger on the spectrum or its optical-depth band
+          pedagogical: true
+        variable: the colour examined, u [km/s] (anywhere in the toy's period)
+        inspection: true
+        physics: science/js/lyaphys.js#tauContributions
+        consequence: app/src/scenes/b12-who-ate.js#b12trace
+        affects: [the threads to the absorbing gas, the developed gas, the shares, the ledger, the rings in the volume]
+        claims: [SCI-TAU-003, SCI-TAU-002, SCI-MAP-001]
+        validation: [VAL-INV-001]
+        display: the decomposition is recomputed exactly at every cursor position — no interpolation or cache between colours, no snapping to clean examples; the gas stains ease in opacity only (about 0.15 s); threads linger 1.2 s after scanning stops, then fade (stills and reduced motion keep them faint)
+      - id: INT-GASREGION-001
+        control: touch, hover or [ ] on the real-space gas
+        gesture:
+          type: dwell
+          mapping: the stretch of gas under the pointer (a tap pins it)
+          pedagogical: true
+        variable: a stretch of gas — the cells within the grouping gap (0.25 Mpc/h) of x [Mpc/h]
+        domain: [0, 20]
+        inspection: true
+        physics: science/js/lyaphys.js#tauFromCells
+        consequence: app/src/scenes/b12-who-ate.js#b12regionTau
+        affects: [that gas's own optical depth across the spectrum, the light it removes (the spectrum without it, shaded), its bracket in real space]
+        claims: [SCI-TAU-002, SCI-TAU-003, SCI-FLUX-002]
+        validation: [VAL-INV-001, VAL-TAU-001]
+        display: the region's τ uses the same kernel and cut as the spectrum; its breadth is shown as it is (the colours where its τ exceeds 5 % of its peak are counted)
+        cache: tauFromCells memoised per region on its exact cells (identical numbers)
+    visual_transforms:
+      - id: VT-INV-TRACE
+        gesture: a chosen colour's thread rises from the spectrum into the optical depth, splits by contribution, and lands on the gas that absorbed it, which develops like ink; only then do the shares appear
+        from: one observed colour (a spectral pixel)
+        to: the real-space cells whose optical depth makes it, grouped into regions
+        claims: [SCI-TAU-003, SCI-TAU-002, SCI-MAP-001]
+        computed_by: science/js/lyaphys.js#tauContributions
+        drawn_by: app/src/scenes/b12-who-ate.js#b12trace
+        validation: [VAL-INV-001]
+        thresholds:
+          kernel_cut_b: 6
+          cell_min_fraction: 0.01
+          group_gap_mpch: 0.25
+          traced_min_share: 0.05
+          places_min_share: 0.15
+          ledger_terms: 3
+        omitted: a cell under cell_min_fraction of the colour's τ is not drawn on its own and regions under traced_min_share get no thread; their optical depth stays in the ledger's "rest", so the written sum is the colour's total τ exactly
+    simplifications:
+      - The observer and the quasar are drawn at the ends of the beam for orientation only; the beam is broken at each end because the gaps are not to scale — the toy sample lies ≈ {{VAL-RED-001:chi_z3_planck_mpch:.0f}} Mpc/h (comoving) from us, and the quasar farther still (SCI-RED-004).
+      - Shares are computed from the same browser model as the spectrum; regions are grouped by contiguity along the line (the grouping is a display choice).
+
+  - n: 13
+    slug: same-shadow
+    title: Same shadow
+    statement: |
+      Now only the recorded line, as an observer has it — no gas to look up. Three different gases could have made it.
+      Predict which — then see why the shadow alone cannot tell, and what can.
+    objective: The spectrum carries physical information, but the inverse problem is not unique; inference must be calibrated, not abandoned.
+    action: Choose a gas; reveal; then add a heavier-ion line or Lyman-beta.
+    consequence: All three gases fit the observed line, for two different reasons — the blend (ii) only because of the noise, (iii) because heat and smooth motion widen every hydrogen line alike; a metal line separates heat from bulk motion, and Lyman-beta exposes the hidden column of the blend.
+    equations:
+      - tex: 'b^2 = \dfrac{2kT}{m} + b^2_{\rm bulk}'
+        note: heat broadens light atoms more than heavy ions; bulk motion broadens all alike — every hydrogen line (Lyα, Lyβ, …) sees only the total b, so heat and smooth motion can match in all of them
+        ids: [SCI-DEG-002, SCI-THERM-002]
+      - tex: '\Delta\chi^2 \approx {{VAL-DEG-001:dchi2.20.ii:.1f}}\ \text{and}\ {{VAL-DEG-001:dchi2.20.iii:.1f}}\ \ (S/N = 20\ \text{per}\ 2.5\ {\rm km\,s^{-1}}\ \text{pixel})'
+        note: 'the blend (ii) is hidden by the noise: at S/N = 50 it shows (Δχ² ≈ {{VAL-DEG-001:dchi2.50.ii:.0f}}). (iii) is hidden by what hydrogen records; its small misfit is the hand-tuning, not physics'
+        ids: [SCI-DEG-001, SCI-OBS-002]
+      - tex: 'F = e^{-\tau} \approx 0\quad(\tau \gg 1)'
+        note: inside the saturated Lyα core almost no light gets through, however the optical depth is split — so the blend (ii) hides there; Lyβ, with a smaller f λ, is not saturated and shows it
+        ids: [SCI-DEG-001, SCI-DEG-002, SCI-SAT-001]
+    science: [SCI-DEG-001, SCI-DEG-002, SCI-OBS-002, SCI-THERM-002, SCI-SAT-001, SCI-ATOM-001]
+    validation: [VAL-DEG-001]
+    simplifications:
+      - 'The three configurations were tuned by hand to match. Two kinds of "same shadow" are shown — the blend (ii) is hidden only at the stated resolution and S/N (measurement-limited: better data can break it); heat against smooth motion, (i) against (iii), cannot be told apart by any hydrogen line at any S/N (information-limited: hydrogen records only the line-of-sight distribution of velocity and optical depth). The toy''s small misfit for (iii) is its hand-tuning (SCI-DEG-001).'
+      - The three gases are called "clouds" for brevity; each is a denser part of the continuous gas, idealised as one or two smooth Gaussian clumps — not a separate object (SCI-REP-003).
+      - The three configurations are a constructed degeneracy example, not typical forest absorbers. Configuration (i) is an idealised compact gas clump — unusually hot (45 000 K, hotter than typical forest gas at z ≈ 3) and only about 7 kpc across (proper), far more compact than typical forest gas — built so that its line matches the other two (SCI-DEG-001).

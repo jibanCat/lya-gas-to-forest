@@ -1,0 +1,65 @@
+# Validates every push and pull request with the release gate (tools/validate.sh — the same script as `npm run validate`).
+# Deploys app/dist to GitHub Pages ONLY when run by hand (Actions → Validate and deploy → Run workflow) on main, and only
+# after the gate passes; the deploy job runs in the github-pages environment, so it can also be held for approval.
+# The deployed files are the gate's own build of this commit, which it has checked are identical to the committed app/dist.
+# Actions are pinned to full commit SHAs (tag in the comment). No secrets. What it can write: nothing in the repository
+# (contents: read); only the deploy job may publish the Pages site (pages: write, with an OIDC token for that alone).
+name: Validate and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Tools (Python with PyYAML in a venv; Playwright 1.63 with Chromium, Firefox and WebKit)
+        run: |
+          set -euo pipefail
+          node --version
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet pyyaml==6.0.2
+          npm install --global --no-fund --no-audit playwright@1.63.0
+          playwright install --with-deps chromium firefox webkit
+      - name: Release gate
+        env:
+          PYTHON: ${{ runner.temp }}/venv/bin/python
+          VALIDATE_OUT: ${{ runner.temp }}/validate
+        run: bash tools/validate.sh
+      - name: Public hygiene of the tracked files (secrets, private paths, internal notes, restricted data)
+        run: python3 tools/hygiene_scan.py
+      - name: The site to deploy
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: app/dist
+
+  deploy:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

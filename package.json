@@ -1,0 +1,24 @@
+{
+  "name": "lya-from-gas-to-forest",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lyα: from gas to forest — an interactive, provenance-traced teaching resource on the Lyman-α forest",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "provenance": "python3 science/tools/build_provenance.py",
+    "build": "python3 science/tools/build_provenance.py && node app/build.mjs && python3 tools/data_inventory.py",
+    "test": "for t in science/tests/test_*.js; do node \"$t\" || exit 1; done",
+    "check": "node app/release_check.mjs",
+    "validate": "bash tools/validate.sh",
+    "hygiene": "python3 tools/hygiene_scan.py",
+    "release": "bash tools/release_gate.sh"
+  },
+  "license": "MIT",
+  "homepage": "https://jibancat.github.io/lya-gas-to-forest/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jibancat/lya-gas-to-forest.git"
+  }
+}

@@ -1,0 +1,80 @@
+{
+ "nbins": 1024,
+ "dvbin": 0.5445485437213006,
+ "velfac": 0.11152354175412237,
+ "vmax": 557.6177087706118,
+ "kernel_int": 1,
+ "tautail": 1e-07,
+ "get_velocity_needed_float32_shim_under_numpy2": true,
+ "direct_vs_Spectra_get_tau_max_rel": 5.627965729166435e-07,
+ "expected_line_centres_kms": [
+  111.5569971780121,
+  318.95383089209406,
+  421.1722269419904
+ ],
+ "argmax_tau_near_expected_kms": [
+  111.36017719100596,
+  318.8331723488215,
+  421.208298568426
+ ],
+ "line_centre_offsets_in_pixels": [
+  -0.36143699083486885,
+  -0.22157536672122216,
+  0.06624134221186286
+ ],
+ "colden_support_relative_to_particle_kpch": [
+  [
+   -31.061718749999955,
+   32.414843750000045
+  ],
+  [
+   -28.155468750000182,
+   30.438281249999818
+  ],
+  [
+   -57.82890624999982,
+   59.35859375000018
+  ]
+ ],
+ "gadget_SmoothingLength_kpch": [
+  60.0,
+  60.0,
+  120.0
+ ],
+ "column_per_particle_cm2": [
+  1894245160923.1245,
+  1894241783002.1943,
+  1262830498809.9785
+ ],
+ "column_expected_nHI_x_rscale_x_6overpi_x_H/2": [
+  1894246353603.952,
+  1894246353603.952,
+  1262830902402.6345
+ ],
+ "get_velocity_at_particles_kms": [
+  0.0,
+  20.0,
+  -12.5
+ ],
+ "true_vpec_kms": [
+  0.0,
+  40.0,
+  -25.0
+ ],
+ "get_velocity_over_vpec": [
+  null,
+  0.5,
+  0.5
+ ],
+ "sqrt_a": 0.5,
+ "get_temp_at_particles_K": [
+  10000.001173578405,
+  20000.00234715681,
+  5000.000018853685
+ ],
+ "true_T_K": [
+  10000.0,
+  20000.0,
+  5000.0
+ ]
+}

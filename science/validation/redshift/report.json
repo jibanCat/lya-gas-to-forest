@@ -1,0 +1,42 @@
+{
+ "oracle": "scipy 1.15.2",
+ "max_rel_chi": 8.286127339829363e-11,
+ "max_dz_inverse": 1.6366357158403844e-9,
+ "max_rel_lambda": 0,
+ "lambda_obs_lya_z3": 4862.6804,
+ "hubble_per_mpch_z3": 114.19254572869457,
+ "chi_z3_planck_mpch": 4383.842452704486,
+ "checks": [
+  {
+   "name": "χ(z) vs scipy quad, z ∈ [0.01, 6], Planck 2018 and toy cosmologies: rel. error < 1e-7",
+   "ok": true,
+   "detail": "8.3e-11"
+  },
+  {
+   "name": "z(χ) inverse vs brentq: |Δz| < 1e-8",
+   "ok": true,
+   "detail": "1.6e-9"
+  },
+  {
+   "name": "λ_obs = λ_rest(1+z) and its reverse λ_rest = λ_obs/(1+z): rel. error < 1e-14",
+   "ok": true,
+   "detail": "0.0e+0"
+  },
+  {
+   "name": "quasar frame: absorption from z_abs < z_q lies blueward of 1215.67 Å (and matches oracle)",
+   "ok": true,
+   "detail": "9 cases"
+  },
+  {
+   "name": "log-λ: the stretch to z_abs equals the velocity u = c ln((1+z_abs)/(1+z0)) on the SCI-MAP-004 axis",
+   "ok": true,
+   "detail": "0.0e+0"
+  },
+  {
+   "name": "forest written along the way: each absorber takes λ_e = 1215.67(1+z_abs)/(1+z_q), which is exactly 1215.67 Å locally and 1215.67(1+z_abs) Å at us; higher z → redder",
+   "ok": true,
+   "detail": "10 cases, 2.2e-16"
+  }
+ ],
+ "pass": true
+}

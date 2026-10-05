@@ -1,0 +1,9 @@
+{
+ "note": "Single source for the 'same shadow' configurations (SCI-DEG-001; Beat 13). Defined in velocity space so the lines do not depend on the cosmology: u = Hubble-flow position [km/s], su = Hubble-flow width (1σ) [km/s], v = bulk peculiar velocity [km/s], dv = extra peculiar velocity across +1σ [km/s]. Real-space x = u/H, σx = su/H, dv/dx = dv/σx with H = aH/h per Mpc/h. Read by science/oracle/degeneracy_oracle.py, science/tests/test_degeneracy.js and the prototype build.",
+ "pixel_kms": 2.5, "u_range_kms": [-150, 150], "npix": 121,
+ "configs": {
+  "i":   [{"u": 0.0, "su": 2.23, "N": 2.5e14, "T": 4.5e4, "v": 0.0, "dv": 0.0}],
+  "ii":  [{"u": -39.0, "su": 12.8, "N": 9.75e13, "T": 1e4, "v": 24.9, "dv": 0.0}, {"u": 39.0, "su": 12.8, "N": 9.75e13, "T": 1e4, "v": -24.9, "dv": 0.0}],
+  "iii": [{"u": 0.0, "su": 11.15, "N": 2.5e14, "T": 1e4, "v": 0.0, "dv": 6.2}]
+ }
+}

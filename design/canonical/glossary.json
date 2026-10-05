@@ -1,0 +1,279 @@
+{
+ "_about": "Canonical public terms of the resource: what each word means where a reader meets it, where it first appears, which synonyms are allowed, and which uses are ambiguous. app/release_check.mjs fails if a prohibited phrase appears in the app or the science notes. Edit here; keep prose natural — this guards meaning, not word choice.",
+ "terms": [
+  {
+   "term": "gas",
+   "meaning": "the continuous intergalactic medium between the quasar and us — mostly ionised hydrogen and helium",
+   "first": 0,
+   "synonyms": [
+    "intergalactic gas",
+    "the IGM (notes)"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "IGM",
+   "meaning": "intergalactic medium; used in the science notes and provenance, not on the surface",
+   "first": "notes",
+   "synonyms": [
+    "intergalactic gas"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "parcel",
+   "meaning": "a teaching summary of one stretch of the continuous gas: a smooth Gaussian clump with one place, motion, temperature and neutral amount (Beats 6–10)",
+   "first": 1,
+   "synonyms": [
+    "teaching parcel"
+   ],
+   "prohibited": [
+    {
+     "phrase": "one physical cloud",
+     "why": "a parcel or pixel is not a discrete cloud (SCI-REP-003)"
+    }
+   ]
+  },
+  {
+   "term": "region",
+   "meaning": "a contiguous stretch of gas grouped for display when a colour is traced back (Beat 12)",
+   "first": 12,
+   "synonyms": [
+    "place"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "stretch",
+   "meaning": "two senses, kept apart: a length of the sightline (\"this 4.4 Mpc/h stretch\") and the redshift stretching of light (Beat 5: \"the light stretches\"); the gas is a \"denser part\", never a \"denser stretch\"",
+   "first": 5,
+   "synonyms": [
+    "span (of gas)",
+    "length of the sightline"
+   ],
+   "prohibited": [
+    {
+     "phrase": "denser stretch of the continuous gas",
+     "why": "in Beat 5 'stretch' means the light's stretching; say 'denser part'"
+    }
+   ]
+  },
+  {
+   "term": "structure",
+   "meaning": "a denser part of the continuous gas along the light's path (Beat 5) — never a separate object",
+   "first": 5,
+   "synonyms": [
+    "density peak"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "cloud / clump",
+   "meaning": "Beat 13 only: a denser part of the continuous gas, idealised as one smooth clump in a constructed degeneracy example",
+   "first": 13,
+   "synonyms": [
+    "clump"
+   ],
+   "prohibited": [
+    {
+     "phrase": "the cloud's own small motion",
+     "why": "in provenance outside Beat 13, the gas is not a cloud"
+    }
+   ]
+  },
+  {
+   "term": "atom",
+   "meaning": "a representative neutral hydrogen atom, drawn as a dark dot — a cartoon sample, never a count",
+   "first": 1,
+   "synonyms": [
+    "neutral atom"
+   ],
+   "prohibited": [
+    {
+     "phrase": "ink dots",
+     "why": "atoms are dark dots; ink is optical depth"
+    }
+   ]
+  },
+  {
+   "term": "simulation element",
+   "meaning": "a particle or cell of a hydrodynamic simulation; never drawn — the data are a declared toy, not a simulation",
+   "first": 1,
+   "synonyms": [
+    "simulation particle"
+   ],
+   "prohibited": [
+    {
+     "phrase": "the simulated sample",
+     "why": "the volume is a toy, not a simulation"
+    },
+    {
+     "phrase": "the simulation’s velocities",
+     "why": "the toy's velocities"
+    }
+   ]
+  },
+  {
+   "term": "ink",
+   "meaning": "a contribution to optical depth τ, laid in velocity space (Beats 6–13)",
+   "first": 6,
+   "synonyms": [
+    "optical depth (its ink)"
+   ],
+   "prohibited": [
+    {
+     "phrase": "neutral hydrogen (ink)",
+     "why": "ink is optical depth, not neutral hydrogen"
+    },
+    {
+     "phrase": "Ink: e^(",
+     "why": "the transmitted flux is never ink"
+    },
+    {
+     "phrase": "ink: neutral atoms",
+     "why": "atoms are dark dots"
+    },
+    {
+     "phrase": "ink: each parcel",
+     "why": "motions are arrows"
+    }
+   ]
+  },
+  {
+   "term": "optical depth",
+   "meaning": "τ: how strongly the gas dims one colour; contributions add (Beat 9)",
+   "first": 3,
+   "synonyms": [
+    "τ",
+    "ink"
+   ],
+   "prohibited": [
+    {
+     "phrase": "place its opacity",
+     "why": "cells place optical depth; 'opacity' is reserved for the drawing's layer opacity 1 − e^−τ"
+    }
+   ]
+  },
+  {
+   "term": "absorption",
+   "meaning": "removal of a colour from the beam — physically, resonant scattering out of the line of sight",
+   "first": 2,
+   "synonyms": [
+    "scattered out of the beam",
+    "shadow"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "flux",
+   "meaning": "F = e^−τ: the fraction of the expected light that arrives at that colour (between 0 and 1; noise aside)",
+   "first": 7,
+   "synonyms": [
+    "transmitted flux",
+    "the light that gets through",
+    "what reaches us"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "velocity",
+   "meaning": "two uses, always distinguished: a parcel's own motion (peculiar velocity, an arrow) and the velocity-space coordinate u = aH·x + v_pec where its ink lands",
+   "first": 2,
+   "synonyms": [
+    "its own motion",
+    "where it lands"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "observed colour",
+   "meaning": "the observed wavelength of the light, read on the velocity axis (Δu = c Δln λ)",
+   "first": 2,
+   "synonyms": [
+    "colour",
+    "observed wavelength",
+    "velocity (as a coordinate)"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "wavelength",
+   "meaning": "λ, in Å; 'measured here' means by an observer at rest in the expanding universe at that point",
+   "first": 2,
+   "synonyms": [
+    "colour"
+   ],
+   "prohibited": [
+    {
+     "phrase": "rest frame makes Lyα shorter",
+     "why": "Lyα is 1215.67 Å in the absorber's frame; the forest lies blueward only in the quasar's frame"
+    }
+   ]
+  },
+  {
+   "term": "real space",
+   "meaning": "comoving distance along the beam, in Mpc/h",
+   "first": 0,
+   "synonyms": [
+    "distance along the beam"
+   ],
+   "prohibited": [
+    {
+     "phrase": "along the whole sightline: the Lyman-alpha forest",
+     "why": "the toy stretch is 20 Mpc/h; the distance to us is not to scale"
+    }
+   ]
+  },
+  {
+   "term": "velocity space",
+   "meaning": "the observed-colour axis u in km/s, where the gas's ink lands",
+   "first": 5,
+   "synonyms": [
+    "observed colour"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "frame",
+   "meaning": "absorber's rest frame (Lyα at 1215.67 Å), our frame (observed), the quasar's rest frame — always named",
+   "first": 2,
+   "synonyms": [
+    "its own frame"
+   ],
+   "prohibited": []
+  },
+  {
+   "term": "colour words",
+   "meaning": "public text names drawn colours plainly — red (the current causal focus) and grey; 'cinnabar' and 'pencil' are internal design tokens",
+   "first": 2,
+   "synonyms": [
+    "red",
+    "grey",
+    "dashed",
+    "solid"
+   ],
+   "prohibited": [
+    {
+     "phrase": "cinnabar:",
+     "why": "say red"
+    },
+    {
+     "phrase": "cinnabar (i)",
+     "why": "say red"
+    },
+    {
+     "phrase": "pencil: recession",
+     "why": "say grey"
+    },
+    {
+     "phrase": "the pencil (before)",
+     "why": "say the grey dashed line"
+    },
+    {
+     "phrase": "pencil (ii)",
+     "why": "say grey"
+    }
+   ]
+  }
+ ]
+}

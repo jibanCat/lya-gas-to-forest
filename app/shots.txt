@@ -1,0 +1,44 @@
+# Review frames (name  hash). Render: node app/shoot.mjs design/material/frames --list app/shots.txt
+# (design/production/frames holds the production pass's render of the earlier list, as history.)
+b00            beat=0
+b01            beat=1&zoom=0.67
+b02            beat=2
+b03            beat=3
+b04            beat=4&stage=4
+b05            beat=5&stage=6
+b06            beat=6
+b07            beat=7&stage=3
+b08            beat=8&nc=24
+b09            beat=9
+b10            beat=10
+b11            beat=11
+b12            beat=12
+b13            beat=13&phase=reveal&pick=ii
+b05-1          beat=5&stage=1&hints=true
+b05-2          beat=5&stage=2
+b05-3          beat=5&stage=3
+b05-4          beat=5&stage=4&hints=true
+b05-5          beat=5&stage=5
+b05-7          beat=5&stage=7
+adv-b05-absorber beat=5&stage=6&adv=1&frame=absorber
+adv-b05-quasar beat=5&stage=6&adv=1&frame=quasar
+adv-b05-log    beat=5&stage=6&adv=1&logr=true
+adv-b11        beat=11&adv=1
+probe-1        beat=5&probe=local-lya
+probe-2        beat=5&probe=existing-shadow
+probe-3        beat=5&probe=absorber-frame
+probe-4        beat=5&probe=quasar-frame
+probe-5        beat=7&probe=space-vs-spectrum
+rm-b00         beat=0&rm=1
+rm-b03         beat=3&rm=1
+# material pass (2026-10-03): the transformations' end states, the sample boundary, reduced motion, the Beat 5 anchor
+b03-1          beat=3&stage=1
+b03-2          beat=3&stage=2
+b03-3          beat=3&stage=3
+b03-4          beat=3&stage=4
+adv-b03        beat=3&stage=4&adv=1
+adv-b00        beat=0&adv=1
+b07-1          beat=7&stage=1
+b12-c          beat=12&pu=1342
+rm-b12         beat=12&rm=1
+b05-6          beat=5&stage=6
