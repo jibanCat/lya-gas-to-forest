@@ -43,7 +43,7 @@ Scenes using each claim are derived from the beat manifest; validation numbers a
 | [SCI-DEG-001](#sci-deg-001) | The "same shadow" configurations | ✓ verified | 13 | VAL-DEG-001 (pass) |
 | [SCI-DEG-002](#sci-deg-002) | What breaks the degeneracy | ✓ verified | 13 | — |
 | [SCI-SIM-001](#sci-sim-001) | The skewer interface (dataset-independent) | ✓ verified | 8, 11 | VAL-CLOSURE-FS (pass (declared domain)) |
-| [SCI-SIM-002](#sci-sim-002) | fake_spectra conventions (the later validation target) | ✓ verified | 8 | VAL-CLOSURE-FS (pass (declared domain)) |
+| [SCI-SIM-002](#sci-sim-002) | fake_spectra conventions (the validation reference) | ✓ verified | 8 | VAL-CLOSURE-FS (pass (declared domain)) |
 | [SCI-SIM-003](#sci-sim-003) | Exporting skewers from fake_spectra 2.2.4 — a velocity-convention compatibility note | ✓ verified | — | VAL-CLOSURE-FS (pass (declared domain)) |
 | [SCI-SIM-TOY-001](#sci-sim-toy-001) | The toy Zel'dovich volume used by the canonical prototype | ✓ verified | 0, 5, 8, 11 | VAL-TOY-001 (pass), VAL-TOY-002 (pass) |
 | [SCI-CTX-001](#sci-ctx-001) | Mean hydrogen density of the universe at z = 3 | ✓ verified | 0, 1 | — |
@@ -1321,7 +1321,7 @@ $$ b^2 = \frac{2kT}{m} + b^2_{\rm bulk},\qquad \frac{(f\lambda)_{\rm Ly\beta}}{(
 
 ## SCI-SIM-002
 
-**fake_spectra conventions (the later validation target)** — ✓ verified · domain: data
+**fake_spectra conventions (the validation reference)** — ✓ verified · domain: data
 
 **Claim.** fake_spectra 2.2.4 conventions for units, velocity mapping, thermal broadening mass, profile evaluation, SPH kernel integration and line data are documented with source citations in science/notes/FAKE_SPECTRA_CONVENTIONS.md, and their effect on our real-space method is quantified in VAL-CLOSURE-FS.
 

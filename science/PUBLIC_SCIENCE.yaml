@@ -5,7 +5,7 @@
 # accuracy section is generated from the validation reports, and the build fails if a number in this file sits next to
 # a word about accuracy.
 
-version: 0.1.0
+version: 0.1.1
 title: Lyα — from gas to forest · science notes
 
 about: >

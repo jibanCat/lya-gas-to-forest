@@ -4,7 +4,7 @@ cff-version: 1.2.0
 message: "If you use or adapt this teaching resource, please cite it as below."
 type: software
 title: "Lyα: from gas to forest — an interactive, provenance-traced teaching resource on the Lyman-α forest"
-version: "0.1.0"
+version: "0.1.1"
 repository-code: "https://github.com/Jibancat/lya-gas-to-forest"
 url: "https://jibancat.github.io/lya-gas-to-forest/"
 license: ["MIT", "CC-BY-4.0", "CC0-1.0"]

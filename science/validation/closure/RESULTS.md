@@ -30,7 +30,7 @@ Run date 2026-10-02. All numbers come from `metrics.json`, `validation_mode.json
    * `Spectra.get_velocity()` returns √a·v_pec, so its velocities are halved at z = 3;
    * both codes cut damping wings at half a box, which changes F by up to 0.28 and EW by 10 % against a periodic sum;
    * fake_spectra stores the pixel-averaged τ, not the pixel-averaged flux;
-   * `turn_off_selfshield` zeroes Γ.
+   * `turn_off_selfshield` zeroes the line's damping constant (`gamma_X`), not Γ_HI.
 
    See §6.
 
@@ -183,12 +183,12 @@ max|ΔF| [ΔEW/EW], worst case in each group. Full table and P1D in `TABLES.md`.
 2. **One v and one T per real-space pixel cannot represent velocity structure inside the pixel.** In fake_spectra each SPH particle's kernel carries that particle's own velocity, so several kernels with different velocities can overlap the same pixel; the skewer keeps only their HI-weighted mean.
    * For gas-like flows the effect is small: max|ΔF| 3.6e-3, P1D ≤ 0.4 %.
    * In the synthetic cases built to stress it (two components at one position, C3c; kernels overlapping across a velocity gradient steep enough to fold u(x), C4c; a 1D Zel'dovich toy field deliberately evolved past shell crossing, C10) it reaches ΔF ≈ 0.02–0.2 and P1D errors of a few %. These cases are exaggerated by construction; C10 is shell crossing of the toy field only and is not offered as a picture of the IGM or of SPH runs.
-   * "Each x maps to one u" is correct for a fluid with one velocity at each place. Where kernels overlap across steep velocity gradients, part of the difference from fake_spectra reflects SPH kernel smoothing rather than physics. Teach the map, and do not treat fake_spectra as ground truth there.
+   * "Each x maps to one u" is correct for a fluid with one velocity at each place. Teach the map; where kernels overlap across steep velocity gradients, do not treat fake_spectra as ground truth.
 3. **Damping wings are cut at half a box in both codes.** For an LLS or DLA in a 5 or 20 Mpc/h box, the true periodic sum differs by up to 0.28 in F and 10 % in EW. A DLA figure needs a box much wider than the wing, or an explicitly non-periodic treatment.
 4. **Pixel averaging.** fake_spectra stores the pixel-averaged τ, but an instrument records the pixel-averaged F. The two agree when lines are resolved. They differ by ≥ 7e-3 at 10 km/s pixels, and by up to 0.3 for narrow saturated lines. Teaching "F = e^{−τ} per pixel" needs the caveat "for resolved pixels". The LSF must act on F, which lyaphys.js `convolveLSF` already does.
 5. **Cold or narrow lines in coarse pixels** are badly wrong in the current default: ΔF = 0.46 and EW +93 % at T = 100 K with 10 km/s pixels. If a temperature slider can go that low, the S8 fix is required.
 6. **H mass.** The browser's m_H is correct. fake_spectra's b is 0.37 % low (equivalently, its T inferred from b is 0.74 % high). This is invisible in a plot but is the main systematic between the codes. **Do not "fix" the browser to match.**
-7. fake_spectra's `turn_off_selfshield=True` also sets Γ = 0, giving pure Gaussian lines (spectra.py:669-672).
+7. fake_spectra's `turn_off_selfshield=True` also sets the line's damping constant (`gamma_X`, not Γ_HI) to 0, giving pure Gaussian lines (spectra.py:669-672).
 
 ## 7. Tolerance proposal (options, not a decision)
 

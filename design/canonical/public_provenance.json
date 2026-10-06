@@ -1,6 +1,6 @@
 {
  "site": {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "title": "Lyα — from gas to forest · science notes",
   "about": "An interactive teaching resource on how neutral hydrogen between a distant quasar and us becomes the Lyman-α forest: atoms meet light, light stretches, gas maps to velocity, optical depth adds, transmitted light multiplies, and the forest can be read backward only up to a point. These notes list, for every scientific claim the scenes make, its sources, the assumptions under which it holds, the simplifications made for teaching, and how the browser's numbers were checked.\n",
   "modeled": [
@@ -27,7 +27,7 @@
    },
    {
     "term": "Simulation data, later",
-    "text": "The skewer interface [[#skewer-interface|The skewer interface (dataset-independent)]] is independent of the data set, so a later release may replace the toy with simulation skewers whose conventions match fake_spectra [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]. No such data are included in this release."
+    "text": "The skewer interface [[#skewer-interface|The skewer interface (dataset-independent)]] is independent of the data set, so a later release may replace the toy with simulation skewers whose conventions match fake_spectra [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]. No such data are included in this release."
    }
   ],
   "statuses": {
@@ -1676,7 +1676,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -1706,7 +1706,7 @@
     },
     {
      "anchor": "fake-spectra-conventions",
-     "title": "fake_spectra conventions (the later validation target)",
+     "title": "fake_spectra conventions (the validation reference)",
      "assumptions": [],
      "validity": "fake_spectra 2.2.4 (PyPI sdist sha256 4cc80e6c…eb84), MIT licence",
      "representation": false
@@ -1799,7 +1799,7 @@
     }
    ],
    "simplifications": [
-    "Real-space cells are the gas re-sampled on a line; particle codes such as fake_spectra deposit each particle's kernel directly in velocity space ([[#check-closure-fs|Closure against fake_spectra]], [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]).",
+    "Real-space cells are the gas re-sampled on a line; particle codes such as fake_spectra deposit each particle's kernel directly in velocity space ([[#check-closure-fs|Closure against fake_spectra]], [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]).",
     "One velocity and one temperature per cell. Where several velocities share one cell (unresolved velocity structure), absorption is misplaced; the toy stores one mass-weighted velocity per cell — it discards sub-cell velocity structure by design ([[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]).",
     "The sum converges only once cells are finer than the narrowest line (aH·Δx ≤ b/2); the coarse slider settings are deliberately under-resolved ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])."
    ],
@@ -1839,7 +1839,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -2137,7 +2137,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -2302,7 +2302,7 @@
      "assumptions": [
       "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
      ],
-     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+     "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
      "representation": false
     },
     {
@@ -2846,7 +2846,7 @@
      "meaning": null
     }
    ],
-   "convention": "m = mass of the ¹H atom (1.00782503 u = 1.6735328×10⁻²⁴ g; an earlier value, 1.6735575×10⁻²⁴ g, was corrected — a 1.5×10⁻⁵ effect); b_turb = 0 unless stated. (fake_spectra's mass convention is recorded in [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]].)",
+   "convention": "m = mass of the ¹H atom (1.00782503 u = 1.6735328×10⁻²⁴ g; an earlier value, 1.6735575×10⁻²⁴ g, was corrected — a 1.5×10⁻⁵ effect); b_turb = 0 unless stated. (fake_spectra's mass convention is recorded in [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]].)",
    "assumptions": [
     "Maxwellian velocities ([[#maxwellian-velocities|Maxwellian velocities; one line-of-sight component is Gaussian]])"
    ],
@@ -3510,9 +3510,9 @@
    "assumptions": [
     "velocity within one cell is single-valued (cell-centre; [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]]); aH·Δx ≤ b_min/2 ([[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]])"
    ],
-   "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
+   "validity": "Bounded by [[#check-closure-fs|Closure against fake_spectra]]. For single-stream gas with b ≥ 2Δu, the app's sum matches an exact reference to 2.7e-07 in F (worst case, with fake_spectra's constants) and fake_spectra 2.2.4 to max |ΔF| 4.9e-03 (dominated by fake_spectra's H-mass convention, [[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]]); forest P1D within 0.33% (k ≤ 0.1 s/km). Outside this domain see [[#unresolved-velocity-structure|One velocity per sampling element (unresolved velocity structure is not represented)]] (multi-stream) and [[#discretisation-limits|Discretisation limits — pixel size, pixel averaging and the periodic box]] (resolution, box).",
    "simplifications": [
-    "The app works on real-space cells; fake_spectra deposits particle kernels in velocity space ([[#fake-spectra-conventions|fake_spectra conventions (the later validation target)]])."
+    "The app works on real-space cells; fake_spectra deposits particle kernels in velocity space ([[#fake-spectra-conventions|fake_spectra conventions (the validation reference)]])."
    ],
    "sources": [
     {
@@ -4124,7 +4124,7 @@
   },
   "SCI-SIM-002": {
    "anchor": "fake-spectra-conventions",
-   "title": "fake_spectra conventions (the later validation target)",
+   "title": "fake_spectra conventions (the validation reference)",
    "domain": "data",
    "status": "verified",
    "claim": "fake_spectra 2.2.4 conventions for units, velocity mapping, thermal broadening mass, profile evaluation, SPH kernel integration and line data are documented with source citations in science/notes/FAKE_SPECTRA_CONVENTIONS.md, and their effect on our real-space method is quantified in [[#check-closure-fs|Closure against fake_spectra]].",
@@ -6821,7 +6821,7 @@
    "entries": [
     {
      "anchor": "fake-spectra-conventions",
-     "title": "fake_spectra conventions (the later validation target)",
+     "title": "fake_spectra conventions (the validation reference)",
      "representation": false
     },
     {

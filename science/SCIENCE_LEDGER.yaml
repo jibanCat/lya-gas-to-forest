@@ -901,7 +901,7 @@ entries:
 
 - id: SCI-SIM-002
   anchor: fake-spectra-conventions
-  title: fake_spectra conventions (the later validation target)
+  title: fake_spectra conventions (the validation reference)
   domain: data
   claim: >
     fake_spectra 2.2.4 conventions for units, velocity mapping, thermal broadening mass, profile evaluation, SPH kernel

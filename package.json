@@ -1,6 +1,6 @@
 {
   "name": "lya-from-gas-to-forest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Lyα: from gas to forest — an interactive, provenance-traced teaching resource on the Lyman-α forest",
   "engines": {

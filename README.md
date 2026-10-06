@@ -4,7 +4,7 @@ An interactive, browser-based teaching resource on how neutral hydrogen between 
 **Lyman-α forest**: the dense pattern of absorption lines in quasar spectra that cosmologists use to map the
 intergalactic gas.
 
-**Version 0.1.0** · <!-- release:site -->**Live site:** https://jibancat.github.io/lya-gas-to-forest/ · **Science notes:** https://jibancat.github.io/lya-gas-to-forest/science/<!-- /release:site -->
+**Version 0.1.1** · <!-- release:site -->**Live site:** https://jibancat.github.io/lya-gas-to-forest/ · **Science notes:** https://jibancat.github.io/lya-gas-to-forest/science/<!-- /release:site -->
 
 ## Who it is for
 
@@ -68,14 +68,17 @@ It needs Playwright 1.63 installed globally with its browsers: `npm i -g playwri
 Version 0.1 is designed for **tablets in landscape and larger screens**, with mouse, trackpad, touch or keyboard.
 Narrow phone screens show a short recommendation, with "continue anyway". A phone layout is planned for v0.2.
 
-Tested for this release:
-- Chromium 153 (Playwright 1.63): every scene, touch, keyboard, accessibility and reduced motion;
+Tested for this release, on the live site as well:
+- Chromium 153 (Playwright 1.63): every scene, touch, keyboard, accessibility, reduced motion, the fixed navigation and
+  the guided tour;
 - Google Chrome 154 on macOS 14.6: the same checks;
-- Firefox 117 on macOS 14.6: every scene, the sources sheets and the science notes;
+- Firefox 117 on macOS 14.6: every scene, the sources sheets, the science notes, the navigation and the guided tour;
 - Safari 17.6 on macOS 14.6: every scene, the science notes, navigation, keyboard focus, the sources sheet, the main
-  gestures, session state and reload.
+  gestures, session state and reload; the guided tour, also by hand;
+- Safari 26.6.1 on an iPad Air, by hand with touch: every scene, the main gestures, the sources and Python sheets, the
+  fixed navigation and the guided tour.
 
-Not yet confirmed: Safari on iPad. `docs/BROWSERS.md` has the exact matrix.
+`docs/BROWSERS.md` has the exact matrix.
 
 **Accessibility:**
 - keyboard accessible, with a visible focus mark;

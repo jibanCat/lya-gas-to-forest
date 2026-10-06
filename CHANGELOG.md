@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.1.1 — maintenance, 2026-10-05
+
+- **CI.** It runs on Ubuntu 24.04, pinned. GitHub moves `ubuntu-latest` to Ubuntu 26 from 2026-10-19, and the tested
+  toolchain (Python 3.12 with NumPy 2.2.6 and SciPy 1.15.2; Playwright 1.63) is upgraded on purpose, not by the runner.
+- **Tested devices.** The README and `docs/BROWSERS.md` now list what v0.1.0 was tested on, on the live site as well:
+  - Safari on an iPad Air, by hand with touch;
+  - the guided tour and the fixed navigation in every browser;
+  - current Firefox figures.
+- **Science notes.** The fake_spectra conventions entry is titled "the validation reference" (it was "the later
+  validation target").
+- **Closure results notes** (`science/validation/closure/RESULTS.md`):
+  - drop an unsourced sentence about SPH kernel smoothing, as the science notes already had;
+  - say that fake_spectra's `turn_off_selfshield` zeroes the line's damping constant (`gamma_X`), not Γ_HI.
+
+No physics, scene or interaction changed.
+
 ## v0.1.0 — first public release, 2026-10-05
 
 **What it is.** Fourteen interactive scenes, from a beam of quasar light crossing continuous intergalactic gas to the
